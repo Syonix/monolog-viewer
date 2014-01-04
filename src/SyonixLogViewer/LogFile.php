@@ -1,13 +1,15 @@
 <?php
 namespace SyonixLogViewer;
 
+use Dubture\Monolog\Parser\LineLogParser;
+
 class LogFile {
     protected $name;
     protected $slug;
     protected $path;
     protected $lines;
 
-    public function __construct($name, $path, $regex) {
+    public function __construct($name, $path) {
         setlocale(LC_ALL, 'en_US.UTF8');
         
         $this->name = $name;
@@ -23,18 +25,12 @@ class LogFile {
         $lines = explode("\n", $file);
 
         foreach($lines as $line) {
-            if($line != "") {
-                $matches = array();
-                $line_contents = preg_match($regex, $line, $matches);
-                $entry = array();
-                try{ $entry['timestamp'] = new \DateTime($matches[1]); } catch(\Exception $e) { }
-                $entry['level'] = trim($matches[2]);
-                $entry['message'] = trim($matches[3]);
-                $entry['context'] = json_decode(str_replace('[]', '', $matches[4]), true);
+            $parser = new LineLogParser(); 
+            $entry = $parser->parse($line, 0);
+            if(count($entry) > 0) {
                 $this->lines[] = $entry;
             }
         }
-        fclose($file);
     }
     
     public function getLine($line)

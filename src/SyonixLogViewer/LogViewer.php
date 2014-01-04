@@ -2,39 +2,46 @@
 namespace SyonixLogViewer;
 
 class LogViewer {
-    protected $basedir;
     protected $logs;
-    protected $regex;
     protected $clients;
 
-    public function __construct() {
+    public function __construct($configPath) {
         setlocale(LC_ALL, 'en_US.UTF8');
 
         $logs = array();
         $this->logs = array();
         $this->clients = array();
-        $this->regex = '/\[([\d\s:-]+)\] ([\w\.]*):(?: : )?([^{]+) ({.+)/';
-        $this->baseDir = dirname(__FILE__) . '/../..';
-        
-        $config = json_decode(file_get_contents($this->baseDir . '/config/config.json'), true);
+
+        $config = json_decode(file_get_contents($configPath), true);
         $logs = $config['clients'];
         
         foreach ($logs as $log) {
             $logfiles = array();
             foreach($log['logs'] as $name => $file) {
-                $logfiles[$this->toAscii($name)] = array('name' => $name, 'file' => $file);
+                $ch = curl_init($file);
+                curl_setopt($ch, CURLOPT_NOBODY, true);
+                curl_exec($ch);
+                $retcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                curl_close($ch);
+                if($retcode == 200) { 
+                    $logfiles[$this->toAscii($name)] = array('name' => $name, 'file' => $file);
+                }
             }
-            $this->logs[$this->toAscii($log['name'])] = array(
-                'name' => $log['name'], 
-                'slug' => $this->toAscii($log['name']),
-                'logs' => $logfiles
-            );
-            $this->clients[$this->toAscii($log['name'])] = $log['name'];
+            
+            // Only add client if at least one log file is readable.
+            if(count($logfiles) > 0) {
+                $this->logs[$this->toAscii($log['name'])] = array(
+                    'name' => $log['name'], 
+                    'slug' => $this->toAscii($log['name']),
+                    'logs' => $logfiles
+                );
+                $this->clients[$this->toAscii($log['name'])] = $log['name'];
+            }
         }
     }
     
-    public function getRegex() {
-        return $this->regex;
+    public function hasLogs() {
+        return (count($this->logs) > 0);
     }
     
     public function getFirstLog($client) {
@@ -47,7 +54,10 @@ class LogViewer {
     }
     
     public function getLogs($client = null) {
-        if($client !== null && isset($this->logs[$client]['logs'])) return $this->logs[$client]['logs'];
+        if($client !== null) {
+            if(isset($this->logs[$client]['logs'])) return $this->logs[$client]['logs'];
+            else return ;
+        }
         return $this->logs;
     }
     
@@ -55,7 +65,7 @@ class LogViewer {
         if(isset($this->logs[$client]['logs'][$slug]))
         {
             $file = $this->logs[$client]['logs'][$slug];
-            return new LogFile($file['name'], $file['file'], $this->regex);
+            return new LogFile($file['name'], $file['file']);
         }
     }
     

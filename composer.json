@@ -18,6 +18,7 @@
         "email": "support@syonix.ch"
     },
     "require": {
+        "ddtraceweb/monolog-parser": "1.*"
     },
     "autoload": {
         "psr-0": {"SyonixLogViewer": "src/"}

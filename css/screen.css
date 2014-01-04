@@ -221,7 +221,7 @@ div.logline:nth-child(even) {
 
 div.logline div.level,
 div.logline div.message,
-div.logline div.timestamp,
+div.logline div.date,
 div.logline div.more {
     display: inline-block;
     float: left;
@@ -278,7 +278,7 @@ div.logline div.message {
     width: calc(100% - 345px);
 }
 
-div.logline div.timestamp {
+div.logline div.date {
     width: 200px;
     color: #cbcbcb;
 }

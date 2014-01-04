@@ -7,6 +7,7 @@
     setlocale(LC_ALL, 'de_DE.utf8');
     
     require_once('bootstrap.php');
+    $app = new \SyonixLogViewer\LogViewer('./config/config.json');
     
     session_start();
     
@@ -56,7 +57,7 @@
 	    
     /* Load Logfiles */
     
-    if($_SESSION['authenticated'] === true) {
+    if($_SESSION['authenticated'] === true && $app->hasLogs()) {
         $redirect = false;
         if(isset($_GET['c']) && $app->clientExists($_GET['c'])) $_SESSION['client'] = $_GET['c'];
         if(isset($_GET['l']) && $app->logExists($_GET['c'], $_GET['l'])) $_SESSION['log'] = $_GET['l'];
@@ -155,61 +156,66 @@
         </header>
         <div id="content">
           <?php
-              $log = $app->getLog($_SESSION['client'], $_SESSION['log']);
-              if($log instanceof SyonixLogViewer\LogFile) {
-                  foreach($log->getLines() as $id => $line) {
-                      $message = ($line['message'] != "") ? $line['message'] : '<span style="color: #cbcbcb; font-style: italic;">No Message</span>';
-                      switch($line['level']) {
-                          case 'debug.DEBUG':
-                            $levelIcon = 'bug';
-                            $cssClass = 'debug';
-                            break;
-                          case 'info.INFO':
-                            $levelIcon = 'info-circle';
-                            $cssClass = 'info';
-                            break;
-                          case 'notice.NOTICE':
-                            $levelIcon = 'file-text';
-                            $cssClass = 'notice';
-                            break;
-                          case 'warning.WARNING':
-                            $levelIcon = 'warning';
-                            $cssClass = 'warning';
-                            break;
-                          case 'error.ERROR':
-                            $levelIcon = 'times-circle';
-                            $cssClass = 'error';
-                            break;
-                          case 'critical.CRITICAL':
-                            $levelIcon = 'fire';
-                            $cssClass = 'critical';
-                            break;
-                          case 'alert.ALERT':
-                            $levelIcon = 'bell';
-                            $cssClass = 'alert';
-                            break;
-                          case 'emergency.EMERGENCY':
-                            $levelIcon = 'flash';
-                            $cssClass = 'emergency';
-                            break;
-                      }
-                      echo '<div class="logline clearfix">';
-                      echo '<div class="level '.$cssClass.'"><i class="fa fa-'.$levelIcon.'"></i>&nbsp;</div>';
-                      echo '<div class="message">'.$message.'</div>';
-                      echo '<div class="timestamp">'.$line['timestamp']->format("d.m.Y, H:i:s").'</div>';
-                      echo '<div class="more" id="more-'.($id+1).'" onclick="toggleMore('.($id+1).');"><i class="fa fa-search-plus"></i> more...</div>';
-                      echo '<div class="context" id="context-'.($id+1).'"><table>';
-                      
-                      foreach($line['context'] as $title => $content) {
-                          echo '<tr><td><strong>' . $title . '</strong></td>';
-                          echo '<td>' . nl2br($content) . '</td></tr>';
-                      }
-                      echo '</table></div>';
-                      echo '</div>';
-                  } 
+              if($app->hasLogs()) {
+                  $log = $app->getLog($_SESSION['client'], $_SESSION['log']);
+                  if($log instanceof SyonixLogViewer\LogFile) {
+                      foreach($log->getLines() as $id => $line) {
+                          $message = ($line['message'] != "") ? $line['message'] : '<span style="color: #cbcbcb; font-style: italic;">No Message</span>';
+                          switch($line['level']) {
+                              case 'DEBUG':
+                                $levelIcon = 'bug';
+                                $cssClass = 'debug';
+                                break;
+                              case 'INFO':
+                                $levelIcon = 'info-circle';
+                                $cssClass = 'info';
+                                break;
+                              case 'NOTICE':
+                                $levelIcon = 'file-text';
+                                $cssClass = 'notice';
+                                break;
+                              case 'WARNING':
+                                $levelIcon = 'warning';
+                                $cssClass = 'warning';
+                                break;
+                              case 'ERROR':
+                                $levelIcon = 'times-circle';
+                                $cssClass = 'error';
+                                break;
+                              case 'CRITICAL':
+                                $levelIcon = 'fire';
+                                $cssClass = 'critical';
+                                break;
+                              case 'ALERT':
+                                $levelIcon = 'bell';
+                                $cssClass = 'alert';
+                                break;
+                              case 'EMERGENCY':
+                                $levelIcon = 'flash';
+                                $cssClass = 'emergency';
+                                break;
+                          }
+                          echo '<div class="logline clearfix">';
+                          echo '<div class="level '.$cssClass.'"><i class="fa fa-'.$levelIcon.'"></i>&nbsp;</div>';
+                          echo '<div class="message">'.$message.'</div>';
+                          echo '<div class="date">'.$line['date']->format("d.m.Y, H:i:s").'</div>';
+                          echo '<div class="more" id="more-'.($id+1).'" onclick="toggleMore('.($id+1).');"><i class="fa fa-search-plus"></i> more...</div>';
+                          echo '<div class="context" id="context-'.($id+1).'"><table>';
+                          
+                          foreach($line['context'] as $title => $content) {
+                              echo '<tr><td><strong>' . $title . '</strong></td>';
+                              echo '<td>' . nl2br($content) . '</td></tr>';
+                          }
+                          echo '</table></div>';
+                          echo '</div>';
+                      } 
+                  } else {
+                      echo "An error has occured!";
+                  }
               } else {
-                  echo "An error has occured!";
+                  echo '<div class="alert alert-danger alert-dismissable"><b>Error</b> - No accessible logs were found. Please check your config file.</div>';
               }
+              
           ?>
         </div>
         <?php elseif($checkPasswdFile === true): ?>
