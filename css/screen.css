@@ -1,0 +1,301 @@
+body {
+	color: #3b3b3b;
+	font-family: 'FlexoWebfont', 'Arial', sans-serif;
+}
+
+h1, h2, h3, h4, h5 {
+	font-family: inherit;
+}
+
+/* Header */
+
+header#header {
+	width: 100%;
+	height: 51px;
+	background: url(../img/lines.png) repeat-x #ffffff;
+	border-bottom: 1px solid #dedede;
+	margin-bottom: 2px
+}
+
+header#header img.logo {
+	margin: 10px 0 0 25px;
+	border: 0;
+}
+
+header#header div#logout {
+	position: absolute;
+	top: 2px;
+	right: 2px;
+	padding: 15px 20px 0 0;
+	font-weight: bold;
+}
+
+header#header div#logout a {
+	color: inherit;
+	text-decoration: none;
+} 
+
+header#header div#logout i {
+	color: #dedede;
+}
+
+header#header div#logout a:hover i {
+	color: inherit;
+}
+
+div.globalalert {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 50px;
+	padding: 13px 0 0 25px;
+	font-size: 14pt;
+	z-index: 20;
+	cursor: pointer;
+}
+
+div.globalalert.warning {
+	background-color: #d20000;
+	color: white;
+}
+
+
+/* Login */
+div#login {
+	position: absolute;
+	top: 53px;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: #f1f1f1;
+	margin: 0;
+	overflow: auto;
+}
+
+div#login div#loginform {
+	width: 300px;
+	margin: 100px auto;
+	padding: 25px;
+	background-color: #ffffff;
+}
+
+div#login div#loginform form {
+	margin: 0;
+}
+
+div#login div#loginform input[type=text],
+div#login div#loginform input[type=password] {
+	margin-bottom: 25px;
+}
+
+
+div#login div#loginform input[type=submit]{
+	
+}
+
+/* Navigation */
+
+nav#navigation {
+	position: absolute;
+	top: 53px;
+	bottom: 0;
+	left: 0;
+	width: 200px;
+	background-color: #0f1a38;
+	float: left;
+}
+
+nav#navigation ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	overflow: auto;
+}
+
+nav#navigation ul li {
+    display: block;
+	width: 200px;
+	height: 60px;
+	display: block;
+	border-left: 5px solid #0f1a38;
+	text-align: left;
+	color: #9aaad2;
+	font-weight: bold;
+	font-size: 11pt;
+}
+
+nav#navigation ul li a {
+	width: 100%;
+	height: 100%;
+	padding: 20px;
+	display: inline-block;
+	text-decoration: none;
+	color: inherit;
+}
+
+nav#navigation ul li a:hover {
+	color: #ffffff;
+}
+
+nav#navigation ul li i {
+	font-size: 22pt;
+	display: block;
+	margin: 26px 0 12px 0;
+}
+
+nav#navigation ul li.active {
+	color: #ffffff;
+	background-color: #1a2d62;
+}
+
+nav#navigation ul li.active.turquoise {
+	border-left-color: #00a4e5;
+}
+
+nav#navigation ul li.active.purple {
+	border-left-color: #7d4bcc;
+}
+
+nav#navigation ul li.active.blue {
+	border-left-color: #5d6ff9;
+}
+
+/* Content */
+div#content {
+	position: absolute;
+	top: 113px;
+	right: 0;
+	bottom: 0;
+	left: 200px;
+	float: left;
+	padding: 25px;
+	overflow: auto;
+	-webkit-overflow-scrolling: touch;
+}
+
+header#logs {
+	position: absolute;
+	left: 200px;
+	top: 53px;
+	right: 0;
+	height: 60px;
+	padding: 0;
+	color: #ffffff;
+	background-color: #006299;
+}
+
+header#logs ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+header#logs ul li {
+    display: inline-block;
+    height: 60px;
+	font-weight: bold;
+	font-size: 11pt;
+}
+
+header#logs ul li.active {
+    background-color: #0091e4;
+}
+
+header#logs ul li a {
+    display: block;
+    height: 100%;
+    width: 100%;
+    padding: 20px 20px;
+    color: #ffffff;
+}
+
+/* Log Lines */
+div.logline {
+    font-size: 12pt;
+}
+
+div.logline:nth-child(even) {
+    background-color: #fafafa;
+}
+
+div.logline div.level,
+div.logline div.message,
+div.logline div.timestamp,
+div.logline div.more {
+    display: inline-block;
+    float: left;
+    padding: 5px 10px;
+}
+
+div.logline div.level {
+    width: 45px;
+    border-right: 3px solid #00a4e5;
+    text-align: center;
+}
+
+div.logline div.level.debug {
+    border-right-color: #00a4e5;
+    color: #00a4e5;
+}
+
+div.logline div.level.info {
+    border-right-color: #00a4e5;
+    color: #00a4e5;
+}
+
+div.logline div.level.notice {
+    border-right-color: #00a4e5;
+    color: #00a4e5;
+}
+
+div.logline div.level.warning {
+    border-right-color: #ffd500;
+    color: #ffd500;
+}
+
+div.logline div.level.error {
+    border-right-color: #ff9a00;
+    color: #ff9a00;
+}
+
+div.logline div.level.critical {
+    border-right-color: #ee0000;
+    color: #ee0000;
+}
+
+div.logline div.level.alert {
+    border-right-color: #ee0000;
+    color: #ee0000;
+}
+
+div.logline div.level.emergency {
+    border-right-color: #ee0000;
+    color: #ee0000;
+}
+
+div.logline div.message {
+    width: calc(100% - 345px);
+}
+
+div.logline div.timestamp {
+    width: 200px;
+    color: #cbcbcb;
+}
+
+div.logline div.more {
+    width: 100px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+div.logline div.context {
+    clear: left;
+    margin-left: 45px;
+}
+
+div.logline div.context table td {
+    vertical-align: top;
+    padding: 5px 10px;
+    color: #8c8c8c;
+}
