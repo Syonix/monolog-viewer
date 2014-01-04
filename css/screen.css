@@ -234,44 +234,54 @@ div.logline div.level {
     text-align: center;
 }
 
-div.logline div.level.debug {
+div.logline div.level.level-debug {
+    border-right-color: #c8c8c8;
+    color: #c8c8c8;
+}
+
+div.logline div.level.level-info {
     border-right-color: #00a4e5;
     color: #00a4e5;
 }
 
-div.logline div.level.info {
+div.logline div.level.level-notice {
     border-right-color: #00a4e5;
     color: #00a4e5;
 }
 
-div.logline div.level.notice {
-    border-right-color: #00a4e5;
-    color: #00a4e5;
-}
-
-div.logline div.level.warning {
+div.logline div.level.level-warning {
     border-right-color: #ffd500;
     color: #ffd500;
 }
 
-div.logline div.level.error {
+div.logline div.level.level-error {
     border-right-color: #ff9a00;
     color: #ff9a00;
 }
 
-div.logline div.level.critical {
+div.logline div.level.level-critical {
     border-right-color: #ee0000;
     color: #ee0000;
 }
 
-div.logline div.level.alert {
+div.logline div.level.level-alert {
     border-right-color: #ee0000;
     color: #ee0000;
 }
 
-div.logline div.level.emergency {
-    border-right-color: #ee0000;
-    color: #ee0000;
+div.logline div.level.level-emergency {
+    border-right-color: #ffffff;
+    color: #ffffff;
+}
+
+div.logline.level-emergency {
+    background: #ee0000;
+    color: #ffffff;
+}
+
+div.logline.level-emergency div.date,
+div.logline.level-emergency div.context table td {
+    color: #ab0000;
 }
 
 div.logline div.message {

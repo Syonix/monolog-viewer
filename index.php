@@ -195,8 +195,8 @@
                                 $cssClass = 'emergency';
                                 break;
                           }
-                          echo '<div class="logline clearfix">';
-                          echo '<div class="level '.$cssClass.'"><i class="fa fa-'.$levelIcon.'"></i>&nbsp;</div>';
+                          echo '<div class="logline clearfix level-'.$cssClass.'">';
+                          echo '<div class="level level-'.$cssClass.'"><i class="fa fa-'.$levelIcon.'"></i>&nbsp;</div>';
                           echo '<div class="message">'.$message.'</div>';
                           echo '<div class="date">'.$line['date']->format("d.m.Y, H:i:s").'</div>';
                           echo '<div class="more" id="more-'.($id+1).'" onclick="toggleMore('.($id+1).');"><i class="fa fa-search-plus"></i> more...</div>';
