@@ -37,7 +37,7 @@ To set up log files, make sure to fill in the config file following this structu
 ```
 
 # Password management
-My goal was to keep this tool so simple, that it can be installed on any shared hosting and the installation-process is a no-brainer. Therefore I decicded not to use a database to store the password. 
+My goal was to keep this tool so simple, that it can be installed on any shared hosting. Therefore I decicded not to use a database to store the password. 
 
 To keep things secure, Monolog Viewer creates a randomly named file inside the folder `/secure/pwd`. This ensures that your password hash is safe, even if someone knows how this process works. 
 
