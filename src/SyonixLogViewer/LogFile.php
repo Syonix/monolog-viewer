@@ -24,8 +24,8 @@ class LogFile {
         
         $lines = explode("\n", $file);
 
+        $parser = new LineLogParser(); 
         foreach($lines as $line) {
-            $parser = new LineLogParser(); 
             $entry = $parser->parse($line, 0);
             if(count($entry) > 0) {
                 $this->lines[] = $entry;
