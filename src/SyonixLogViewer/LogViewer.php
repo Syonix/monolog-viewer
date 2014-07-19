@@ -18,17 +18,10 @@ class LogViewer {
         foreach ($logs as $log) {
             $logfiles = array();
             foreach($log['logs'] as $name => $file) {
-                $ch = curl_init($file);
-                curl_setopt($ch, CURLOPT_NOBODY, true);
-                curl_exec($ch);
-                $retcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                curl_close($ch);
-                if($retcode == 200) { 
-                    $logfiles[$this->toAscii($name)] = array('name' => $name, 'file' => $file);
-                }
+                $logfiles[$this->toAscii($name)] = array('name' => $name, 'file' => $file);
             }
             
-            // Only add client if at least one log file is readable.
+            // Only add client with at leas one log file.
             if(count($logfiles) > 0) {
                 $this->logs[$this->toAscii($log['name'])] = array(
                     'name' => $log['name'], 

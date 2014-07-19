@@ -21,7 +21,8 @@ The config file is a Json file containing the paths to your log files. Log files
 To set up log files, make sure to fill in the config file following this structure:
 ```json
 {
-    "clients": [
+    "timezone" : "UTC",
+    "clients" : [
         {
             "name": "Your first client",
             "logs": {
@@ -39,6 +40,12 @@ To set up log files, make sure to fill in the config file following this structu
 }
 ```
 **Note:** If your `config.json` is invalid or none of your log files are readable, Monolog Viewer will display an error message. Also, if a client contains only logs that are not readable, the client will not be listed in the navigation.
+
+## Configuration values
+The following configuration values are available:
+Name | Type | Description
+`timezone` | `string` | Timezone string according to [PHP Manual](http://php.net/manual/en/timezones.php).
+`clients` | `array` | List of all log files, categorized by "clients" (see above)
 
 # Password management
 My goal was to keep this tool so simple, that it can be installed on any shared hosting. Therefore I decicded not to use a database to store the password. 

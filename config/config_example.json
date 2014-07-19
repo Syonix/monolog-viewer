@@ -1,5 +1,6 @@
 {
-    "clients": [
+    "timezone" : "Europe/Zurich",
+    "clients" : [
         {
             "name": "Demo-Client",
             "logs": {

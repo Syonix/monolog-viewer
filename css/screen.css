@@ -189,6 +189,8 @@ header#logs ul {
     list-style: none;
     padding: 0;
     margin: 0;
+    height: 60px;
+    overflow: auto;
 }
 
 header#logs ul li {
@@ -198,7 +200,8 @@ header#logs ul li {
 	font-size: 11pt;
 }
 
-header#logs ul li.active {
+header#logs ul li.active,
+header#logs ul li a.active {
     background-color: #0091e4;
 }
 
@@ -206,8 +209,39 @@ header#logs ul li a {
     display: block;
     height: 100%;
     width: 100%;
-    padding: 20px 20px;
+    padding: 20px;
     color: #ffffff;
+}
+
+header#logs ul li a:hover {
+    text-decoration: none;
+    background-color: #0091e4;
+}
+
+header#logs ul li form {
+	height: 100%;
+	padding: 20px;
+    display: block;
+}
+
+header#logs #filter-form-dropdown {
+    background-color: #0091e4;
+    position: absolute;
+    right: 0;
+    top: 60px;
+    padding: 20px;
+    z-index: 10;
+}
+
+header#logs #filter-form-dropdown a {
+    color: inherit;
+    display: inline-block;
+    padding: 3px 0;
+    font-size: 1.1em;
+}
+
+header#logs #filter-form-dropdown a.lower {
+    color: rgba(255, 255, 255, 0.5);
 }
 
 /* Log Lines */
@@ -286,6 +320,10 @@ div.logline.level-emergency div.context table td {
 
 div.logline div.message {
     width: calc(100% - 345px);
+}
+
+div.logline div.pointer {
+    cursor: pointer;
 }
 
 div.logline div.date {
