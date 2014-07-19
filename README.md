@@ -43,6 +43,7 @@ To set up log files, make sure to fill in the config file following this structu
 
 ## Configuration values
 The following configuration values are available:
+
 Name | Type | Description
 ---- | ---- | -----------
 `timezone` | `string` | Timezone string according to [PHP Manual](http://php.net/manual/en/timezones.php).
