@@ -1,0 +1,118 @@
+{% extends "base.html.twig" %}
+{% block scripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("div.context").hide();
+            $.stayInWebApp();
+        });
+
+        function toggleMore(id) {
+            context = $('#context-'+id);
+            more = $('#more-'+id);
+            if(context.is(':visible')) {
+                context.slideUp(300);
+                more.html('<i class="fa fa-search-plus"></i> more...');
+            } else {
+                context.slideDown(300);
+                more.html('<i class="fa fa-search-minus"></i> less...');
+            }
+        }
+
+        $(document).ready(function(){
+            $(".show-if-js").removeClass('show-if-js');
+            $(".hide-if-js").hide();
+
+            $("#filter-form-toggle").click(function() {
+                if($("#filter-form-dropdown").is(":visible")) {
+                    $("#filter-form-arrow").removeClass("fa-chevron-up");
+                    $("#filter-form-arrow").addClass("fa-chevron-down");
+                    $(this).removeClass("active");
+                    $("#filter-form-dropdown").slideUp(200);
+                } else {
+                    $("#filter-form-arrow").removeClass("fa-chevron-down");
+                    $("#filter-form-arrow").addClass("fa-chevron-up");
+                    $(this).addClass("active");
+                    $("#filter-form-dropdown").slideDown(200);
+                }
+            });
+        });
+    </script>
+{% endblock %}
+{% block navigation %}
+    <ul>
+        {% for slug, client in clients %}
+            <li{% if clientSlug == slug %} class="active turquoise"{% endif %}><a href="{{ path('client', {'clientSlug': slug}) }}">{{ client }}</a></li>
+        {% else %}
+            <!--<li>No Logs found.</li>-->
+        {% endfor %}
+    </ul>
+{% endblock %}
+{% block logslist %}
+    <ul>
+        {% for slug, log in logs %}
+            <li{% if logSlug == slug %} class="active"{% endif %}><a href="{{ path('log', {'clientSlug': clientSlug, 'logSlug': slug}) }}">{{ log.name }}</a></li>
+        {% else %}
+            <!--<li>No Logs found.</li>-->
+        {% endfor %}
+        <li id="filter-form-js" class="pull-right{% if minLogLevel > 0 %} active{% endif %} show-if-js">
+            <a id="filter-form-toggle" href="javascript:void(0);"><i class="fa fa-lg fa-filter"></i> Minimal Log Level <i id="filter-form-arrow" class="fa fa-chevron-down"></i></a>
+        </li>
+        <li id="filter-form" class="pull-right hide-if-js">
+            <form method="get">
+                <label><i class="fa fa-filter"></i></label>
+                <select name="f">
+                    <option value="">Minimal Log Level</option>
+                    {% for name, value in logLevels %}
+                        <option value="{{ value }}"{% if app.request.query.get('f') == value %} selected="selected"{% endif %}>{{ name }}</option>
+                    {% endfor %}
+                </select>
+                <input type="submit" value="Filter">
+            </form>
+        </li>
+        <li id="jump-to-newest" class="pull-right show-if-js"><a href="#" onclick="$('#content').animate({ scrollTop: $('#content').prop('scrollHeight') - $('#content').height() }, 500); return false;"><i class="fa fa-lg fa-arrow-circle-down"></i> Newest entry</a></li>
+    </ul>
+    <div id="filter-form-dropdown" style="display:none;">
+        {% for name, value in logLevels %}
+            {% if value > 100 %}
+                {% set href = path('minLogLevel', {'clientSlug': clientSlug, 'logSlug': logSlug, 'minLogLevel': value}) %}
+            {% else %}
+                {% set href = path('log', {'clientSlug': clientSlug, 'logSlug': logSlug}) %}
+            {% endif %}
+            <a href="{{ href }}"{% if value < minLogLevel %} class="lower"{% endif %}><i class="fa fa-fw fa-{{ logLevelStyle[value].icon }}"></i> {{ name }}</a><br />
+        {% endfor %}
+    </div>
+{% endblock %}
+{% block content %}
+    {% for id,line in log.lines if constant('Monolog\\Logger::' ~ line.level) >= minLogLevel %}
+        {% set level = constant('Monolog\\Logger::' ~ line.level) %}
+        <div class="logline clearfix level-{{ logLevelStyle[level].class }}">
+            <div class="level level-{{ logLevelStyle[level].class }}">
+                <i class="fa fa-{{ logLevelStyle[level].icon }}"></i>&nbsp;
+            </div>
+            <div class="message">{{ line.message }}</div>
+            <div class="date">{{ line.date|date(app.mvconfig.dateFormat) }}</div>
+            {% if line.context|length > 0 %}
+                <div class="more" id="more-{{ id + 1 }}" onclick="toggleMore({{ id + 1 }});"><i class="fa fa-search-plus"></i> more...</div>
+                <div class="context" id="context-{{ id + 1 }}"><table>
+                {% for title, content in line.context %}
+                    <tr><td><strong>{{ title }}</strong></td><td>{{ content|nl2br }}</td></tr>
+                {% endfor %}
+                </table></div>
+            {% endif %}
+        </div>
+    {% else %}
+        <div class="logline clearfix level-info">
+            <div class="level level-info">
+                <i class="fa fa-info-circle"></i>&nbsp;
+            </div>
+            <div class="message">
+                {% if minLogLevel > 0 %}
+                    No log entries match your selection. <a href="{{ path('log', {'clientSlug': clientSlug, 'logSlug': logSlug}) }}" class="reset-btn" ><i class="fa fa-times-circle-o"></i> Reset filter</a>
+                {% else %}
+                    This log file is empty
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

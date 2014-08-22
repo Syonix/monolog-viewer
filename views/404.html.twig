@@ -1,0 +1,26 @@
+{% extends "base.html.twig" %}
+{% block navigation %}
+    <ul>
+        {% for slug, client in clients %}
+            <li><a href="{{ app.request.baseUrl}}/{{ slug }}">{{ client }}</a></li>
+        {% else %}
+            <!--<li>No Logs found.</li>-->
+        {% endfor %}
+    </ul>
+{% endblock %}
+{% block logslist %}
+    <ul>
+        {% for slug, log in logs %}
+            <li><a href="{{ app.request.baseUrl}}/{{ clientSlug }}/{{ slug }}">{{ log.name }}</a></li>
+        {% else %}
+            <!--<li>No Logs found.</li>-->
+        {% endfor %}
+    </ul>
+{% endblock %}
+{% block content %}
+    <div class="error-message">
+        <p><i class="fa fa-4x fa-{{ icon }}"></i><br/><strong>Error!</strong></p>
+        <p>{{ message }}</p>
+        {% if app.debug and error %}<p>{{ error.message }}</p>{% endif %}
+    </div>
+{% endblock %}

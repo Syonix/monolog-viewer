@@ -1,0 +1,91 @@
+{% set logLevelStyle = {
+    100: {
+    'icon': 'bug',
+    'class' : 'debug'
+    },
+    200: {
+    'icon': 'info-circle',
+    'class' : 'info'
+    },
+    250: {
+    'icon': 'file-text',
+    'class' : 'notice'
+    },
+    300: {
+    'icon': 'warning',
+    'class' : 'warning'
+    },
+    400: {
+    'icon': 'times-circle',
+    'class' : 'error'
+    },
+    500: {
+    'icon': 'fire',
+    'class' : 'critical'
+    },
+    550: {
+    'icon': 'bell',
+    'class' : 'alert'
+    },
+    600: {
+    'icon': 'flash',
+    'class' : 'emergency'
+    }
+} %}
+<html>
+<head>
+    <title>{% block title %}Syonix Monolog Viewer{% endblock %}</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta charset="utf-8">
+    <!-- Bootstrap -->
+    <link href="{{ app.request.baseUrl }}/web/res/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="http://syonix.ch/res/fonts/flexo.css" rel="stylesheet" media="screen">
+    <link href="{{ app.request.baseUrl }}/web/res/font-awesome/css/font-awesome.min.css" rel="stylesheet" media="screen">
+    <link href="{{ app.request.baseUrl }}/web/css/screen.css" rel="stylesheet" media="screen">
+
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" href="{{ app.request.baseUrl }}/web/img/touch-icon-iphone.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ app.request.baseUrl }}/web/img/touch-icon-ipad.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="{{ app.request.baseUrl }}/web/img/touch-icon-iphone-retina.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="{{ app.request.baseUrl }}/web/img/touch-icon-ipad-retina.png">
+
+    <!-- Web App Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-startup-image" href="{{ app.request.baseUrl }}/web/img/touch-startup-ipad-portrait.png"    sizes="768x1004" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)" />
+    <link rel="apple-touch-startup-image" href="{{ app.request.baseUrl }}/web/img/touch-startup-ipad-landscape.png"     sizes="1024x748" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)" />
+
+
+
+    <!-- Java Scripts -->
+    {% block scripts %}
+        <script src="{{ app.request.baseUrl }}/web/res/jquery/jquery-2.0.3.min.js"></script>
+        <script src="{{ app.request.baseUrl }}/web/res/jquery/jquery.stayInWebApp.min.js"></script>
+        <script src="{{ app.request.baseUrl }}/web/res/retina.js"></script>
+    {% endblock %}
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ app.request.baseUrl }}/web/img/favicon.ico"/>
+</head>
+<body>
+<header id="header">
+    <a href="{{ app.request.baseUrl }}"><img class="logo" src="{{ app.request.baseUrl }}/web/img/logo.png" alt="Syonix" width="102" height="32"></a>
+    {% if app.security.token and app.security.token.user %}<div id="logout"><a href="{{ path('logs_logout') }}">Logout <i class="fa fa-sign-out"></i></a></div>{% endif %}
+</header>
+{% block body %}
+    <nav id="navigation">
+        {% block navigation %}{% endblock %}
+    </nav>
+    <header id="logs">
+        {% block logslist %}{% endblock %}
+    </header>
+    {% block content_wrap %}
+        <div id="content">
+            {% block content %}{% endblock %}
+        </div>
+    {% endblock %}
+{% endblock %}
+</body>
+</html>

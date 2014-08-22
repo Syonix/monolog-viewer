@@ -60,6 +60,7 @@ class LogViewer {
             $file = $this->logs[$client]['logs'][$slug];
             return new LogFile($file['name'], $file['file']);
         }
+        return false;
     }
     
     public function getClients() {

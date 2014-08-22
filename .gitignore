@@ -1,5 +1,5 @@
-secure/*
+.idea
 vendor/*
-config/config.json
 composer.phar
-composer.lock
+app/config/secure/passwd
+app/config/config.json

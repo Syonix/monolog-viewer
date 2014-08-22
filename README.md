@@ -47,6 +47,7 @@ The following configuration values are available:
 Name | Type | Description
 ---- | ---- | -----------
 `timezone` | `string` | Timezone string according to [PHP Manual](http://php.net/manual/en/timezones.php).
+`dateFormat` | `string` | Date format for log entries according to [PHP Manual](http://php.net/manual/en/function.date.php).
 `clients` | `array` | List of all log files, categorized by "clients" (see above)
 
 # Password management

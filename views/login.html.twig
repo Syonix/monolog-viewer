@@ -1,0 +1,16 @@
+{% extends "base.html.twig" %}
+{% block title %}{{ parent() }}{% endblock %}
+{% block content_wrap %}
+    <div id="login">
+        <div id="loginform">
+            <form method="post" action="{{ path('logs_login_check') }}">
+                {% if create_success %}<div class="alert alert-success alert-dismissable"><b>Congratulations</b> - Your login has successfully been created. You can now sign in using the password you created.</div>{% endif %}
+                <p>Please enter your password to access the log files.</p>
+                {% if error %}<div class="alert alert-danger alert-dismissable"><b>Error</b> - {{ error }}.</div>{% endif %}
+                <input type="hidden" name="_username" value="user" />
+                <input type="password" class="form-control" name="_password" placeholder="Password">
+                <input type="submit" class="btn btn-primary btn-block" name="login" value="Sign in">
+            </form>
+        </div>
+    </div>
+{% endblock %}

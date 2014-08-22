@@ -7,6 +7,10 @@ h1, h2, h3, h4, h5 {
 	font-family: inherit;
 }
 
+.show-if-js {
+    display: none !important;
+}
+
 /* Header */
 
 header#header {
@@ -194,7 +198,8 @@ header#logs ul {
 }
 
 header#logs ul li {
-    display: inline-block;
+    display: block;
+    float: left;
     height: 60px;
 	font-weight: bold;
 	font-size: 11pt;
@@ -322,6 +327,15 @@ div.logline div.message {
     width: calc(100% - 345px);
 }
 
+div.logline.level-critical .message,
+div.logline.level-alert .message {
+    color: #ee0000;
+}
+
+div.logline.level-alert .message {
+    font-weight: bold;
+}
+
 div.logline div.pointer {
     cursor: pointer;
 }
@@ -346,4 +360,24 @@ div.logline div.context table td {
     vertical-align: top;
     padding: 5px 10px;
     color: #8c8c8c;
+}
+
+div.error-message {
+    max-width: 960px;
+    margin: 10px auto;
+    padding: 10px;
+    color: #ffffff;
+    background: #e74c3c;
+    font-size: 1.3em;
+    text-align: center;
+}
+
+a.reset-btn {
+    color: inherit;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+a.reset-btn:hover {
+    color: #e74c3c;
 }

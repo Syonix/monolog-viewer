@@ -1,0 +1,9 @@
+{% extends "base.html.twig" %}
+{% block title %}Error! - {{ parent() }}{% endblock %}
+{% block content %}
+    <div class="error-message">
+        <p><i class="fa fa-4x fa-{{ icon }}"></i><br/><strong>Error!</strong></p>
+        <p>{{ message }}</p>
+        {% if app.debug and error %}<p>{{ error.message }}</p>{% endif %}
+    </div>
+{% endblock %}
