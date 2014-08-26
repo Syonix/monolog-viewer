@@ -1,5 +1,7 @@
-.idea
 vendor/*
 composer.phar
 app/config/secure/passwd
 app/config/config.json
+
+app/cache/
+!app/cache/.gitkeep
