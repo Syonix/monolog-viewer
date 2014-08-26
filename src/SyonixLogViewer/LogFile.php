@@ -32,7 +32,6 @@ class LogFile {
     
     public function getLine($line)
     {
-        // Todo: Check
         return $this->lines[intval($line)];
     }
     
