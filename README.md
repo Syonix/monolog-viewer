@@ -21,7 +21,7 @@ The config file is a Json file containing the paths to your log files. Log files
 To set up log files, make sure to fill in the config file following this structure:
 ```json
 {
-    "debug" : "false",
+    "debug" : false,
     "timezone" : "UTC",
     "clients" : [
         {
