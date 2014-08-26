@@ -9,18 +9,15 @@ class LogFile {
     protected $path;
     protected $lines;
 
-    public function __construct($name, $path) {
+    public function __construct($name, $path, $cacheDir) {
         setlocale(LC_ALL, 'en_US.UTF8');
         
         $this->name = $name;
         $this->slug = $this->toAscii($name);
         $this->path = $path;
-        
-        $ch = curl_init();
-        curl_setopt ($ch, CURLOPT_URL, $this->path);
-        curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
-        $file = curl_exec($ch);
-        curl_close($ch);
+
+        $cache = new LogCache($cacheDir);
+        $file = $cache->get($path);
         
         $lines = explode("\n", $file);
 

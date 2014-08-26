@@ -4,16 +4,17 @@ namespace SyonixLogViewer;
 class LogViewer {
     protected $logs;
     protected $clients;
+    protected $cacheDir;
 
     public function __construct($configPath) {
         setlocale(LC_ALL, 'en_US.UTF8');
 
-        $logs = array();
         $this->logs = array();
         $this->clients = array();
 
         $config = json_decode(file_get_contents($configPath), true);
         $logs = $config['clients'];
+        $this->cacheDir = APP_PATH . 'cache/';
         
         foreach ($logs as $log) {
             $logfiles = array();
@@ -58,7 +59,7 @@ class LogViewer {
         if(isset($this->logs[$client]['logs'][$slug]))
         {
             $file = $this->logs[$client]['logs'][$slug];
-            return new LogFile($file['name'], $file['file']);
+            return new LogFile($file['name'], $file['file'], $this->cacheDir);
         }
         return false;
     }

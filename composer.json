@@ -23,7 +23,8 @@
         "symfony/twig-bridge": "2.1.*",
         "symfony/security": "~2.3",
         "ddtraceweb/monolog-parser": "1.*",
-        "ircmaxell/password-compat": "1.*"
+        "ircmaxell/password-compat": "1.*",
+        "rmccue/requests": "1.6.*"
     },
     "autoload": {
         "psr-0": {"SyonixLogViewer": "src/"}
