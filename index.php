@@ -121,7 +121,7 @@ else
 
             $log = $viewer->getLog($clientSlug, $logSlug);
 
-            if($log == false) {
+            if($log === false) {
                 return $app->redirect($app['url_generator']->generate('client', array('clientSlug' => $clientSlug)));
             }
 
