@@ -90,8 +90,8 @@
             <div class="level level-{{ logLevelStyle[level].class }}">
                 <i class="fa fa-{{ logLevelStyle[level].icon }}"></i>&nbsp;
             </div>
-            <div class="message">{{ line.message }}</div>
-            <div class="date">{{ line.date|date(app.mvconfig.dateFormat) }}</div>
+            <div class="message{% if line.context|length > 0 %} has-more" onclick="toggleMore({{ id + 1 }});{% endif %}">{{ line.message }}</div>
+            <div class="date">{{ line.date|date(app.config.dateFormat) }}</div>
             {% if line.context|length > 0 %}
                 <div class="more" id="more-{{ id + 1 }}" onclick="toggleMore({{ id + 1 }});"><i class="fa fa-search-plus"></i> more...</div>
                 <div class="context" id="context-{{ id + 1 }}"><table>
