@@ -12,13 +12,13 @@ define('WEB_URL', BASE_URL . 'web/');
 
 $app = new Silex\Application();
 
-$app->register(new DerAlex\Silex\YamlConfigServiceProvider(CONFIG_FILE));
-$app['debug'] = ($app['config']['debug']);
-
-Symfony\Component\Debug\ExceptionHandler::register(!$app['debug']);
-
-if(in_array($app['config']['timezone'], DateTimeZone::listIdentifiers())) date_default_timezone_set($app['config']['timezone']);
-
+if(is_readable(CONFIG_FILE)) {
+    $app->register(new DerAlex\Silex\YamlConfigServiceProvider(CONFIG_FILE));
+    $app['debug'] = ($app['config']['debug']);
+    Symfony\Component\Debug\ExceptionHandler::register(!$app['debug']);
+    if(in_array($app['config']['timezone'], DateTimeZone::listIdentifiers())) date_default_timezone_set($app['config']['timezone']);
+}
+$app['debug'] =true;
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
         'twig.path' => __DIR__.'/views',
         'twig.options' => array('debug' => $app['debug'])
@@ -79,6 +79,9 @@ else
 {
 
     $app->get('/', function() use($app) {
+            if(!is_readable(CONFIG_FILE)) {
+                throw new \Syonix\LogViewer\Exceptions\ConfigFileMissingException();
+            }
             return $app->redirect($app['url_generator']->generate('home'));
         });
 
@@ -166,6 +169,10 @@ else
         ->assert('minLogLevel', '\d+')
         ->bind("minLogLevel");
 }
+
+$app->error(function (\Syonix\LogViewer\Exceptions\ConfigFileMissingException $e, $code) use($app) {
+    return $app['twig']->render('error/config_file_missing.html.twig');
+});
 
 $app->error(function (\Syonix\LogViewer\Exceptions\NoLogsConfiguredException $e, $code) use($app) {
     return $app['twig']->render('error/no_log_files.html.twig');
