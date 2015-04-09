@@ -15,6 +15,8 @@ $app = new Silex\Application();
 $app->register(new DerAlex\Silex\YamlConfigServiceProvider(CONFIG_FILE));
 $app['debug'] = ($app['config']['debug']);
 
+Symfony\Component\Debug\ExceptionHandler::register(!$app['debug']);
+
 if(in_array($app['config']['timezone'], DateTimeZone::listIdentifiers())) date_default_timezone_set($app['config']['timezone']);
 
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
@@ -123,30 +125,13 @@ else
                 $clients = $viewer->getClients();
                 $logs = $viewer->getLogs($clientSlug);
                 $log = $viewer->getLog($clientSlug, $logSlug);
+                if(false === $log) $app->abort(404, "Log file not found");
             } catch(\League\Flysystem\FileNotFoundException $e) {
                 return $app['twig']->render('error/log_file_not_found.html.twig', array(
                     'clients' => $viewer->getClients(),
                     'logs' => $viewer->getLogs($clientSlug),
                     'clientSlug' => $clientSlug,
                     'logSlug' => $logSlug,
-                    'error' => $e
-                ));
-            } catch(InvalidArgumentException $e) {
-                return $app['twig']->render('error/exception.html.twig', array(
-                    'clients' => $viewer->getClients(),
-                    'logs' => $viewer->getLogs($clientSlug),
-                    'clientSlug' => $clientSlug,
-                    'logSlug' => $logSlug,
-                    'icon' => 'bug',
-                    'message' => $e->getMessage(),
-                    'error' => $e
-                ));
-            } catch(\Exception $e) {
-                return $app['twig']->render('error/error.html.twig', array(
-                    'clients' => (isset($clients) && count($clients) > 0) ? $clients : null,
-                    'logs' => (isset($logs) && count($logs) > 0) ? $logs : null,
-                    'message' => 'Something went wrong!',
-                    'icon' => 'bug',
                     'error' => $e
                 ));
             }
@@ -165,7 +150,6 @@ else
     $app->get('/logs/{clientSlug}/{logSlug}/{minLogLevel}', function($clientSlug, $logSlug, $minLogLevel) use($app) {
             $minLogLevel = intval($minLogLevel);
             $viewer = new Syonix\LogViewer\LogViewer($app['config']['logs']);
-            if($viewer->hasLogs() === false) throw new Exception("No logs were found. Please check your config file.");
 
             $log = $viewer->getLog($clientSlug, $logSlug);
 
@@ -183,16 +167,8 @@ else
         ->bind("minLogLevel");
 }
 
-$app->error(function (\League\Flysystem\FileNotFoundException $e, $code) use($app) {
-    $viewer = new Syonix\LogViewer\LogViewer($app['config']['logs']);
-
-    return $app['twig']->render('error/404.html.twig', array(
-        'clients' => $viewer->getClients(),
-        'logs' => array(),
-        'message' => 'The log file could not be found!',
-        'icon' => 'search',
-        'error' => false
-    ));
+$app->error(function (\Syonix\LogViewer\Exceptions\NoLogsConfiguredException $e, $code) use($app) {
+    return $app['twig']->render('error/no_log_files.html.twig');
 });
 
 $app->error(function (\Exception $e, $code) use($app) {
@@ -219,6 +195,8 @@ $app->error(function (\Exception $e, $code) use($app) {
             }
             return $app['twig']->render('error/error.html.twig', array(
                     'clients' => $clients,
+                    'clientSlug' => null,
+                    'logSlug' => null,
                     'message' => 'Something went wrong!',
                     'icon' => 'bug',
                     'error' => $e

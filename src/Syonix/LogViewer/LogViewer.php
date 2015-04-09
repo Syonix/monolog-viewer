@@ -1,6 +1,7 @@
 <?php
 namespace Syonix\LogViewer;
 
+use Syonix\LogViewer\Exceptions\NoLogsConfiguredException;
 use Syonix\Util\String;
 
 class LogViewer
@@ -17,7 +18,9 @@ class LogViewer
         $this->clients = array();
 
         $this->cacheDir = APP_PATH . 'cache/';
-        
+        if(count($logs) == 0) {
+            throw new NoLogsConfiguredException();
+        }
         foreach ($logs as $client_name => $client) {
             $logfiles = array();
             foreach($client as $log_name => $file) {

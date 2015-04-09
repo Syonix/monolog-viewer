@@ -9,6 +9,7 @@
     </ul>
 {% endblock %}
 {% block logslist %}
+    {% if clientSlug is not null %}
     <ul>
         {% for slug, log in logs %}
             <li{% if logSlug == slug %} class="active"{% endif %}><a href="{{ path('log', {'clientSlug': clientSlug, 'logSlug': slug}) }}">{{ log.name }}</a></li>
@@ -16,11 +17,12 @@
             <!--<li>No Logs found.</li>-->
         {% endfor %}
     </ul>
+    {% endif %}
 {% endblock %}
 {% block content %}
     <div class="placeholder-message">
         <p><i class="fa fa-4x fa-bug error-icon"></i><br/><strong>Oops. This should not have happened.</strong></p>
-        <p>{{ message }}</p>
+        <p>{{ error.message }}</p>
         {% if app.debug and error %}<p>{{ error.message }}</p>{% endif %}
     </div>
 {% endblock %}

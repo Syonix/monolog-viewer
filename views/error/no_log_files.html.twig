@@ -1,0 +1,9 @@
+{% extends "base.html.twig" %}
+{% block title %}Error! - {{ parent() }}{% endblock %}
+{% block content %}
+    <div class="error-message">
+        <p><i class="fa fa-4x fa-warning"></i><br/><strong>No valid logs found!</strong></p>
+        <p>You don't have any valid log files in your <code>config.yml</code></p>
+        <p>To learn how to set up this application, check the <a href="https://github.com/Syonix/monolog-viewer" target="_blank">GitHub page</a>.</p>
+    </div>
+{% endblock %}

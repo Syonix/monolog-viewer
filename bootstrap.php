@@ -1,5 +1,5 @@
 <?php
 
-namespace SyonixLogViewer;
+namespace Syonix\LogViewer;
 
 require_once "vendor/autoload.php";
