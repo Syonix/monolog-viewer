@@ -56,7 +56,7 @@ Accesses log files on the server's local file system.
 
 Config values | Description
 ------------- | -----------
-`path` | The file path, relative to the server's document root.
+`path` | The absolute file path. (You can use PHP's `realpath()` to get the absolute path of a file.)
 
 ##### `ftp`
 Accesses log files on the server's local file system.
