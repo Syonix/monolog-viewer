@@ -68,6 +68,12 @@ Config values | Description
 `password` | The ftp user's password.
 `path` | The file path, relative to the FTP user's root directory.
 
+##### All types
+
+Config values | Description
+------------- | -----------
+`pattern` | A regex for a custom log line pattern.<br>For example if your log lines don't end in `[] {}` you could use `/\[(?P<date>.*)\] (?P<logger>\w+).(?P<level>\w+): (?P<message>[^\[\{]+)/`
+
 # Password management
 My goal was to keep this tool so simple, that it can be installed on any shared hosting. Therefore I decicded not to use a database to store the password. Instead it is saved within a folder that is protected by a `.htaccess` file and therefore not accessible by the public.
 
