@@ -50,6 +50,24 @@ Name | Type | Description
 `dateFormat` | `string` | Date format for log entries according to [PHP Manual](http://php.net/manual/en/function.date.php).
 `logs` | `array` | List of all log files, categorized by "clients" (see above)
 
+### Flysystem Types
+##### `local`
+Accesses log files on the server's local file system.
+
+Config values | Description
+------------- | -----------
+`path` | The file path, relative to the server's document root.
+
+##### `ftp`
+Accesses log files on the server's local file system.
+
+Config values | Description
+------------- | -----------
+`host` | The host to connect to (e.g. `ftp.acme.com`)
+`username` | The ftp user to connect with
+`password` | The ftp user's password.
+`path` | The file path, relative to the FTP user's root directory.
+
 # Password management
 My goal was to keep this tool so simple, that it can be installed on any shared hosting. Therefore I decicded not to use a database to store the password. Instead it is saved within a folder that is protected by a `.htaccess` file and therefore not accessible by the public.
 
