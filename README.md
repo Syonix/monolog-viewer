@@ -36,6 +36,9 @@ logs:
             password: $upersecur3
             path: app/logs/prod.log
 ```
+
+The field `type` determines how the app will try to access the log file. For this, [Flysystem](http://flysystem.thephpleague.com/) is used. Currently implemented are `local` and `ftp`, but any other Flysystem Adapter can easily be added to the `Syonix\LogViewer\LogFile.php` constructor. Feel free to contribute.
+
 **Note:** If your `config.yaml` is invalid or none of your log files are readable, Monolog Viewer will display an error message. Also, if a client does not contain any logs, the client will not be listed in the navigation.
 
 ## Configuration values
