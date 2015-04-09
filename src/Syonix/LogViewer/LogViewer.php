@@ -66,7 +66,7 @@ class LogViewer
         if(isset($this->logs[$client]['logs'][$slug]))
         {
             $file = $this->logs[$client]['logs'][$slug];
-            return new LogFile($file['name'], $file['file'], $this->cacheDir);
+            return new LogFile($file['name'], $file['file']);
         }
         return false;
     }

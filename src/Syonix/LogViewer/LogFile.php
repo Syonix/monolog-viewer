@@ -14,7 +14,7 @@ class LogFile {
     protected $lines;
     protected $filesystem;
 
-    public function __construct($name, $args, $cacheDir) {
+    public function __construct($name, $args) {
         setlocale(LC_ALL, 'en_US.UTF8');
         
         $this->name = $name;
@@ -33,9 +33,6 @@ class LogFile {
                 break;
             case 'local':
                 $this->filesystem = new Filesystem(new Local(APP_ROOT));
-                break;
-            case 'url':
-                //$this->filesystem = new Filesystem(new Local(APP_ROOT));
                 break;
             default:
                 throw new \InvalidArgumentException("Invalid log file type: \"" . $this->args['type']."\"");
