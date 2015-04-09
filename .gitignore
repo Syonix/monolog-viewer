@@ -2,6 +2,3 @@ vendor/*
 composer.phar
 app/config/secure/passwd
 app/config/config.yml
-
-app/cache/
-!app/cache/.gitkeep
