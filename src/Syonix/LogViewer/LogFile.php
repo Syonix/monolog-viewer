@@ -32,7 +32,7 @@ class LogFile {
                 )));
                 break;
             case 'local':
-                $this->filesystem = new Filesystem(new Local($_SERVER['DOCUMENT_ROOT']));
+                $this->filesystem = new Filesystem(new Local("/"));
                 break;
             default:
                 throw new \InvalidArgumentException("Invalid log file type: \"" . $this->args['type']."\"");
@@ -41,8 +41,14 @@ class LogFile {
         $file = $this->filesystem->read($this->args['path']);
         $lines = explode("\n", $file);
         $parser = new LineLogParser();
+        if(isset($this->args['pattern'])) {
+            $hasCustomPattern = true;
+            $parser->registerPattern('custom', $this->args['pattern']);
+        } else {
+            $hasCustomPattern = false;
+        }
         foreach ($lines as $line) {
-            $entry = $parser->parse($line, 0);
+            $entry = ($hasCustomPattern ? $parser->parse($line, 0, 'custom') : $parser->parse($line, 0));
             if (count($entry) > 0) {
                 $this->lines[] = $entry;
             }

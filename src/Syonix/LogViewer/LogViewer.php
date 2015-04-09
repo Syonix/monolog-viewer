@@ -8,7 +8,6 @@ class LogViewer
 {
     protected $logs;
     protected $clients;
-    protected $cacheDir;
 
     public function __construct($logs)
     {
@@ -17,7 +16,6 @@ class LogViewer
         $this->logs = array();
         $this->clients = array();
 
-        $this->cacheDir = APP_PATH . 'cache/';
         if(count($logs) == 0) {
             throw new NoLogsConfiguredException();
         }

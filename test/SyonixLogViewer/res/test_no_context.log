@@ -1,0 +1,8 @@
+[2014-01-04 17:28:00] debug.DEBUG: Random debug message
+[2014-01-04 17:28:00] info.INFO: Random info message 
+[2014-01-04 17:28:00] notice.NOTICE: Random notice message 
+[2014-01-04 17:28:00] warning.WARNING: Random warning message 
+[2014-01-04 17:28:00] error.ERROR: Random error message 
+[2014-01-04 17:28:00] critical.CRITICAL: Random critical message 
+[2014-01-04 17:28:00] alert.ALERT: Random alert message 
+[2014-01-04 17:28:00] emergency.EMERGENCY: Random emergency message

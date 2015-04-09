@@ -1,19 +1,35 @@
 <?php
 
-require_once("../bootstrap.php");
-
 class LogViewerTest extends PHPUnit_Framework_TestCase
 {
 	protected $logViewer;
 	public function setUp(){
-	    $this->logViewer = new \SyonixLogViewer\LogViewer(dirname(__FILE__) . '/res/config.json');
+        $config = array(
+            'Client1' => array(
+                'Log1' => array(
+                    'type' => 'local',
+                    'path' => realpath(__DIR__ . '/res/test.log')
+                ),
+                'Log2' => array(
+                    'type' => 'local',
+                    'path' => realpath(__DIR__ . '/res/test.log')
+                )
+            ),
+            'Client2' => array(
+                'Log3' => array(
+                    'type' => 'local',
+                    'path' => realpath(__DIR__ . '/res/test.log')
+                )
+            )
+        );
+	    $this->logViewer = new Syonix\LogViewer\LogViewer($config);
 	}
 	
 	public function tearDown(){ }
     
     public function testInit()
     {
-        $this->assertInstanceOf('SyonixLogViewer\LogViewer', $this->logViewer, "LogViewer is not instance of LogViewer");
+        $this->assertInstanceOf('Syonix\LogViewer\LogViewer', $this->logViewer, "LogViewer is not instance of LogViewer");
     }
     
     /**
@@ -38,7 +54,7 @@ class LogViewerTest extends PHPUnit_Framework_TestCase
     public function testGetLog()
     {
         $log = $this->logViewer->getLog('client1', 'log1');
-        $this->assertInstanceOf('\SyonixLogViewer\LogFile', $log);
+        $this->assertInstanceOf('\Syonix\LogViewer\LogFile', $log);
         return $log;
     }
     
@@ -56,4 +72,3 @@ class LogViewerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($lines[0]['extra']));
     }
 }
-?>
