@@ -1,20 +1,21 @@
 <?php
 require_once('bootstrap.php');
 
+define('APP_ROOT', __DIR__);
 define('APP_PATH', __DIR__ . '/app/');
 define('CONFIG_FILE', APP_PATH . 'config/config.json');
 define('PASSWD_DIR', APP_PATH . 'config/secure');
 define('PASSWD_FILE', PASSWD_DIR . '/passwd');
 define('VENDOR_PATH', __DIR__ . '/vendor/');
-define('BASE_URL', ($_SERVER['HTTPS'] ? 'https' : 'http') . '://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']);
+define('BASE_URL', (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']);
 define('WEB_URL', BASE_URL . 'web/');
 
 $app = new Silex\Application();
 
-$app['mvconfig'] = json_decode(\file_get_contents(CONFIG_FILE), true);
-$app['debug'] = $app['mvconfig']['debug'];
+$app->register(new DerAlex\Silex\YamlConfigServiceProvider('app/config/config.yml'));
+$app['debug'] = ($app['config']['debug']);
 
-if(in_array($app['mvconfig']['timezone'], DateTimeZone::listIdentifiers())) date_default_timezone_set($app['mvconfig']['timezone']);
+if(in_array($app['config']['timezone'], DateTimeZone::listIdentifiers())) date_default_timezone_set($app['config']['timezone']);
 
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
         'twig.path' => __DIR__.'/views',
@@ -88,7 +89,7 @@ else
         ->bind("login");
 
     $app->get('/logs', function() use($app) {
-            $viewer = new \SyonixLogViewer\LogViewer(CONFIG_FILE);
+            $viewer = new Syonix\LogViewer\LogViewer($app['config']['logs']);
 
             $clientSlug = $viewer->getFirstClient();
             $logSlug  = $viewer->getFirstLog($clientSlug);
@@ -101,7 +102,7 @@ else
         ->bind("home");
 
     $app->get('/logs/{clientSlug}', function($clientSlug) use($app) {
-            $viewer = new \SyonixLogViewer\LogViewer(CONFIG_FILE);
+            $viewer = new Syonix\LogViewer\LogViewer($app['config']['logs']);
 
             $logSlug = $viewer->getFirstLog($clientSlug);
             if(is_null($logSlug))
@@ -117,17 +118,41 @@ else
         ->bind("client");
 
     $app->get('/logs/{clientSlug}/{logSlug}', function($clientSlug, $logSlug) use($app) {
-            $viewer = new \SyonixLogViewer\LogViewer(CONFIG_FILE);
-
-            $log = $viewer->getLog($clientSlug, $logSlug);
-
-            if($log === false) {
-                return $app->redirect($app['url_generator']->generate('client', array('clientSlug' => $clientSlug)));
-            }
-
-            return $app['twig']->render('log.html.twig', array(
+            try {
+                $viewer = new Syonix\LogViewer\LogViewer($app['config']['logs']);
+                $clients = $viewer->getClients();
+                $logs = $viewer->getLogs($clientSlug);
+                $log = $viewer->getLog($clientSlug, $logSlug);
+            } catch(\League\Flysystem\FileNotFoundException $e) {
+                return $app['twig']->render('error/log_file_not_found.html.twig', array(
                     'clients' => $viewer->getClients(),
                     'logs' => $viewer->getLogs($clientSlug),
+                    'clientSlug' => $clientSlug,
+                    'logSlug' => $logSlug,
+                    'error' => $e
+                ));
+            } catch(InvalidArgumentException $e) {
+                return $app['twig']->render('error/exception.html.twig', array(
+                    'clients' => $viewer->getClients(),
+                    'logs' => $viewer->getLogs($clientSlug),
+                    'clientSlug' => $clientSlug,
+                    'logSlug' => $logSlug,
+                    'icon' => 'bug',
+                    'message' => $e->getMessage(),
+                    'error' => $e
+                ));
+            } catch(\Exception $e) {
+                return $app['twig']->render('error/error.html.twig', array(
+                    'clients' => (isset($clients) && count($clients) > 0) ? $clients : null,
+                    'logs' => (isset($logs) && count($logs) > 0) ? $logs : null,
+                    'message' => 'Something went wrong!',
+                    'icon' => 'bug',
+                    'error' => $e
+                ));
+            }
+            return $app['twig']->render('log.html.twig', array(
+                    'clients' => $clients,
+                    'logs' => $logs,
                     'clientSlug' => $clientSlug,
                     'logSlug' => $logSlug,
                     'log' => $log,
@@ -139,7 +164,7 @@ else
 
     $app->get('/logs/{clientSlug}/{logSlug}/{minLogLevel}', function($clientSlug, $logSlug, $minLogLevel) use($app) {
             $minLogLevel = intval($minLogLevel);
-            $viewer = new \SyonixLogViewer\LogViewer(CONFIG_FILE);
+            $viewer = new Syonix\LogViewer\LogViewer($app['config']['logs']);
             if($viewer->hasLogs() === false) throw new Exception("No logs were found. Please check your config file.");
 
             $log = $viewer->getLog($clientSlug, $logSlug);
@@ -158,6 +183,18 @@ else
         ->bind("minLogLevel");
 }
 
+$app->error(function (\League\Flysystem\FileNotFoundException $e, $code) use($app) {
+    $viewer = new Syonix\LogViewer\LogViewer($app['config']['logs']);
+
+    return $app['twig']->render('error/404.html.twig', array(
+        'clients' => $viewer->getClients(),
+        'logs' => array(),
+        'message' => 'The log file could not be found!',
+        'icon' => 'search',
+        'error' => false
+    ));
+});
+
 $app->error(function (\Exception $e, $code) use($app) {
     if ($app['debug']) {
         return;
@@ -165,16 +202,23 @@ $app->error(function (\Exception $e, $code) use($app) {
 
     switch($code) {
         case 404:
-            $viewer = new \SyonixLogViewer\LogViewer(CONFIG_FILE);
+            $viewer = new Syonix\LogViewer\LogViewer($app['config']['logs']);
 
-            return $app['twig']->render('404.html.twig', array(
-            'clients' => $viewer->getClients(),
-            'message' => 'The page you are looking for does not exist!',
-            'icon' => 'search',
-            'error' => false
+            return $app['twig']->render('error/404.html.twig', array(
+                'clients' => $viewer->getClients(),
+                'message' => 'The page you are looking for does not exist!',
+                'icon' => 'search',
+                'error' => false
             ));
         default:
-            return $app['twig']->render('error.html.twig', array(
+            try {
+                $viewer = new Syonix\LogViewer\LogViewer($app['config']['logs']);
+                $clients = $viewer->getClients();
+            } catch(\Exception $e) {
+                $clients = array();
+            }
+            return $app['twig']->render('error/error.html.twig', array(
+                    'clients' => $clients,
                     'message' => 'Something went wrong!',
                     'icon' => 'bug',
                     'error' => $e

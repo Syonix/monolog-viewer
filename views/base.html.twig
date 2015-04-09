@@ -64,6 +64,9 @@
         <script src="{{ app.request.baseUrl }}/web/res/jquery/jquery-2.0.3.min.js"></script>
         <script src="{{ app.request.baseUrl }}/web/res/jquery/jquery.stayInWebApp.min.js"></script>
         <script src="{{ app.request.baseUrl }}/web/res/retina.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){ $.stayInWebApp(); });
+        </script>
     {% endblock %}
 
     <!-- Favicon -->

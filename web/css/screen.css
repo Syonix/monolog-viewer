@@ -11,6 +11,10 @@ h1, h2, h3, h4, h5 {
     display: none !important;
 }
 
+.monospaced {
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
 /* Header */
 
 header#header {
@@ -267,6 +271,10 @@ div.logline div.more {
     padding: 5px 10px;
 }
 
+div.logline div.message.has-more {
+    cursor: pointer;
+}
+
 div.logline div.level {
     width: 45px;
     border-right: 3px solid #00a4e5;
@@ -362,14 +370,21 @@ div.logline div.context table td {
     color: #8c8c8c;
 }
 
-div.error-message {
-    max-width: 960px;
-    margin: 10px auto;
-    padding: 10px;
-    color: #ffffff;
-    background: #e74c3c;
+div.error-message,
+div.placeholder-message {
+    width: 100%;
+    height: 100%;
     font-size: 1.3em;
     text-align: center;
+    color: #9f9f9f;
+}
+
+div.error-message {
+    color: #e74c3c;
+}
+
+.error-icon {
+    margin-bottom: 10px;
 }
 
 a.reset-btn {

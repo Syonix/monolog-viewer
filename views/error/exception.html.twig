@@ -1,0 +1,17 @@
+{% extends "base.html.twig" %}
+{% block title %}Error! - {{ parent() }}{% endblock %}
+{% block navigation %}
+    <ul>
+        {% for slug, client in clients %}
+            <li><a href="{{ app.request.baseUrl}}/logs/{{ slug }}">{{ client }}</a></li>
+        {% else %}
+            <!--<li>No Logs found.</li>-->
+        {% endfor %}
+    </ul>
+{% endblock %}
+{% block content %}
+    <div class="error-message">
+        <p><i class="fa fa-4x fa-{{ icon }}"></i><br/><strong>Error!</strong></p>
+        <p>{{ error.message }}</p>
+    </div>
+{% endblock %}

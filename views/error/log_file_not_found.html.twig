@@ -1,0 +1,7 @@
+{% extends "error/error.html.twig" %}
+{% block content %}
+    <div class="placeholder-message">
+        <p><i class="fa fa-4x fa-search error-icon"></i><br/><strong>This log file does not exist.</strong></p>
+        {% if app.debug and error %}<p>{{ error.message }}</p>{% endif %}
+    </div>
+{% endblock %}

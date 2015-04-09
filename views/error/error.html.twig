@@ -2,7 +2,7 @@
 {% block navigation %}
     <ul>
         {% for slug, client in clients %}
-            <li><a href="{{ app.request.baseUrl}}/{{ slug }}">{{ client }}</a></li>
+            <li{% if clientSlug == slug %} class="active turquoise"{% endif %}><a href="{{ path('client', {'clientSlug': slug}) }}">{{ client }}</a></li>
         {% else %}
             <!--<li>No Logs found.</li>-->
         {% endfor %}
@@ -11,15 +11,15 @@
 {% block logslist %}
     <ul>
         {% for slug, log in logs %}
-            <li><a href="{{ app.request.baseUrl}}/{{ clientSlug }}/{{ slug }}">{{ log.name }}</a></li>
+            <li{% if logSlug == slug %} class="active"{% endif %}><a href="{{ path('log', {'clientSlug': clientSlug, 'logSlug': slug}) }}">{{ log.name }}</a></li>
         {% else %}
             <!--<li>No Logs found.</li>-->
         {% endfor %}
     </ul>
 {% endblock %}
 {% block content %}
-    <div class="error-message">
-        <p><i class="fa fa-4x fa-{{ icon }}"></i><br/><strong>Error!</strong></p>
+    <div class="placeholder-message">
+        <p><i class="fa fa-4x fa-bug error-icon"></i><br/><strong>Oops. This should not have happened.</strong></p>
         <p>{{ message }}</p>
         {% if app.debug and error %}<p>{{ error.message }}</p>{% endif %}
     </div>
