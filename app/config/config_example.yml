@@ -5,10 +5,10 @@ logs:
     Demo:
         Demo-Log-File:
             type: local
-            path: /test/SyonixLogViewer/res/test.log
+            path: /path/to/your/monolog-viewer/installation/test/SyonixLogViewer/res/test.log
         Custom Pattern:
             type: local
-            path: /your/path/to/document/root/test/SyonixLogViewer/res/test_no_context.log
+            path: /path/to/your/monolog-viewer/installation/test/SyonixLogViewer/res/test_no_context.log
             pattern: /\[(?P<date>.*)\] (?P<logger>\w+).(?P<level>\w+): (?P<message>[^\[\{]+)/
     Acme:
         Acme App:
