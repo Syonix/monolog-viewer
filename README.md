@@ -27,7 +27,7 @@ logs:
     Demo:
         Demo-Log-File:
             type: local
-            path: /test/SyonixLogViewer/res/test.log
+            path: /path/to/your/monolog-viewer/installation/test/SyonixLogViewer/res/test.log
     Acme:
         Acme App:
             type: ftp
