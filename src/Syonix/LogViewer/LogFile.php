@@ -32,7 +32,8 @@ class LogFile {
                 )));
                 break;
             case 'local':
-                $this->filesystem = new Filesystem(new Local("/"));
+                $this->filesystem = new Filesystem(new Local(dirname($this->args['path'])));
+                $this->args['path'] = basename($this->args['path']);
                 break;
             default:
                 throw new \InvalidArgumentException("Invalid log file type: \"" . $this->args['type']."\"");
