@@ -39,7 +39,7 @@ logs:
 
 The field `type` determines how the app will try to access the log file. For this, [Flysystem](http://flysystem.thephpleague.com/) is used. Currently implemented are `local` and `ftp`, but any other Flysystem Adapter can easily be added to the `Syonix\LogViewer\LogFile.php` constructor. Feel free to contribute.
 
-**Note:** If your `config.yaml` is invalid or none of your log files are readable, Monolog Viewer will display an error message. Also, if a client does not contain any logs, the client will not be listed in the navigation.
+**Note:** If your `config.yaml` is invalid or none of your log files are readable, Monolog Viewer will display an error message. Also, if a client does not contain any logs, the client will not be listed in the navigation. If your config file is invalid and you don't know why, check if [there are any tab characters in it](http://www.yaml.org/faq.html).
 
 ## Configuration values
 The following configuration values are available:
