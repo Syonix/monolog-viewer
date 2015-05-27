@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fe7807a677e22010ad15a549e458b298",
+    "hash": "546a054cc17f46e357d5facff0536f62",
     "packages": [
         {
             "name": "ddtraceweb/monolog-parser",
@@ -47,16 +47,16 @@
         },
         {
             "name": "deralex/yaml-config-service-provider",
-            "version": "dev-master",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/deralex/YamlConfigServiceProvider.git",
-                "reference": "20857a6f34a6276429c548ab67be6fa138457f1a"
+                "reference": "5923f60e6fbb16432e47310cf9680fe658c8dc0e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deralex/YamlConfigServiceProvider/zipball/20857a6f34a6276429c548ab67be6fa138457f1a",
-                "reference": "20857a6f34a6276429c548ab67be6fa138457f1a",
+                "url": "https://api.github.com/repos/deralex/YamlConfigServiceProvider/zipball/5923f60e6fbb16432e47310cf9680fe658c8dc0e",
+                "reference": "5923f60e6fbb16432e47310cf9680fe658c8dc0e",
                 "shasum": ""
             },
             "require": {
@@ -94,7 +94,73 @@
             "keywords": [
                 "silex"
             ],
-            "time": "2015-03-10 15:57:39"
+            "time": "2015-03-10 12:58:27"
+        },
+        {
+            "name": "doctrine/collections",
+            "version": "v1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/collections.git",
+                "reference": "6c1e4eef75f310ea1b3e30945e9f06e652128b8a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/collections/zipball/6c1e4eef75f310ea1b3e30945e9f06e652128b8a",
+                "reference": "6c1e4eef75f310ea1b3e30945e9f06e652128b8a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Doctrine\\Common\\Collections\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Roman Borschel",
+                    "email": "roman@code-factory.org"
+                },
+                {
+                    "name": "Benjamin Eberlei",
+                    "email": "kontakt@beberlei.de"
+                },
+                {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com"
+                },
+                {
+                    "name": "Jonathan Wage",
+                    "email": "jonwage@gmail.com"
+                },
+                {
+                    "name": "Johannes Schmitt",
+                    "email": "schmittjoh@gmail.com"
+                }
+            ],
+            "description": "Collections Abstraction library",
+            "homepage": "http://www.doctrine-project.org",
+            "keywords": [
+                "array",
+                "collections",
+                "iterator"
+            ],
+            "time": "2015-04-14 22:21:58"
         },
         {
             "name": "ircmaxell/password-compat",
@@ -1125,9 +1191,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "deralex/yaml-config-service-provider": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

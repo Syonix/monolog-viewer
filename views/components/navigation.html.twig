@@ -1,0 +1,10 @@
+<ul>
+    {% for client in clients %}
+        <li class="client">{{ client.name }}</li>
+        {% for log in client.logs %}
+            <li{% if current_client_slug == client.slug and current_log_slug == log.slug %} class="active turquoise"{% endif %}><a href="{{ path('log', {'clientSlug': client.slug, 'logSlug': log.slug}) }}">{{ log.name }}</a></li>
+        {% endfor %}
+    {% endfor %}
+    <li class="client">Current User</li>
+    {% if app.security.token and app.security.token.user %}<li id="logout"><a href="{{ path('logs_logout') }}"><i class="fa fa-sign-out"></i> Logout</a></li>{% endif %}
+</ul>

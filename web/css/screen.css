@@ -1,6 +1,8 @@
 body {
 	color: #3b3b3b;
 	font-family: 'FlexoWebfont', 'Arial', sans-serif;
+    height: 100%;
+    position: relative;
 }
 
 h1, h2, h3, h4, h5 {
@@ -8,6 +10,10 @@ h1, h2, h3, h4, h5 {
 }
 
 .show-if-js {
+    display: none !important;
+}
+
+.hide-if-mobile {
     display: none !important;
 }
 
@@ -22,11 +28,29 @@ header#header {
 	height: 51px;
 	background: url(../img/lines.png) repeat-x #ffffff;
 	border-bottom: 1px solid #dedede;
-	margin-bottom: 2px
+	margin-bottom: 2px;
+    text-align: center;
+}
+
+header#header .toggle-button {
+    display: inline-block;
+    font-size: 20px;
+    padding: 15px;
+    color: #b7b7b7;
+}
+
+header#header .sb-toggle-left {
+    float: left;
+    margin-right: 47px;
+}
+
+header#header .scroll-down,
+header#header .sb-toggle-right {
+    float: right;
 }
 
 header#header img.logo {
-	margin: 10px 0 0 25px;
+	margin: 10px 0 0;
 	border: 0;
 }
 
@@ -104,28 +128,21 @@ div#login div#loginform input[type=submit]{
 
 /* Navigation */
 
-nav#navigation {
-	position: absolute;
-	top: 53px;
-	bottom: 0;
-	left: 0;
-	width: 200px;
+.sb-slidebar {
 	background-color: #0f1a38;
-	float: left;
 }
 
-nav#navigation ul {
+.sb-slidebar ul {
 	list-style: none;
 	margin: 0;
 	padding: 0;
 	overflow: auto;
 }
 
-nav#navigation ul li {
+.sb-slidebar ul li {
     display: block;
-	width: 200px;
-	height: 60px;
-	display: block;
+	width: 100%;
+	height: 40px;
 	border-left: 5px solid #0f1a38;
 	text-align: left;
 	color: #9aaad2;
@@ -133,60 +150,77 @@ nav#navigation ul li {
 	font-size: 11pt;
 }
 
-nav#navigation ul li a {
+.sb-slidebar ul li.client {
+    padding: 15px 0 0 20px;
+    font-weight: bold;
+    color: #5e6880;
+}
+
+.sb-slidebar ul li.lower {
+    color: #5e6880;
+}
+
+.sb-slidebar ul li.client:first-child {
+    padding: 25px 0 0 20px;
+    height: 51px;
+}
+
+.sb-slidebar ul li a {
 	width: 100%;
 	height: 100%;
-	padding: 20px;
+	padding: 10px 20px;
 	display: inline-block;
 	text-decoration: none;
 	color: inherit;
 }
 
-nav#navigation ul li a:hover {
+.sb-slidebar ul li a:hover {
 	color: #ffffff;
 }
 
-nav#navigation ul li i {
-	font-size: 22pt;
-	display: block;
-	margin: 26px 0 12px 0;
-}
-
-nav#navigation ul li.active {
+.sb-slidebar ul li.active {
 	color: #ffffff;
 	background-color: #1a2d62;
 }
 
-nav#navigation ul li.active.turquoise {
+.sb-slidebar ul li.active.turquoise {
 	border-left-color: #00a4e5;
 }
 
-nav#navigation ul li.active.purple {
+.sb-slidebar ul li.active.purple {
 	border-left-color: #7d4bcc;
 }
 
-nav#navigation ul li.active.blue {
+.sb-slidebar ul li.active.blue {
 	border-left-color: #5d6ff9;
 }
 
 /* Content */
+
+div#sb-site {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
 div#content {
 	position: absolute;
-	top: 113px;
+    top: 113px;
 	right: 0;
 	bottom: 0;
-	left: 200px;
+	left: 0;
 	float: left;
-	padding: 25px;
+	padding: 15px 5px;
 	overflow: auto;
 	-webkit-overflow-scrolling: touch;
+    z-index: 10;
 }
 
 header#logs {
 	position: absolute;
-	left: 200px;
 	top: 53px;
-	right: 0;
+    left: 0;
+    right: 0;
 	height: 60px;
 	padding: 0;
 	color: #ffffff;
@@ -198,7 +232,6 @@ header#logs ul {
     padding: 0;
     margin: 0;
     height: 60px;
-    overflow: auto;
 }
 
 header#logs ul li {
@@ -214,7 +247,48 @@ header#logs ul li a.active {
     background-color: #0091e4;
 }
 
-header#logs ul li a {
+header#logs #filter-text {
+    width: 100%;
+    padding: 0 20px;
+}
+
+header#logs #filter-text-wrap {
+    height: 40px;
+    margin: 10px 0 0 10px;
+    padding: 0 10px;
+    border: 1px solid #0091e4;
+    color: #ffffff;
+    background: #006299;
+    outline: none;
+    border-radius: 2px;
+}
+
+header#logs #filter-text-wrap.active,
+header#logs #filter-text-wrap.focus {
+    border-color: #ffffff;
+}
+
+header#logs #filter-text-wrap input {
+    width: calc(100% - 65px);
+    height: 100%;
+    padding: 0;
+    margin: 0 10px;
+    border: 0;
+    color: #ffffff;
+    background: transparent;
+    -webkit-appearance: none;
+}
+
+header#logs #filter-text-wrap input:focus {
+    outline: none;
+}
+
+header#logs #filter-text-wrap a#filter-text-reset {
+    display: none;
+    color: #ffffff;
+}
+
+header#logs ul li > a {
     display: block;
     height: 100%;
     width: 100%;
@@ -222,7 +296,8 @@ header#logs ul li a {
     color: #ffffff;
 }
 
-header#logs ul li a:hover {
+header#logs ul li > a:hover,
+header#logs ul li > a:focus {
     text-decoration: none;
     background-color: #0091e4;
 }
@@ -233,141 +308,212 @@ header#logs ul li form {
     display: block;
 }
 
-header#logs #filter-form-dropdown {
+header#logs .dropdown a:hover {
+    text-decoration: none;
+}
+
+header#logs .filter-dropdown {
+    padding: 20px;
+    color: #ffffff;
+    cursor: pointer;
+    position: relative;
+}
+
+header#logs .filter-dropdown:hover {
+    text-decoration: none;
+    background-color: #0091e4;
+}
+
+header#logs .filter-dropdown .dropdown {
+    display: none;
+    padding-bottom: 7px;
     background-color: #0091e4;
     position: absolute;
     right: 0;
     top: 60px;
-    padding: 20px;
     z-index: 10;
+    white-space: nowrap;
 }
 
-header#logs #filter-form-dropdown a {
+header#logs .filter-dropdown .dropdown a {
     color: inherit;
-    display: inline-block;
-    padding: 3px 0;
+    display: block;
+    padding: 7px 20px;
     font-size: 1.1em;
+    font-weight: normal;
 }
 
-header#logs #filter-form-dropdown a.lower {
+header#logs .filter-dropdown .dropdown a:hover {
+    background-color: #007dc5;
+}
+
+header#logs .filter-dropdown:hover .dropdown {
+    display: block;
+}
+
+header#logs .filter-dropdown a.lower {
     color: rgba(255, 255, 255, 0.5);
 }
 
 /* Log Lines */
-div.logline {
-    font-size: 12pt;
-}
 
-div.logline:nth-child(even) {
-    background-color: #fafafa;
-}
-
-div.logline div.level,
-div.logline div.message,
-div.logline div.date,
-div.logline div.more {
-    display: inline-block;
-    float: left;
-    padding: 5px 10px;
-}
-
-div.logline div.message.has-more {
-    cursor: pointer;
-}
-
-div.logline div.level {
-    width: 45px;
-    border-right: 3px solid #00a4e5;
+#filter-meta {
+    display: none;
+    margin-bottom: 20px;
+    color: #cbcbcb;
+    font-size: 1.1em;
+    font-style: italic;
     text-align: center;
 }
 
-div.logline div.level.level-debug {
+#logline-table {
+    table-layout: fixed;
+    max-width: 100%;
+    min-width: 100%;
+}
+
+.logline {
+    font-size: 11pt;
+}
+
+.logline:nth-child(even) {
+    background-color: #fafafa;
+}
+
+.logline td {
+    padding: 3px 10px;
+    vertical-align: top;
+}
+
+.logline td.level {
+    border-right: 3px solid #00a4e5;
+    text-align: center;
+    width: 40px;
+}
+
+.logline.level-debug td.level {
     border-right-color: #c8c8c8;
     color: #c8c8c8;
 }
 
-div.logline div.level.level-info {
+.logline.level-info td.level {
     border-right-color: #00a4e5;
     color: #00a4e5;
 }
 
-div.logline div.level.level-notice {
+.logline.level-notice td.level {
     border-right-color: #00a4e5;
     color: #00a4e5;
 }
 
-div.logline div.level.level-warning {
+.logline.level-warning td.level {
     border-right-color: #ffd500;
     color: #ffd500;
 }
 
-div.logline div.level.level-error {
+.logline.level-error td.level {
     border-right-color: #ff9a00;
     color: #ff9a00;
 }
 
-div.logline div.level.level-critical {
+.logline.level-critical td.level {
     border-right-color: #ee0000;
     color: #ee0000;
 }
 
-div.logline div.level.level-alert {
+.logline.level-alert td.level {
     border-right-color: #ee0000;
     color: #ee0000;
 }
 
-div.logline div.level.level-emergency {
-    border-right-color: #ffffff;
-    color: #ffffff;
-}
-
-div.logline.level-emergency {
+.logline.level-emergency {
     background: #ee0000;
     color: #ffffff;
 }
 
-div.logline.level-emergency div.date,
-div.logline.level-emergency div.context table td {
-    color: #ab0000;
+.logline.level-emergency td.level {
+    border-right-color: #ffffff;
+    color: #ffffff;
 }
 
-div.logline div.message {
-    width: calc(100% - 345px);
+.logline.level-emergency td.date,
+.logline.level-emergency td.logger,
+.logline.level-emergency div.context table th,
+.logline.level-emergency div.context table td,
+.logline.level-emergency td.more {
+    color: #ff9a9a;
 }
 
-div.logline.level-critical .message,
-div.logline.level-alert .message {
+.logline td.date {
+    display: block;
+    font-family: "Source Code Pro", monospace;
+    color: #cbcbcb;
+    width: 210px;
+    padding-bottom: 0;
+}
+
+.logline td.message {
+    display: block;
+    font-family: "Source Code Pro", monospace;
+    padding-top: 0;
+}
+
+.logline td.message.has-more {
+    cursor: pointer;
+}
+
+.logline.level-critical .message,
+.logline.level-alert .message {
     color: #ee0000;
 }
 
-div.logline.level-alert .message {
+.logline.level-alert .message {
     font-weight: bold;
 }
 
-div.logline div.pointer {
+.logline div.pointer {
     cursor: pointer;
 }
 
-div.logline div.date {
-    width: 200px;
+.logline td.logger {
+    display: block;
     color: #cbcbcb;
+    white-space: nowrap;
 }
 
-div.logline div.more {
-    width: 100px;
+.logline td.more {
+    width: 20px;
     cursor: pointer;
     font-weight: 500;
+    color: #cbcbcb;
+    font-size: 1.5em;
+    padding-top: 15px;
 }
 
-div.logline div.context {
-    clear: left;
-    margin-left: 45px;
+.logline td.logger + td.more {
+    padding-top: 25px;
 }
 
-div.logline div.context table td {
+div.context {
+    font-family: 'FlexoWebfont', 'Arial', sans-serif;
+    display: none;
+    margin: 5px 0 5px;
+}
+
+div.context table td,
+div.context table th {
     vertical-align: top;
-    padding: 5px 10px;
     color: #8c8c8c;
+    padding: 5px 0 0;
+}
+div.context table td {
+    padding-left: 20px;
+    word-break: break-all;
+}
+
+div.context table th {
+    vertical-align: top;
+    font-weight: bold;
 }
 
 div.error-message,

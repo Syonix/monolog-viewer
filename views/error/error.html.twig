@@ -1,24 +1,5 @@
 {% extends "base.html.twig" %}
-{% block navigation %}
-    <ul>
-        {% for slug, client in clients %}
-            <li{% if clientSlug == slug %} class="active turquoise"{% endif %}><a href="{{ path('client', {'clientSlug': slug}) }}">{{ client }}</a></li>
-        {% else %}
-            <!--<li>No Logs found.</li>-->
-        {% endfor %}
-    </ul>
-{% endblock %}
-{% block logslist %}
-    {% if clientSlug is not null %}
-    <ul>
-        {% for slug, log in logs %}
-            <li{% if logSlug == slug %} class="active"{% endif %}><a href="{{ path('log', {'clientSlug': clientSlug, 'logSlug': slug}) }}">{{ log.name }}</a></li>
-        {% else %}
-            <!--<li>No Logs found.</li>-->
-        {% endfor %}
-    </ul>
-    {% endif %}
-{% endblock %}
+{% block navigation %}{% include "components/navigation.html.twig" %}{% endblock %}
 {% block content %}
     <div class="placeholder-message">
         <p><i class="fa fa-4x fa-bug error-icon"></i><br/><strong>Oops. This should not have happened.</strong></p>

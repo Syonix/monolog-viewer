@@ -18,7 +18,6 @@ if(is_readable(CONFIG_FILE)) {
     Symfony\Component\Debug\ExceptionHandler::register(!$app['debug']);
     if(in_array($app['config']['timezone'], DateTimeZone::listIdentifiers())) date_default_timezone_set($app['config']['timezone']);
 }
-$app['debug'] =true;
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
         'twig.path' => __DIR__.'/views',
         'twig.options' => array('debug' => $app['debug'])
@@ -94,80 +93,70 @@ else
         ->bind("login");
 
     $app->get('/logs', function() use($app) {
-            $viewer = new Syonix\LogViewer\LogViewer($app['config']['logs']);
+        $viewer = new Syonix\LogViewer\LogViewer($app['config']['logs']);
 
-            $clientSlug = $viewer->getFirstClient();
-            $logSlug  = $viewer->getFirstLog($clientSlug);
+        $client = $viewer->getFirstClient();
+        $log = $client->getFirstLog();
 
-            return $app->redirect($app['url_generator']->generate('log', array(
-                        'clientSlug' => $clientSlug,
-                        'logSlug' => $logSlug
-                    )));
+        return $app->redirect($app['url_generator']->generate('log', array(
+                    'clientSlug' => $client->getSlug(),
+                    'logSlug' => $log->getSlug()
+                )));
         })
         ->bind("home");
 
     $app->get('/logs/{clientSlug}', function($clientSlug) use($app) {
-            $viewer = new Syonix\LogViewer\LogViewer($app['config']['logs']);
+        $viewer = new Syonix\LogViewer\LogViewer($app['config']['logs']);
+        $client = $viewer->getClient($clientSlug);
+        $log = $client->getFirstLog();
+        if(is_null($log))
+        {
+            $app->abort(404, "Client not found");
+        }
 
-            $logSlug = $viewer->getFirstLog($clientSlug);
-            if(is_null($logSlug))
-            {
-                $app->abort(404, "Client not found");
-            }
-
-            return $app->redirect($app['url_generator']->generate('log', array(
-                        'clientSlug' => $clientSlug,
-                        'logSlug' => $logSlug
-                    )));
+        return $app->redirect($app['url_generator']->generate('log', array(
+                    'clientSlug' => $clientSlug,
+                    'logSlug' => $log->getSlug()
+                )));
         })
         ->bind("client");
 
-    $app->get('/logs/{clientSlug}/{logSlug}', function($clientSlug, $logSlug) use($app) {
+    $controller_log = function(\Symfony\Component\HttpFoundation\Request $request, $clientSlug, $logSlug) use($app) {
             try {
                 $viewer = new Syonix\LogViewer\LogViewer($app['config']['logs']);
                 $clients = $viewer->getClients();
-                $logs = $viewer->getLogs($clientSlug);
-                $log = $viewer->getLog($clientSlug, $logSlug);
-                if(false === $log) $app->abort(404, "Log file not found");
+                $client = $viewer->getClient($clientSlug);
+                if($client === null || !$client->logExists($logSlug)) {
+                    $app->abort(404, "Log file not configured");
+                }
+                $log = $client->getLog($logSlug)->load();
+
+                $minLogLevel = $request->query->get('m');
+                $currentLogger = $request->query->get('l');
+                if($currentLogger && !$log->getLoggers()->contains($currentLogger)) {
+                    return $app->redirect($app['url_generator']->generate('log', array(
+                        'clientSlug' => $clientSlug,
+                        'logSlug' => $logSlug,
+                        'm' => $minLogLevel,
+                        'l' => $currentLogger
+                    )));
+                }
             } catch(\League\Flysystem\FileNotFoundException $e) {
-                return $app['twig']->render('error/log_file_not_found.html.twig', array(
-                    'clients' => $viewer->getClients(),
-                    'logs' => $viewer->getLogs($clientSlug),
-                    'clientSlug' => $clientSlug,
-                    'logSlug' => $logSlug,
-                    'error' => $e
-                ));
+                $app->abort(404, "Log file not found");
             }
             return $app['twig']->render('log.html.twig', array(
                     'clients' => $clients,
-                    'logs' => $logs,
-                    'clientSlug' => $clientSlug,
-                    'logSlug' => $logSlug,
+                    'current_client_slug' => $clientSlug,
+                    'current_log_slug' => $logSlug,
                     'log' => $log,
                     'logLevels' => Monolog\Logger::getLevels(),
-                    'minLogLevel' => 0
+                    'min_log_level' => (in_array($minLogLevel, Monolog\Logger::getLevels()) ? $minLogLevel : 100),
+                    'loggers' => $log->getLoggers(),
+                    'current_logger' => $currentLogger
                 ));
-        })
+        };
+    $app->get('/logs/{clientSlug}/{logSlug}', $controller_log)
         ->bind("log");
-
-    $app->get('/logs/{clientSlug}/{logSlug}/{minLogLevel}', function($clientSlug, $logSlug, $minLogLevel) use($app) {
-            $minLogLevel = intval($minLogLevel);
-            $viewer = new Syonix\LogViewer\LogViewer($app['config']['logs']);
-
-            $log = $viewer->getLog($clientSlug, $logSlug);
-
-            return $app['twig']->render('log.html.twig', array(
-                    'clients' => $viewer->getClients(),
-                    'logs' => $viewer->getLogs($clientSlug),
-                    'clientSlug' => $clientSlug,
-                    'logSlug' => $logSlug,
-                    'log' => $log,
-                    'logLevels' => Monolog\Logger::getLevels(),
-                    'minLogLevel' => (in_array($minLogLevel, Monolog\Logger::getLevels()) ? $minLogLevel : 0)
-                ));
-        })
-        ->assert('minLogLevel', '\d+')
-        ->bind("minLogLevel");
 }
 
 $app->error(function (\Syonix\LogViewer\Exceptions\ConfigFileMissingException $e, $code) use($app) {
@@ -178,20 +167,20 @@ $app->error(function (\Syonix\LogViewer\Exceptions\NoLogsConfiguredException $e,
     return $app['twig']->render('error/no_log_files.html.twig');
 });
 
-$app->error(function (\Exception $e, $code) use($app) {
+$app->error(function (\Symfony\Component\HttpKernel\Exception\HttpException $e) use($app) {
     if ($app['debug']) {
         return;
     }
 
-    switch($code) {
+    switch($e->getStatusCode()) {
         case 404:
             $viewer = new Syonix\LogViewer\LogViewer($app['config']['logs']);
 
-            return $app['twig']->render('error/404.html.twig', array(
+            return $app['twig']->render('error/log_file_not_found.html.twig', array(
                 'clients' => $viewer->getClients(),
-                'message' => 'The page you are looking for does not exist!',
-                'icon' => 'search',
-                'error' => false
+                'current_client_slug' => null,
+                'current_log_slug' => null,
+                'error' => $e
             ));
         default:
             try {
@@ -201,13 +190,37 @@ $app->error(function (\Exception $e, $code) use($app) {
                 $clients = array();
             }
             return $app['twig']->render('error/error.html.twig', array(
-                    'clients' => $clients,
-                    'clientSlug' => null,
-                    'logSlug' => null,
-                    'message' => 'Something went wrong!',
-                    'icon' => 'bug',
-                    'error' => $e
-                ));
+                'clients' => $clients,
+                'clientSlug' => null,
+                'logSlug' => null,
+                'message' => 'Something went wrong!',
+                'icon' => 'bug',
+                'error' => $e
+            ));
+    }
+});
+
+$app->error(function (\Exception $e, $code) use($app) {
+    if ($app['debug']) {
+        return;
+    }
+
+    switch($code) {
+        default:
+            try {
+                $viewer = new Syonix\LogViewer\LogViewer($app['config']['logs']);
+                $clients = $viewer->getClients();
+            } catch(\Exception $e) {
+                $clients = array();
+            }
+            return $app['twig']->render('error/error.html.twig', array(
+                'clients' => $clients,
+                'clientSlug' => null,
+                'logSlug' => null,
+                'message' => 'Something went wrong!',
+                'icon' => 'bug',
+                'error' => $e
+            ));
     }
 });
 
