@@ -3,7 +3,6 @@ namespace Syonix\LogViewer;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Syonix\LogViewer\Exceptions\NoLogsConfiguredException;
-use Syonix\Util\String;
 
 class LogViewer
 {
