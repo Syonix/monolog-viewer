@@ -6,11 +6,12 @@ define('APP_PATH', __DIR__ . '/app/');
 define('CONFIG_FILE', APP_PATH . 'config/config.yml');
 define('PASSWD_DIR', APP_PATH . 'config/secure');
 define('PASSWD_FILE', PASSWD_DIR . '/passwd');
-define('VENDOR_PATH', __DIR__ . '/vendor/');
-define('BASE_URL', (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']);
-define('WEB_URL', BASE_URL . 'web/');
+define('VENDOR_PATH', __DIR__ . '/vendor');
+define('BASE_URL', (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['SERVER_NAME'] . $_SERVER['BASE']);
+define('WEB_URL', BASE_URL . '/web');
 
 $app = new Silex\Application();
+$app['template_url'] = WEB_URL;
 
 if(is_readable(CONFIG_FILE)) {
     $app->register(new DerAlex\Silex\YamlConfigServiceProvider(CONFIG_FILE));
