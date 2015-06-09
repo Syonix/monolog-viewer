@@ -1,5 +1,6 @@
 Monolog Viewer 
 ==============
+[![Build Status](https://travis-ci.org/Syonix/monolog-viewer.svg?branch=master)](https://travis-ci.org/Syonix/monolog-viewer)
 [![Total Downloads](https://poser.pugx.org/syonix/monolog-viewer/downloads.png)](https://packagist.org/packages/monolog/monolog)
 [![Latest Stable Version](https://poser.pugx.org/syonix/monolog-viewer/v/stable.png)](https://packagist.org/packages/monolog/monolog)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/c22e8c7d-c543-4e56-8f10-ad24ca14859f/mini.png)](https://insight.sensiolabs.com/projects/c22e8c7d-c543-4e56-8f10-ad24ca14859f)
