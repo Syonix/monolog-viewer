@@ -1,8 +1,0 @@
-[2014-01-04 17:28:00] debug.DEBUG: Random debug message {"c1":"Context1","c2":"Context2"} []
-[2014-01-04 17:28:00] info.INFO: Random info message {"c1":"Context1","c2":"Context2"} []
-[2014-01-04 17:28:00] notice.NOTICE: Random notice message {"c1":"Context1","c2":"Context2"} []
-[2014-01-04 17:28:00] warning.WARNING: Random warning message {"c1":"Context1","c2":"Context2"} []
-[2014-01-04 17:28:00] error.ERROR: Random error message {"c1":"Context1","c2":"Context2"} []
-[2014-01-04 17:28:00] critical.CRITICAL: Random critical message {"c1":"Context1","c2":"Context2"} []
-[2014-01-04 17:28:00] alert.ALERT: Random alert message {"c1":"Context1","c2":"Context2"} []
-[2014-01-04 17:28:00] emergency.EMERGENCY: Random emergency message {"c1":"Context1","c2":"Context2"} []
