@@ -56,6 +56,7 @@ Name | Type | Description
 `timezone` | `string` | Timezone string according to [PHP Manual](http://php.net/manual/en/timezones.php).
 `dateFormat` | `string` | Date format for log entries according to [PHP Manual](http://php.net/manual/en/function.date.php).
 `logs` | `array` | List of all log files, categorized by "clients" (see above)
+`display_logger` | `boolean` | Turn log channel (logger) display in log view on or off
 
 ### Flysystem Types
 ##### `local`
