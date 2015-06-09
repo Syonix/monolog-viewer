@@ -12,7 +12,7 @@ php:
   - hhvm
 
 install:
-  composer install
+  - composer install
 
 script:
-    script: phpunit --bootstrap bootstrap.php --colors --coverage-text ./tests
+  - phpunit --bootstrap bootstrap.php --colors --coverage-text ./tests
