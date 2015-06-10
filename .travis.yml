@@ -16,4 +16,4 @@ install:
   - composer install
 
 script:
-  - phpunit --bootstrap bootstrap.php --colors --coverage-text ./tests
+  - php vendor/phpunit/phpunit/phpunit
