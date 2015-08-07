@@ -68,10 +68,10 @@ if(!is_file(PASSWD_FILE)) {
                     'error' => $error
                 ));
         })
-        ->bind("set_pwd")
+        ->bind("home")
         ->method('POST|GET');
     $app->match('/{url}', function(\Symfony\Component\HttpFoundation\Request $request) use($app) {
-        return $app->redirect($app['url_generator']->generate('set_pwd'));
+        return $app->redirect($app['url_generator']->generate('home'));
     })
     ->assert('url', '.+'); // Match any route;
 }

@@ -13,7 +13,7 @@ matrix:
     - php: 7.0
 
 install:
-  - composer install
+  - composer install --prefer-source
 
 script:
-  - php vendor/phpunit/phpunit/phpunit
+  - vendor/bin/phpunit
