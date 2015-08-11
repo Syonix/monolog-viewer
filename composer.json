@@ -20,7 +20,7 @@
         "php": ">=5.4",
         "silex/silex": "~1.2",
         "twig/twig": ">=1.8,<2.0-dev",
-        "symfony/twig-bridge": "2.1.*",
+        "symfony/twig-bridge": "2.7.*",
         "symfony/security": "~2.3",
         "ddtraceweb/monolog-parser": "1.*",
         "ircmaxell/password-compat": "1.*",
