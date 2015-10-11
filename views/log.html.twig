@@ -55,10 +55,10 @@
         <tr class="logline level-{{ logLevelStyle[level].class }}">
             <td class="level"><i class="fa fa-{{ logLevelStyle[level].icon }} fa-fw"></i></td>
             <td class="date">{{ line.date|date(app.config.dateFormat) }}</td>
-            <td class="message clearfix{% if line.context|length > 0 %} has-more" onclick="toggleMore({{ id + 1 }});{% endif %}">
+            <td class="message clearfix{% if (line.context|length > 0) or (line.extra|length > 0) %} has-more {% endif %}">
                 {{ line.message }}
                 {% if line.context|length > 0 %}
-                    <div class="context" id="context-{{ id + 1 }}">
+                    <div class="context" id="context-{{ id + 1 }}" onclick="toggleMore({{ id + 1 }});">
                         <table>
                             {% for title, content in line.context %}
                                 <tr><th>{{ title }}</th><td>{{ content|nl2br }}</td></tr>
@@ -67,16 +67,23 @@
                     </div>
                 {% endif %}
                 {% if line.extra|length > 0 %}
+                    <div class="extra" id="extra-{{ id + 1 }}" onclick="toggleMoreExtra({{ id + 1 }});">
                         <table>
                             {% for title, content in line.extra %}
                                 <tr><th>{{ title }}</th><td>{{ content|nl2br }}</td></tr>
                             {% endfor %}
                         </table>
+                    </div>
                 {% endif %}
             </td>
             {% if app.config.display_logger %}<td class="logger"><i class="fa fa-tag"></i> {{ line.logger }}</td>{% endif %}
             {% if line.context|length > 0 %}
                 <td class="more" id="more-{{ id + 1 }}" onclick="toggleMore({{ id + 1 }});"><i class="fa fa-plus-circle"></i></td>
+            {% else %}
+                <td class="more"></td>
+            {% endif %}
+            {% if line.extra|length > 0 %}
+                <td class="more" id="moreExtra-{{ id + 1 }}" onclick="toggleMoreExtra({{ id + 1 }});"><i class="fa fa-plus-circle"></i></td>
             {% else %}
                 <td class="more"></td>
             {% endif %}

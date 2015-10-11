@@ -444,6 +444,8 @@ header#logs .filter-dropdown a.lower {
 .logline.level-emergency td.logger,
 .logline.level-emergency div.context table th,
 .logline.level-emergency div.context table td,
+.logline.level-emergency div.extra table th,
+.logline.level-emergency div.extra table td,
 .logline.level-emergency td.more {
     color: #ff9a9a;
 }
@@ -462,9 +464,7 @@ header#logs .filter-dropdown a.lower {
     padding-top: 0;
 }
 
-.logline td.message.has-more {
-    cursor: pointer;
-}
+
 
 .logline.level-critical .message,
 .logline.level-alert .message {
@@ -516,6 +516,28 @@ div.context table td {
 }
 
 div.context table th {
+    vertical-align: top;
+    font-weight: bold;
+}
+
+div.extra {
+    font-family: 'FlexoWebfont', 'Arial', sans-serif;
+    display: none;
+    margin: 5px 0 5px;
+}
+
+div.extra table td,
+div.extra table th {
+    vertical-align: top;
+    color: #8c8c8c;
+    padding: 5px 0 0;
+}
+div.extra table td {
+    padding-left: 20px;
+    word-break: break-all;
+}
+
+div.extra table th {
     vertical-align: top;
     font-weight: bold;
 }
