@@ -66,6 +66,13 @@
                         </table>
                     </div>
                 {% endif %}
+                {% if line.extra|length > 0 %}
+                        <table>
+                            {% for title, content in line.extra %}
+                                <tr><th>{{ title }}</th><td>{{ content|nl2br }}</td></tr>
+                            {% endfor %}
+                        </table>
+                {% endif %}
             </td>
             {% if app.config.display_logger %}<td class="logger"><i class="fa fa-tag"></i> {{ line.logger }}</td>{% endif %}
             {% if line.context|length > 0 %}
