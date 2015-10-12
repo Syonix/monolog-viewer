@@ -462,6 +462,7 @@ header#logs .filter-dropdown a.lower {
     display: block;
     font-family: "Source Code Pro", monospace;
     padding-top: 0;
+    word-break: break-all;
 }
 
 
