@@ -22,14 +22,14 @@
         </li>
         <li class="filter-dropdown pull-right{% if min_log_level > 100 %} active{% endif %} hide-if-mobile"><i class="fa fa-lg fa-filter"></i> Channel <i id="filter-form-arrow" class="fa fa-chevron-down"></i>
             <div class="dropdown">
-                {% if value > 100 %}
+                {% if value is defined and value > 100 %}
                     {% set href = path('log', {'clientSlug': current_client_slug, 'logSlug': current_log_slug, 'm': min_log_level }) %}
                 {% else %}
                     {% set href = path('log', {'clientSlug': current_client_slug, 'logSlug': current_log_slug}) %}
                 {% endif %}
-                <a {% if current_logger != logger %} class="lower"{% endif %} href="{{ href }}"><i class="fa fa-fw fa-tag"></i> All</a>
+                <a {% if logger is defined and current_logger != logger %} class="lower"{% endif %} href="{{ href }}"><i class="fa fa-fw fa-tag"></i> All</a>
                 {% for logger in loggers %}
-                    {% if value > 100 %}
+                    {% if value is defined and value > 100 %}
                         {% set href = path('log', {'clientSlug': current_client_slug, 'logSlug': current_log_slug, 'm': min_log_level, 'l': logger }) %}
                     {% else %}
                         {% set href = path('log', {'clientSlug': current_client_slug, 'logSlug': current_log_slug, 'l': logger}) %}
@@ -105,7 +105,7 @@
             </li>
         {% endfor %}
         <li class="client">Logger</li>
-        {% if value > 100 %}
+        {% if value is defined and value > 100 %}
             {% set href = path('log', {'clientSlug': current_client_slug, 'logSlug': current_log_slug, 'm': min_log_level }) %}
         {% else %}
             {% set href = path('log', {'clientSlug': current_client_slug, 'logSlug': current_log_slug}) %}
@@ -114,7 +114,7 @@
             <a href="{{ href }}"><i class="fa fa-fw fa-tag"></i> All</a>
         </li>
         {% for logger in loggers %}
-            {% if value > 100 %}
+            {% if value is defined and value > 100 %}
                 {% set href = path('log', {'clientSlug': current_client_slug, 'logSlug': current_log_slug, 'm': min_log_level, 'l': logger }) %}
             {% else %}
                 {% set href = path('log', {'clientSlug': current_client_slug, 'logSlug': current_log_slug, 'l': logger}) %}
