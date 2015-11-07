@@ -9,7 +9,7 @@ logs:
         Custom Pattern:
             type: local
             path: /path/to/your/monolog-viewer/installation/test/SyonixLogViewer/res/test_no_context.log
-            pattern: /\[(?P<date>.*)\] (?P<logger>\w+).(?P<level>\w+): (?P<message>[^\[\{]+)/
+            pattern: /\[(?P<date>.*)\] (?P<logger>\w+).(?P<level>\w+): (?P<message>.*[^ ]+) (?P<context>[^ ]+) (?P<extra>[^ ]+)/
     Acme:
         Acme App:
             type: ftp

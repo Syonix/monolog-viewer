@@ -10,6 +10,18 @@ function toggleMore(id) {
     }
 }
 
+function toggleMoreExtra(id) {
+    var extra = $('#extra-'+id);
+    var more = $('#moreExtra-'+id);
+    if(extra.is(':visible')) {
+        extra.slideUp(200);
+        more.html('<i class="fa fa-plus-circle"></i>');
+    } else {
+        extra.slideDown(200);
+        more.html('<i class="fa fa-minus-circle"></i>');
+    }
+}
+
 function filterContent(string) {
     var count = 0;
     var total = 0;
@@ -45,6 +57,7 @@ function filterContentReset() {
 
 $(document).ready(function() {
     $("div.context").hide();
+    $("div.extra").hide();
     $("#filter-form-toggle").click(function() {
         var arrow = $("#filter-form-arrow");
         var dropdown = $("#filter-form-dropdown");

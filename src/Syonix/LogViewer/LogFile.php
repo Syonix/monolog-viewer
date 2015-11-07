@@ -45,7 +45,7 @@ class LogFile {
         }
 
         $file = $this->filesystem->read($this->args['path']);
-        $lines = explode("\n", $file);
+        $lines = array_reverse(explode("\n", $file));
         $parser = new LineLogParser();
         if(isset($this->args['pattern'])) {
             $hasCustomPattern = true;
