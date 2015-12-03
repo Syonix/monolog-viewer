@@ -464,6 +464,10 @@ header#logs .filter-dropdown a.lower {
 
 .logline td.message.has-more {
     cursor: pointer;
+    -moz-user-select:-moz-none;
+    -ms-user-select:none;
+    -webkit-user-select:none;
+    user-select:none
 }
 
 .logline.level-critical .message,
