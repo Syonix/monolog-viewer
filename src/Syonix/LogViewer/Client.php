@@ -75,4 +75,17 @@ class Client {
         }
         return false;
     }
+
+    public function toArray()
+    {
+        $logs = [];
+        foreach($this->logs as $log) {
+            $logs[] = $log->toArray();
+        }
+        return array(
+            'name' => $this->name,
+            'slug' => $this->slug,
+            'logs' => $logs
+        );
+    }
 }

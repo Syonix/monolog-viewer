@@ -6,6 +6,7 @@ use Dubture\Monolog\Parser\LineLogParser;
 use League\Flysystem\Adapter\Ftp;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
+use Monolog\Logger;
 use Syonix\Util\String;
 
 class LogFile {
@@ -22,6 +23,7 @@ class LogFile {
         $this->name = $name;
         $this->slug = String::toAscii($name);
         $this->args = $args;
+        $this->lines = new ArrayCollection();
     }
 
     public function load()
@@ -60,7 +62,7 @@ class LogFile {
                 if(!$this->loggers->contains($entry['logger'])) {
                     $this->loggers->add($entry['logger']);
                 }
-                $this->lines[] = $entry;
+                $this->lines->add($entry);
             }
         }
         return $this;
@@ -71,14 +73,17 @@ class LogFile {
         return $this->lines[intval($line)];
     }
 
-    public function getLines()
+    public function getLines($limit = null, $offset = 0)
     {
-        return $this->lines;
+        if(null !== $limit) {
+            return $this->lines->slice($offset, $limit);
+        }
+        return $this->lines->toArray();
     }
 
     public function countLines()
     {
-        return count($this->lines);
+        return $this->lines->count();
     }
     
     public function getName()
@@ -94,5 +99,29 @@ class LogFile {
     public function getLoggers()
     {
         return $this->loggers;
+    }
+
+    public static function getLevelName($level)
+    {
+        return Logger::getLevelName($level);
+    }
+
+    public static function getLevelNumber($level)
+    {
+        return Logger::getLevels()[$level];
+    }
+
+    public static function getLevels()
+    {
+        return Logger::getLevels();
+    }
+
+    public function toArray()
+    {
+        return array(
+            'name'    => $this->name,
+            'slug'    => $this->slug,
+            'loggers' => $this->loggers
+        );
     }
 }

@@ -77,7 +77,6 @@ if(!is_file(PASSWD_FILE)) {
 }
 else
 {
-
     $app->get('/', function() use($app) {
             if(!is_readable(CONFIG_FILE)) {
                 throw new \Syonix\LogViewer\Exceptions\ConfigFileMissingException();
@@ -158,6 +157,8 @@ else
         };
     $app->get('/logs/{clientSlug}/{logSlug}', $controller_log)
         ->bind("log");
+
+    $app->mount('/api', include 'api.php');
 }
 
 $app->error(function (\Syonix\LogViewer\Exceptions\ConfigFileMissingException $e, $code) use($app) {
