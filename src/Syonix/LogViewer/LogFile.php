@@ -6,7 +6,7 @@ use Dubture\Monolog\Parser\LineLogParser;
 use League\Flysystem\Adapter\Ftp;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
-use Syonix\Util\String;
+use Syonix\Util\StringUtil;
 
 class LogFile {
     protected $name;
@@ -20,7 +20,7 @@ class LogFile {
         setlocale(LC_ALL, 'en_US.UTF8');
         
         $this->name = $name;
-        $this->slug = String::toAscii($name);
+        $this->slug = StringUtil::toAscii($name);
         $this->args = $args;
     }
 
