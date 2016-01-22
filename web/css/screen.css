@@ -1,6 +1,6 @@
 body {
 	color: #3b3b3b;
-	font-family: 'FlexoWebfont', 'Arial', sans-serif;
+	font-family: 'Open Sans', 'Arial', sans-serif;
     height: 100%;
     position: relative;
 }
@@ -11,10 +11,6 @@ html {
 
 h1, h2, h3, h4, h5 {
 	font-family: inherit;
-}
-
-.show-if-js {
-    display: none !important;
 }
 
 .hide-if-mobile {
@@ -95,7 +91,6 @@ div.globalalert.warning {
 	background-color: #d20000;
 	color: white;
 }
-
 
 /* Login */
 div#login {
@@ -220,6 +215,11 @@ div#content {
     z-index: 10;
 }
 
+div#content.blur {
+    filter: blur(5px);
+    -webkit-filter: blur(5px);
+}
+
 header#logs {
 	position: absolute;
 	top: 53px;
@@ -258,7 +258,7 @@ header#logs #filter-text {
 
 header#logs #filter-text-wrap {
     height: 40px;
-    margin: 10px 0 0 10px;
+    margin: 10px 0 0 0;
     padding: 0 10px;
     border: 1px solid #0091e4;
     color: #ffffff;
@@ -273,7 +273,7 @@ header#logs #filter-text-wrap.focus {
 }
 
 header#logs #filter-text-wrap input {
-    width: calc(100% - 65px);
+    width: calc(100% - 70px);
     height: 100%;
     padding: 0;
     margin: 0 10px;
@@ -288,7 +288,6 @@ header#logs #filter-text-wrap input:focus {
 }
 
 header#logs #filter-text-wrap a#filter-text-reset {
-    display: none;
     color: #ffffff;
 }
 
@@ -344,11 +343,15 @@ header#logs .filter-dropdown .dropdown a {
     display: block;
     padding: 7px 20px;
     font-size: 1.1em;
-    font-weight: normal;
+    font-weight: 200;
 }
 
 header#logs .filter-dropdown .dropdown a:hover {
     background-color: #007dc5;
+}
+
+header#logs .filter-dropdown .dropdown a:focus {
+    text-decoration: none;
 }
 
 header#logs .filter-dropdown:hover .dropdown {
@@ -361,9 +364,15 @@ header#logs .filter-dropdown a.lower {
 
 /* Log Lines */
 
+#logline-loader {
+    color: #8c8c8c;
+    font-size: 1.1em;
+    font-style: italic;
+    margin-left: 10px;
+}
+
 #filter-meta {
-    display: none;
-    margin-bottom: 20px;
+    margin: 15px 0;
     color: #cbcbcb;
     font-size: 1.1em;
     font-style: italic;
@@ -502,9 +511,15 @@ header#logs .filter-dropdown a.lower {
     padding-top: 25px;
 }
 
+a#next-button {
+    width: 100%;
+}
+
 div.context {
-    font-family: 'FlexoWebfont', 'Arial', sans-serif;
-    display: none;
+    font-family: 'Open Sans', 'Arial', sans-serif;
+}
+
+div.context table {
     margin: 5px 0 5px;
 }
 

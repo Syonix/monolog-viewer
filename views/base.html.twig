@@ -1,53 +1,26 @@
 <!DOCTYPE html>
-{% set logLevelStyle = {
-    100: {
-    'icon': 'bug',
-    'class' : 'debug'
-    },
-    200: {
-    'icon': 'info-circle',
-    'class' : 'info'
-    },
-    250: {
-    'icon': 'file-text',
-    'class' : 'notice'
-    },
-    300: {
-    'icon': 'warning',
-    'class' : 'warning'
-    },
-    400: {
-    'icon': 'times-circle',
-    'class' : 'error'
-    },
-    500: {
-    'icon': 'fire',
-    'class' : 'critical'
-    },
-    550: {
-    'icon': 'bell',
-    'class' : 'alert'
-    },
-    600: {
-    'icon': 'flash',
-    'class' : 'emergency'
-    }
-} %}
-<html>
+<html ng-app="logViewer">
 <head>
     <title>{% block title %}Syonix Monolog Viewer{% endblock %}</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
+
     <!-- Bootstrap -->
     <link href="{{ app.request.baseUrl }}/web/res/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="http://cdn.syonix.ch/fonts/flexo/1.0/flexo.css" rel="stylesheet" media="screen">
-    <link href="http://cdn.syonix.ch/fonts/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" media="screen">
-    <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-    <link href="http://cdn.syonix.ch/js/slidebars/0.10.2/slidebars.min.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,300,600,300italic,600italic,700italic,400italic' rel='stylesheet' type='text/css'>
+    <link href="{{ app.request.baseUrl }}/web/res/font-awesome/css/font-awesome.min.css" rel="stylesheet" media="screen">
+    <link href="{{ app.request.baseUrl }}/web/res/slidebars/slidebars.min.css" rel="stylesheet">
     <link href="{{ app.request.baseUrl }}/web/css/screen.css" rel="stylesheet" media="screen">
     <link href="{{ app.request.baseUrl }}/web/css/790.css" rel="stylesheet" media="screen">
     <link href="{{ app.request.baseUrl }}/web/css/960.css" rel="stylesheet" media="screen">
+
+    <!-- Scripts -->
+    <script src="{{ app.request.baseUrl }}/web/res/angular/angular.min.js"></script>
+    <script src="{{ app.request.baseUrl }}/web/res/angular/angular-route.min.js"></script>
+    <script src="{{ app.request.baseUrl }}/web/js/angular/app.js"></script>
+    <script src="{{ app.request.baseUrl }}/web/js/angular/controllers.js"></script>
 
     <!-- Apple Touch Icons -->
     <link rel="apple-touch-icon" href="{{ app.request.baseUrl }}/web/img/touch-icon-iphone.png">
@@ -120,6 +93,7 @@
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{ app.template_url }}/favicon.ico"/>
+    <base href="{{ app.request.baseUrl }}/">
 </head>
 <body>
 {% block body %}
@@ -135,7 +109,7 @@
         {% endblock %}
     </header>
     {% block content_wrap %}
-        <div id="content">
+        <div id="content"{% block content_args %}{% endblock %}>
             {% block content %}{% endblock %}
         </div>
         <header id="logs">
@@ -150,16 +124,15 @@
 {% block scripts %}
     <script src="{{ app.request.baseUrl }}/web/res/jquery/jquery-2.0.3.min.js"></script>
     <script src="{{ app.request.baseUrl }}/web/res/jquery/jquery.stayInWebApp.min.js"></script>
-    <script src="http://cdn.syonix.ch/js/slidebars/0.10.2/slidebars.min.js"></script>
+    <script src="{{ app.request.baseUrl }}/web/res/slidebars/slidebars.min.js"></script>
     <script src="{{ app.request.baseUrl }}/web/res/retina.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
             $.stayInWebApp();
             $.slidebars({
-                disableOver: 790
+                disableOver: 790,
+                scrollLock: true
             });
-            $(".show-if-js").removeClass('show-if-js');
-            $(".hide-if-js").hide();
         });
     </script>
 {% endblock %}

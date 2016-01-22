@@ -96,3 +96,10 @@ To change your password, simply delete the `/app/config/secure/passwd` file and 
 
 # Mobile devices
 The App is fully optimized for tablets and smart phones and can even be installed to the home screen on iOS devices. It then works like a native app and features an app icon as well as a beautiful splash screen.
+
+# Enforcing HTTPS
+This should be done on a server configuration level. You could for example add this to the `.htaccess` file, right below `RewriteEngine On`:
+
+```RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+```

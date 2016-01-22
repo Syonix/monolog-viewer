@@ -2,11 +2,18 @@
 namespace Syonix\LogViewer;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Dubture\Monolog\Parser\LineLogParser;
+use League\Flysystem\Adapter\Ftp;
+use League\Flysystem\Adapter\Local;
+use League\Flysystem\Cached\CachedAdapter;
+use League\Flysystem\Cached\Storage\Adapter;
+use League\Flysystem\Filesystem;
 use Syonix\LogViewer\Exceptions\NoLogsConfiguredException;
 
 class LogViewer
 {
     protected $clients;
+    protected $cacheDir;
 
     public function __construct($logs)
     {
@@ -21,7 +28,7 @@ class LogViewer
             if(count($client_logs) > 0) {
                 $client = new Client($client_name);
                 foreach ($client_logs as $log_name => $args) {
-                    $client->addLog(new LogFile($log_name, $args));
+                    $client->addLog(new LogFile($log_name, $client->getSlug(), $args));
                 }
                 $this->clients->add($client);
             }

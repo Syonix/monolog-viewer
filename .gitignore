@@ -2,7 +2,6 @@ vendor/*
 composer.phar
 app/config/secure/passwd
 app/config/config.yml
-.idea
 *.yml~
 .settings
 .project

@@ -63,14 +63,23 @@
     }
 
     header#logs #filter-text-wrap {
-        width: 200px;
+        width: 190px;
+        margin: 10px 0 0 10px;
+        -webkit-transition: width 200ms ease-in-out;
+        -moz-transition: width 200ms ease-in-out;
+        -ms-transition: width 200ms ease-in-out;
+        -o-transition: width 200ms ease-in-out;
+        transition: width 200ms ease-in-out;
+    }
+
+    header#logs #filter-text-wrap.wide {
+        width: 190px;
     }
 
     /* Log table */
 
     #filter-meta {
-        display: none;
-        margin: 0 0 50px 20px;
+        margin: 10px 0 10px 10px;
         text-align: left;
     }
 
@@ -96,5 +105,9 @@
 
     .logline td.logger + td.more {
         padding-top: 3px;
+    }
+
+    a#next-button {
+        width: auto;
     }
 }

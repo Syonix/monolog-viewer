@@ -1,0 +1,24 @@
+<a id="logtop" style="margin: -25px 0 25px; display: block; height: 0;"></a>
+<div id="logline-loader" ng-if="!$parent.currentLog"><i class="fa fa-spinner fa-spin"></i> Loading log lines...</div>
+<div class="alert alert-error" ng-if="$parent.isFiltered && $parent.currentLog.total_lines == 0"><i class="fa fa-warning"></i> No log lines are matching your filter. <button ng-click="$parent.resetFilters()">Reset filters</button></div>
+<table id="logline-table">
+    <tr ng-repeat="(id, line) in $parent.currentLog.lines" class="logline level-{{ line.level | lowercase }}" slide-toggle="#context-{{ id + 1 }}">
+        <td class="level"><i class="fa fa-{{ $parent.getLevelIcon($parent.getLevelNumber(line.level)) }} fa-fw"></i></td>
+        <td class="date">{{ formatDate(line.date.date) | date: config.date_format }}</td>
+        <td class="message clearfix" ng-class="{'has-more': keys(line.context).length+keys(line.extra).length > 0}">
+            {{ line.message }}
+            <div ng-if="keys(line.context).length+keys(line.extra).length > 0" class="context slideable" id="context-{{ id + 1 }}">
+                <table>
+                    <tr ng-repeat="(title, content) in line.context"><th>{{ title }}</th><td>{{ content|nl2br }}</td></tr>
+                    <tr ng-repeat="(title, content) in line.extra"><th>{{ title }}</th><td>{{ content|nl2br }}</td></tr>
+                </table>
+            </div>
+        </td>
+        <td class="logger" ng-if="config.display_logger"><i class="fa fa-tag"></i> {{ line.logger }}</td>
+        <td class="more" id="more-{{ id + 1 }}">
+            <i class="fa fa-plus-circle" ng-if="keys(line.context).length+keys(line.extra).length > 0"></i>
+        </td>
+    </tr>
+</table>
+<div id="filter-meta" ng-if="$parent.currentLog">Displaying <span id="filter-count">{{ $parent.currentLog.lines.length }}</span> of {{ $parent.currentLog.total_lines }} lines.</div>
+<a id="next-button" ng-show="$parent.currentLog.next_page_url" href="javascript:void(0);" ng-disabled="busy" class="btn btn-primary" ng-click="getMore()"><i class="fa fa-arrow-down"></i> Load<span ng-if="busy">ing</span> <span ng-if="config.reverse_line_order"> older</span><span ng-if="!config.reverse_line_order"> newer</span> lines...</a>

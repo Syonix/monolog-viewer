@@ -1,25 +1,5 @@
 @media screen and (min-width: 960px) {
-    /* Log Line */
-    /*div.logline div.level {
-        height: auto;
+    header#logs #filter-text-wrap.wide {
+        width: 360px;
     }
-
-    div.logline div.date {
-        width: 200px;
-        float: left;
-    }
-
-    div.logline div.message {
-        width: calc(100% - 431px);
-        float: left;
-    }
-
-    div.logline div.logger {
-        float: left;
-    }
-
-    div.logline div.more {
-        height: auto;
-        padding-top: 5px;
-    }*/
 }
