@@ -1,7 +1,7 @@
 <?php
 namespace Syonix\Util;
 
-class String
+class StringUtil
 {
     public static function toAscii($str, $replace=array(), $delimiter='-')
     {

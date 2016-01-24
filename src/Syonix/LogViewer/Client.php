@@ -2,7 +2,7 @@
 namespace Syonix\LogViewer;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Syonix\Util\String;
+use Syonix\Util\StringUtil;
 
 class Client {
     protected $name;
@@ -25,7 +25,7 @@ class Client {
     public function setName($name)
     {
         $this->name = $name;
-        $this->slug = String::toAscii($name);
+        $this->slug = StringUtil::toAscii($name);
     }
 
     public function getSlug()
