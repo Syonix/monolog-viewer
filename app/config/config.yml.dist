@@ -1,6 +1,8 @@
 debug: false
 timezone: "Europe/Zurich"
 dateFormat: d.m.Y, H:i:s
+default_limit: 100
+display_logger: false
 logs:
     Demo:
         Demo-Log-File:

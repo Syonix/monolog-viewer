@@ -3,129 +3,69 @@
     <a href="javascript:void(0)" class="toggle-button sb-toggle-left"><i class="fa fa-bars"></i></a>
     <a href="{{ app.request.baseUrl }}"><img class="logo" src="{{ app.request.baseUrl }}/web/img/logo.png" alt="Syonix" width="102" height="32"></a>
     <a href="javascript:void(0)" class="toggle-button sb-toggle-right"><i class="fa fa-filter"></i></a>
-    <a href="javascript:void(0)" class="toggle-button scroll-down" onclick="$('#content').animate({ scrollTop: $('#content').prop('scrollHeight') - $('#content').height() }, 500); return false;"><i class="fa fa-arrow-circle-down"></i></a>
+{% if not reverse_order %}<a href="javascript:void(0)" class="toggle-button scroll-down" onclick="$('#content').animate({ scrollTop: $('#content').prop('scrollHeight') - $('#content').height() }, 500); return false;"><i class="fa fa-arrow-circle-down"></i></a>{% endif %}
 {% endblock %}
-{% block navigation %}{% include "components/navigation.html.twig" %}{% endblock %}
+{% block navigation %}
+    <ul ng-controller="NavigationController">
+        <span ng-repeat="client in clients">
+            <li class="client">{{ "{{ client.name }}" }}</li>
+            <li ng-repeat="log in client.logs" ng-class="{'active turquoise': (route.log == log.slug && route.client == client.slug) }">
+                <a href="{{ app.request.baseUrl }}/logs/{{ "{{ client.slug }}/{{ log.slug }}" }}">{{ "{{ log.name }}" }}</a>
+            </li>
+        </span>
+
+        <li class="client">Utility</li>
+        {% if app.security.token and app.security.token.user %}<li id="logout"><a href="{{ path('logs_logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>{% endif %}
+        <li><a href="javascript:void(0);" ng-click="clearCache()"><i class="fa fa-trash-o fa-fw"></i> Clear cache</a></li>
+    </ul>
+{% endblock %}
 {% block logslist %}
     <ul>
-        <li class="filter-dropdown pull-right{% if min_log_level > 100 %} active{% endif %} hide-if-mobile"><i class="fa fa-lg fa-filter"></i> Minimal Log Level <i id="filter-form-arrow" class="fa fa-chevron-down"></i>
+        <li class="filter-dropdown pull-right hide-if-mobile"><i class="fa fa-lg fa-filter"></i> Minimal Log Level <i id="filter-form-arrow" class="fa fa-chevron-down"></i>
             <div class="dropdown">
-                {% for name, value in logLevels %}
-                    {% if value > 100 %}
-                        {% set href = path('log', {'clientSlug': current_client_slug, 'logSlug': current_log_slug, 'm': value, 'l': current_logger }) %}
-                    {% else %}
-                        {% set href = path('log', {'clientSlug': current_client_slug, 'logSlug': current_log_slug, 'l': current_logger}) %}
-                    {% endif %}
-                    <a href="{{ href }}"{% if value < min_log_level %} class="lower"{% endif %}><i class="fa fa-fw fa-{{ logLevelStyle[value].icon }}"></i> {{ name }}</a>
-                {% endfor %}
+                <a ng-repeat="(level, levelName) in levels" ng-class="{'lower': level < filter.level }"
+                   href="javascript:void(0);" ng-click="filter.level = level">
+                    <i class="fa fa-fw fa-{{ "{{ getLevelIcon(level) }}" }}"></i> {{ "{{ levelName.toUpperCase() }} " }}
+                </a>
             </div>
         </li>
-        <li class="filter-dropdown pull-right{% if min_log_level > 100 %} active{% endif %} hide-if-mobile"><i class="fa fa-lg fa-filter"></i> Channel <i id="filter-form-arrow" class="fa fa-chevron-down"></i>
+        <li class="filter-dropdown pull-right hide-if-mobile"><i class="fa fa-lg fa-filter"></i> Channel <i id="filter-form-arrow" class="fa fa-chevron-down"></i>
             <div class="dropdown">
-                {% if value is defined and value > 100 %}
-                    {% set href = path('log', {'clientSlug': current_client_slug, 'logSlug': current_log_slug, 'm': min_log_level }) %}
-                {% else %}
-                    {% set href = path('log', {'clientSlug': current_client_slug, 'logSlug': current_log_slug}) %}
-                {% endif %}
-                <a {% if logger is defined and current_logger != logger %} class="lower"{% endif %} href="{{ href }}"><i class="fa fa-fw fa-tag"></i> All</a>
-                {% for logger in loggers %}
-                    {% if value is defined and value > 100 %}
-                        {% set href = path('log', {'clientSlug': current_client_slug, 'logSlug': current_log_slug, 'm': min_log_level, 'l': logger }) %}
-                    {% else %}
-                        {% set href = path('log', {'clientSlug': current_client_slug, 'logSlug': current_log_slug, 'l': logger}) %}
-                    {% endif %}
-                    <a {% if current_logger != logger %} class="lower"{% endif %} href="{{ href }}"><i class="fa fa-fw fa-tag"></i> {{ logger }}</a>
-                {% endfor %}
+                <a href="javascript:void(0);" ng-class="{'lower': null != filter.logger }"
+                   ng-click="filter.logger = null"><i class="fa fa-fw fa-tag"></i> All</a>
+                <a ng-repeat="logger in currentLog.loggers" ng-class="{'lower': logger != filter.logger }"
+                   href="javascript:void(0);" ng-click="filter.logger = logger">
+                    <i class="fa fa-fw fa-tag"></i> {{ "{{ logger }} " }}
+                </a>
             </div>
         </li>
-        <li id="jump-to-newest" class="pull-right hide-if-mobile"><a href="#" onclick="$('#content').animate({ scrollTop: $('#content').prop('scrollHeight') - $('#content').height() }, 500); return false;"><i class="fa fa-lg fa-arrow-circle-down"></i> Newest entry</a></li>
-        <li id="filter-text" class="pull-right show-if-js">
-            <div id="filter-text-wrap">
-                <i class="fa fa-lg fa-search"></i>
-                <input type="text" id="filter-query">
-                <a id="filter-text-reset" href="javascript:void(0)" onclick="filterContentReset();"><i class="fa fa-lg fa-times-circle"></i></a>
+        {% if not reverse_order %}<li id="jump-to-newest" class="pull-right hide-if-mobile"><a href="javascript:void(0);"><i class="fa fa-lg fa-arrow-circle-down"></i> Newest entry</a></li>{% endif %}
+        <li id="filter-text" class="pull-right">
+            <div id="filter-text-wrap" ng-class="{wide: searchInputWide}">
+                <i class="fa fa-fw fa-lg" ng-class="{'fa-search': !busySearch, 'fa-spinner fa-spin': busySearch}"></i>
+                <input type="text" id="filter-query" ng-model="filter.text"
+                       ng-trim="true" ng-focus="searchInputWide=true" ng-blur="searchInputWide=false">
+                <a id="filter-text-reset" ng-show="filter.text.length > 0" ng-click="filter.text=null" href="javascript:void(0)"><i class="fa fa-lg fa-times-circle"></i></a>
             </div>
         </li>
     </ul>
 {% endblock %}
-{% block content %}
-    <div id="filter-meta">Displaying <span id="filter-count">{{ log.countlines }}</span> of {{ log.countlines }} lines due to your filter(s).</div>
-    <table id="logline-table">
-    {% for id,line in log.lines if constant('Monolog\\Logger::' ~ line.level) >= min_log_level and (current_logger is null or current_logger == line.logger) %}
-        {% set level = constant('Monolog\\Logger::' ~ line.level) %}
-        <tr class="logline level-{{ logLevelStyle[level].class }}">
-            <td class="level"><i class="fa fa-{{ logLevelStyle[level].icon }} fa-fw"></i></td>
-            <td class="date">{{ line.date|date(app.config.dateFormat) }}</td>
-            <td class="message clearfix{% if line.context|length > 0 %} has-more" onclick="toggleMore({{ id + 1 }});{% endif %}">
-                {{ line.message }}
-                {% if line.context|length > 0 %}
-                    <div class="context" id="context-{{ id + 1 }}">
-                        <table>
-                            {% for title, content in line.context %}
-                                <tr><th>{{ title }}</th><td>{{ content|nl2br }}</td></tr>
-                            {% endfor %}
-                        </table>
-                    </div>
-                {% endif %}
-            </td>
-            {% if app.config.display_logger %}<td class="logger"><i class="fa fa-tag"></i> {{ line.logger }}</td>{% endif %}
-            {% if line.context|length > 0 %}
-                <td class="more" id="more-{{ id + 1 }}" onclick="toggleMore({{ id + 1 }});"><i class="fa fa-plus-circle"></i></td>
-            {% else %}
-                <td class="more"></td>
-            {% endif %}
-        </tr>
-    {% else %}
-        <tr class="logline clearfix level-info">
-            <div class="level level-info">
-                <i class="fa fa-info-circle"></i>&nbsp;
-            </div>
-            <div class="message">
-                {% if min_log_level > 100 %}
-                    No log entries match your selection. <a href="{{ path('log', {'clientSlug': current_client_slug, 'logSlug': current_log_slug}) }}" class="reset-btn" ><i class="fa fa-times-circle-o"></i> Reset filter</a>
-                {% else %}
-                    This log file is empty
-                {% endif %}
-            </div>
-        </tr>
-    {% endfor %}
-    </table>
-{% endblock %}
+{% block content_args %}ng-view{% endblock %}
+{% block content %}{% endblock %}
 {% block filter_sidebar %}
     <ul>
         <li class="client">Minimal Log Level</li>
-        {% for name, value in logLevels %}
-            {% if value > 100 %}
-                {% set href = path('log', {'clientSlug': current_client_slug, 'logSlug': current_log_slug, 'm': value, 'l': current_logger }) %}
-            {% else %}
-                {% set href = path('log', {'clientSlug': current_client_slug, 'logSlug': current_log_slug, 'l': current_logger}) %}
-            {% endif %}
-            <li{% if value < min_log_level %} class="lower"{% elseif value == min_log_level %} class="active turquoise"{% endif %}>
-                <a href="{{ href }}"><i class="fa fa-fw fa-{{ logLevelStyle[value].icon }}"></i> {{ name }}</a>
-            </li>
-        {% endfor %}
-        <li class="client">Logger</li>
-        {% if value is defined and value > 100 %}
-            {% set href = path('log', {'clientSlug': current_client_slug, 'logSlug': current_log_slug, 'm': min_log_level }) %}
-        {% else %}
-            {% set href = path('log', {'clientSlug': current_client_slug, 'logSlug': current_log_slug}) %}
-        {% endif %}
-        <li{% if current_logger is null %} class="active turquoise"{% endif %}>
-            <a href="{{ href }}"><i class="fa fa-fw fa-tag"></i> All</a>
+        <li ng-repeat="(level, levelName) in levels" ng-class="{'lower': level < filter.level, 'active turquoise': level == filter.level }">
+            <a href="javascript:void(0);" ng-click="filter.level = level">
+                <i class="fa fa-fw fa-{{ "{{ getLevelIcon(level) }}" }}"></i> {{ "{{ levelName.toUpperCase() }} " }}
+            </a>
         </li>
-        {% for logger in loggers %}
-            {% if value is defined and value > 100 %}
-                {% set href = path('log', {'clientSlug': current_client_slug, 'logSlug': current_log_slug, 'm': min_log_level, 'l': logger }) %}
-            {% else %}
-                {% set href = path('log', {'clientSlug': current_client_slug, 'logSlug': current_log_slug, 'l': logger}) %}
-            {% endif %}
-            <li{% if current_logger == logger %} class="active turquoise"{% endif %}>
-                <a href="{{ href }}"><i class="fa fa-fw fa-tag"></i> {{ logger }}</a>
-            </li>
-        {% endfor %}
+        <li class="client">Logger</li>
+        <li ng-class="{'active purple': null == filter.logger }">
+            <a href="javascript:void(0);" ng-click="filter.logger = null"><i class="fa fa-fw fa-tag"></i> All</a>
+        </li>
+        <li ng-repeat="logger in currentLog.loggers" ng-class="{'active purple': logger == filter.logger }">
+            <a href="javascript:void(0);" ng-click="filter.logger = logger"><i class="fa fa-fw fa-tag"></i> {{ "{{ logger }} " }}</a>
+        </li>
     </ul>
-{% endblock %}
-{% block scripts %}
-    {{ parent() }}
-    <script src="{{ app.request.baseUrl }}/web/js/log.js"></script>
 {% endblock %}

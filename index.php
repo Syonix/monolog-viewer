@@ -2,12 +2,15 @@
 require_once('bootstrap.php');
 
 define('APP_ROOT', __DIR__);
-define('APP_PATH', __DIR__ . '/app/');
-define('CONFIG_FILE', APP_PATH . 'config/config.yml');
-define('PASSWD_DIR', APP_PATH . 'config/secure');
+define('APP_PATH', __DIR__ . '/app');
+define('CONFIG_FILE', APP_PATH . '/config/config.yml');
+define('PASSWD_DIR', APP_PATH . '/config/secure');
 define('PASSWD_FILE', PASSWD_DIR . '/passwd');
 define('VENDOR_PATH', __DIR__ . '/vendor');
-define('BASE_URL', (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['SERVER_NAME'] . $_SERVER['BASE']);
+define('BASE_URL', ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http') .
+    '://' . $_SERVER['SERVER_NAME'] .
+    str_replace('/index.php', '', $_SERVER['SCRIPT_NAME'])
+);
 define('WEB_URL', BASE_URL . '/web');
 
 $app = new Silex\Application();
@@ -20,7 +23,7 @@ if(is_readable(CONFIG_FILE)) {
     if(in_array($app['config']['timezone'], DateTimeZone::listIdentifiers())) date_default_timezone_set($app['config']['timezone']);
 }
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
-        'twig.path' => __DIR__.'/views',
+        'twig.path' => APP_ROOT.'/views',
         'twig.options' => array('debug' => $app['debug'])
     ));
 $app->register(new Silex\Provider\SessionServiceProvider());
@@ -77,13 +80,13 @@ if(!is_file(PASSWD_FILE)) {
 }
 else
 {
-
     $app->get('/', function() use($app) {
             if(!is_readable(CONFIG_FILE)) {
                 throw new \Syonix\LogViewer\Exceptions\ConfigFileMissingException();
             }
-            return $app->redirect($app['url_generator']->generate('home'));
-        });
+            return $app->redirect($app['url_generator']->generate('logs'));
+        })
+        ->bind("home");
 
     $app->get('/login', function(\Symfony\Component\HttpFoundation\Request $request) use($app) {
             return $app['twig']->render('login.html.twig', array(
@@ -93,71 +96,14 @@ else
         })
         ->bind("login");
 
-    $app->get('/logs', function() use($app) {
-        $viewer = new Syonix\LogViewer\LogViewer($app['config']['logs']);
+    $app->mount('/api', include 'api.php');
 
-        $client = $viewer->getFirstClient();
-        $log = $client->getFirstLog();
-
-        return $app->redirect($app['url_generator']->generate('log', array(
-                    'clientSlug' => $client->getSlug(),
-                    'logSlug' => $log->getSlug()
-                )));
-        })
-        ->bind("home");
-
-    $app->get('/logs/{clientSlug}', function($clientSlug) use($app) {
-        $viewer = new Syonix\LogViewer\LogViewer($app['config']['logs']);
-        $client = $viewer->getClient($clientSlug);
-        $log = $client->getFirstLog();
-        if(is_null($log))
-        {
-            $app->abort(404, "Client not found");
-        }
-
-        return $app->redirect($app['url_generator']->generate('log', array(
-                    'clientSlug' => $clientSlug,
-                    'logSlug' => $log->getSlug()
-                )));
-        })
-        ->bind("client");
-
-    $controller_log = function(\Symfony\Component\HttpFoundation\Request $request, $clientSlug, $logSlug) use($app) {
-            try {
-                $viewer = new Syonix\LogViewer\LogViewer($app['config']['logs']);
-                $clients = $viewer->getClients();
-                $client = $viewer->getClient($clientSlug);
-                if($client === null || !$client->logExists($logSlug)) {
-                    $app->abort(404, "Log file not configured");
-                }
-                $log = $client->getLog($logSlug)->load();
-
-                $minLogLevel = $request->query->get('m');
-                $currentLogger = $request->query->get('l');
-                if($currentLogger && !$log->getLoggers()->contains($currentLogger)) {
-                    return $app->redirect($app['url_generator']->generate('log', array(
-                        'clientSlug' => $clientSlug,
-                        'logSlug' => $logSlug,
-                        'm' => $minLogLevel,
-                        'l' => $currentLogger
-                    )));
-                }
-            } catch(\League\Flysystem\FileNotFoundException $e) {
-                $app->abort(404, "Log file not found");
-            }
-            return $app['twig']->render('log.html.twig', array(
-                    'clients' => $clients,
-                    'current_client_slug' => $clientSlug,
-                    'current_log_slug' => $logSlug,
-                    'log' => $log,
-                    'logLevels' => Monolog\Logger::getLevels(),
-                    'min_log_level' => (in_array($minLogLevel, Monolog\Logger::getLevels()) ? $minLogLevel : 100),
-                    'loggers' => $log->getLoggers(),
-                    'current_logger' => $currentLogger
-                ));
-        };
-    $app->get('/logs/{clientSlug}/{logSlug}', $controller_log)
-        ->bind("log");
+    $app->get('/logs{path}', function() use($app) { return $app['twig']->render('log.html.twig', array(
+        'reverse_order' => $app['config']['reverse_line_order']
+    )); })
+        ->bind("logs")
+        ->value('path', FALSE)
+        ->assert("path", ".*");
 }
 
 $app->error(function (\Syonix\LogViewer\Exceptions\ConfigFileMissingException $e, $code) use($app) {

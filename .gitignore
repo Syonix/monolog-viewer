@@ -1,8 +1,9 @@
 vendor/*
 composer.phar
 app/config/secure/passwd
+app/cache/*
+!app/cache/.gitkeep
 app/config/config.yml
-.idea
 *.yml~
 .settings
 .project
