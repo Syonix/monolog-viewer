@@ -2,12 +2,6 @@
 namespace Syonix\LogViewer;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Dubture\Monolog\Parser\LineLogParser;
-use League\Flysystem\Adapter\Ftp;
-use League\Flysystem\Adapter\Local;
-use League\Flysystem\Cached\CachedAdapter;
-use League\Flysystem\Cached\Storage\Adapter;
-use League\Flysystem\Filesystem;
 use Syonix\LogViewer\Exceptions\NoLogsConfiguredException;
 
 class LogViewer
