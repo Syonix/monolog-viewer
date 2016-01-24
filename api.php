@@ -92,7 +92,7 @@ $api->get('/logs/{clientSlug}/{logSlug}', function (Silex\Application $app, Requ
     $filter['text'] = $request->query->get('text');
     if($filter['text'] == "") $filter['text'] = null;
 
-    if($filter['logger'] === null && $filter['level'] == null && $filter['text'] === null) {
+    if($filter['logger'] === null && $filter['level'] === null && $filter['text'] === null) {
         $filter = null;
     }
 
