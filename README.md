@@ -100,6 +100,7 @@ The App is fully optimized for tablets and smart phones and can even be installe
 # Enforcing HTTPS
 This should be done on a server configuration level. You could for example add this to the `.htaccess` file, right below `RewriteEngine On`:
 
-```RewriteCond %{HTTPS} !=on
+```
+RewriteCond %{HTTPS} !=on
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 ```
