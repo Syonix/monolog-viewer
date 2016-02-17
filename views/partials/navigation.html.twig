@@ -1,10 +1,12 @@
-<ul>
-    {% for client in clients %}
-        <li class="client">{{ client.name }}</li>
-        {% for log in client.logs %}
-            <li{% if current_client_slug == client.slug and current_log_slug == log.slug %} class="active turquoise"{% endif %}><a href="{{ path('log', {'clientSlug': client.slug, 'logSlug': log.slug}) }}">{{ log.name }}</a></li>
-        {% endfor %}
-    {% endfor %}
-    <li class="client">Current User</li>
-    {% if app.security.token and app.security.token.user %}<li id="logout"><a href="{{ path('logs_logout') }}"><i class="fa fa-sign-out"></i> Logout</a></li>{% endif %}
+<ul ng-controller="NavigationController">
+        <span ng-repeat="client in clients">
+            <li class="client">{{ "{{ client.name }}" }}</li>
+            <li ng-repeat="log in client.logs" ng-class="{'active turquoise': (route.log == log.slug && route.client == client.slug) }">
+                <a href="{{ app.request.baseUrl }}/logs/{{ "{{ client.slug }}/{{ log.slug }}" }}">{{ "{{ log.name }}" }}</a>
+            </li>
+        </span>
+
+    <li class="client">Utility</li>
+    {% if app.security.token and app.security.token.user %}<li id="logout"><a href="{{ path('logs_logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>{% endif %}
+    <li><a href="javascript:void(0);" ng-click="clearCache()"><i class="fa fa-trash-o fa-fw"></i> Clear cache</a></li>
 </ul>
