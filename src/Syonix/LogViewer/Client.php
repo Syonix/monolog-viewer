@@ -63,6 +63,10 @@ class Client {
         return null;
     }
 
+
+    /**
+     * @return LogFile|null
+     */
     public function getFirstLog()
     {
         return ($this->logs->count() > 0) ? $this->logs->first() : null;
