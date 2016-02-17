@@ -1,11 +1,21 @@
 <?php
 
+use League\Flysystem\Adapter\NullAdapter;
+use Syonix\LogViewer\Cache;
+use Syonix\LogViewer\LogFile;
+
+
 class LogViewerTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Syonix\LogViewer\LogViewer
      */
 	protected $logViewer;
+
+    /**
+     * @var Cache
+     */
+    protected $cache;
 
 	public function setUp(){
         $config = array(
@@ -63,13 +73,18 @@ class LogViewerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Log1', $log->getName());
         return $log;
     }
-    
+
+
     /**
+     * @param LogFile $log
+     *
      * @depends testGetLog
      */
-    public function testGetLogLines($log)
+    public function testGetLogLines(LogFile $log)
     {
-        $log->load();
+        $adapter = new NullAdapter();
+        $this->cache = new Cache($adapter,300, false);
+        $log = $this->cache->get($log);
         $lines = $log->getLines();
         $this->assertInstanceOf('DateTime', $lines[0]['date']);
         $this->assertEquals('debug', $lines[0]['logger']);
