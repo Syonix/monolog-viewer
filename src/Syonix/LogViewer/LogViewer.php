@@ -50,7 +50,11 @@ class LogViewer
         }
         return null;
     }
-    
+
+
+    /**
+     * @return Client|null
+     */
     public function getFirstClient()
     {
         return ($this->clients->count() > 0) ? $this->clients->first() : null;

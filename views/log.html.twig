@@ -5,20 +5,7 @@
     <a href="javascript:void(0)" class="toggle-button sb-toggle-right"><i class="fa fa-filter"></i></a>
 {% if not reverse_order %}<a href="javascript:void(0)" class="toggle-button scroll-down" onclick="$('#content').animate({ scrollTop: $('#content').prop('scrollHeight') - $('#content').height() }, 500); return false;"><i class="fa fa-arrow-circle-down"></i></a>{% endif %}
 {% endblock %}
-{% block navigation %}
-    <ul ng-controller="NavigationController">
-        <span ng-repeat="client in clients">
-            <li class="client">{{ "{{ client.name }}" }}</li>
-            <li ng-repeat="log in client.logs" ng-class="{'active turquoise': (route.log == log.slug && route.client == client.slug) }">
-                <a href="{{ app.request.baseUrl }}/logs/{{ "{{ client.slug }}/{{ log.slug }}" }}">{{ "{{ log.name }}" }}</a>
-            </li>
-        </span>
-
-        <li class="client">Utility</li>
-        {% if app.security.token and app.security.token.user %}<li id="logout"><a href="{{ path('logs_logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>{% endif %}
-        <li><a href="javascript:void(0);" ng-click="clearCache()"><i class="fa fa-trash-o fa-fw"></i> Clear cache</a></li>
-    </ul>
-{% endblock %}
+{% block navigation %}{% include "partials/navigation.html.twig" %}{% endblock %}
 {% block logslist %}
     <ul>
         <li class="filter-dropdown pull-right hide-if-mobile"><i class="fa fa-lg fa-filter"></i> Minimal Log Level <i id="filter-form-arrow" class="fa fa-chevron-down"></i>
