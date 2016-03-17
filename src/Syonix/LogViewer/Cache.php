@@ -58,7 +58,7 @@ class Cache
     {
         $cache = $this->cache->get('/')->getContents();
         foreach ($cache as $file) {
-            if($file['type'] == 'file') $this->cache->delete($file['path']);
+            if($file['type'] == 'file' && substr($file['basename'], 0, 1) !== '.') $this->cache->delete($file['path']);
         }
     }
 
