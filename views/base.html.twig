@@ -114,6 +114,10 @@
         </div>
         <header id="logs">
             {% block logslist %}{% endblock %}
+            <div id="alert" class="alert" ng-show="alertShow">
+                <span>{{ "{{ alertMessage }}" }}</span>
+                <button type="button" class="close pull-right" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
         </header>
     {% endblock %}
 </div>

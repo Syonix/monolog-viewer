@@ -1,4 +1,4 @@
-<a id="logtop" style="margin: -25px 0 25px; display: block; height: 0;"></a>
+<a id="logtop"></a>
 <div id="logline-loader" ng-if="!$parent.currentLog"><i class="fa fa-spinner fa-spin"></i> Loading log lines...</div>
 <div class="alert alert-error" ng-if="$parent.isFiltered && $parent.currentLog.total_lines == 0"><i class="fa fa-warning"></i> No log lines are matching your filter. <button ng-click="$parent.resetFilters()">Reset filters</button></div>
 <table id="logline-table">

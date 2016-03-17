@@ -139,7 +139,7 @@ controllers.controller('NavigationController', ['$scope', '$http', '$routeParams
         $scope.clearCache = function () {
             $http.get('api/cache/clear')
                 .then(function successCallback() {
-                    alert("Cache cleared");
+                    alert('The cache has successfully been cleared.');
                 });
         };
 
