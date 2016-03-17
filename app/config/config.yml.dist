@@ -1,8 +1,10 @@
 debug: false
 timezone: "Europe/Zurich"
-dateFormat: d.m.Y, H:i:s
-default_limit: 100
+date_format: dd.MM.yyyy HH:mm:ss
 display_logger: false
+default_limit: 100
+cache_expire: 300
+reverse_line_order: true
 logs:
     Demo:
         Demo-Log-File:
