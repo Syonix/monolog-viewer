@@ -1,4 +1,4 @@
-vendor/*
+vendor
 composer.phar
 app/config/secure/passwd
 app/cache/*

@@ -2,7 +2,6 @@
 use Symfony\Component\HttpFoundation\Request;
 use League\Flysystem\Adapter\Local;
 
-
 $api = $app['controllers_factory'];
 
 $api->get('/config', function (Silex\Application $app) {
@@ -17,22 +16,22 @@ $api->get('/config', function (Silex\Application $app) {
 });
 
 $api->get('/logs', function (Silex\Application $app, Request $request) {
-    $viewer = new Syonix\LogViewer\LogViewer($app['config']['logs']);
-    $clients = $viewer->getClients();
+    $viewer = new Syonix\LogViewer\LogManager($app['config']['logs']);
+    $logCollections = $viewer->getLogCollections();
     $returnLogs = (bool) $request->query->get('logs', false);
     $return = [];
-    foreach ($clients as $client) {
+    foreach ($logCollections as $logCollection) {
         $element = array(
-            'name' => $client->getName(),
-            'slug' => $client->getSlug(),
-            'url' => BASE_URL.'/api/logs/'.$client->getSlug()
+            'name' => $logCollection->getName(),
+            'slug' => $logCollection->getSlug(),
+            'url' => BASE_URL.'/api/logs/'.$logCollection->getSlug()
         );
         if ($returnLogs) {
-            foreach ($client->getLogs() as $log) {
+            foreach ($logCollection->getLogs() as $log) {
                 $element['logs'][] = array(
                     'name' => $log->getName(),
                     'slug' => $log->getSlug(),
-                    'url' => BASE_URL.'/api/logs/'.$client->getSlug().'/'.$log->getSlug()
+                    'url' => BASE_URL.'/api/logs/'.$logCollection->getSlug().'/'.$log->getSlug()
                 );
             }
         }
@@ -55,25 +54,25 @@ $api->get('/cache/clear', function (Silex\Application $app) {
 });
 
 $api->get('/logs/{clientSlug}', function (Silex\Application $app, $clientSlug) {
-    $viewer = new Syonix\LogViewer\LogViewer($app['config']['logs']);
-    $client = $viewer->getClient($clientSlug);
-    if(null === $client) {
+    $viewer = new Syonix\LogViewer\LogManager($app['config']['logs']);
+    $logCollection = $viewer->getLogCollection($clientSlug);
+    if(null === $logCollection) {
         $error = array('message' => 'The client was not found.');
         return $app->json($error, 404);
     }
 
-    $logs = $client->getLogs();
+    $logs = $logCollection->getLogs();
     $return = [];
     foreach($logs as $log) {
         $return [] = array(
             'name' => $log->getName(),
             'slug' => $log->getSlug(),
-            'url' => BASE_URL.'/api/logs/'.$client->getSlug().'/'.$log->getSlug()
+            'url' => BASE_URL.'/api/logs/'.$logCollection->getSlug().'/'.$log->getSlug()
         );
     }
     $response = array(
-        'name' => $client->getName(),
-        'slug' => $client->getSlug(),
+        'name' => $logCollection->getName(),
+        'slug' => $logCollection->getSlug(),
         'logs' => $return
     );
 
@@ -96,14 +95,14 @@ $api->get('/logs/{clientSlug}/{logSlug}', function (Silex\Application $app, Requ
         $filter = null;
     }
 
-    $viewer = new Syonix\LogViewer\LogViewer($app['config']['logs']);
-    $client = $viewer->getClient($clientSlug);
-    if(null === $client) {
+    $viewer = new Syonix\LogViewer\LogManager($app['config']['logs']);
+    $logCollection = $viewer->getLogCollection($clientSlug);
+    if(null === $logCollection) {
         $error = array('message' => 'The client was not found.');
         return $app->json($error, 404);
     }
 
-    $log = $client->getLog($logSlug);
+    $log = $logCollection->getLog($logSlug);
     if(null === $log) {
         $error = array('message' => 'The log file was not found.');
         return $app->json($error, 404);
@@ -112,7 +111,7 @@ $api->get('/logs/{clientSlug}/{logSlug}', function (Silex\Application $app, Requ
     $cache = new \Syonix\LogViewer\Cache($adapter, $app['config']['cache_expire'], $app['config']['reverse_line_order']);
     $log = $cache->get($log);
 
-    $logUrl = BASE_URL.'/api/logs/'.$client->getSlug().'/'.$log->getSlug();
+    $logUrl = BASE_URL.'/api/logs/'.$logCollection->getSlug().'/'.$log->getSlug();
     $totalLines = $log->countLines($filter);
 
     $prevPageUrl = $offset > 0 ? ($offset-$limit < 0 ? $logUrl.'?limit='.$limit.'&offset=0' : $logUrl.'?limit='.$limit.'&offset='.($offset-$limit)) : null;
@@ -126,8 +125,8 @@ $api->get('/logs/{clientSlug}/{logSlug}', function (Silex\Application $app, Requ
     $response = array(
         'name' => $log->getName(),
         'client' => array(
-            'name' => $client->getName(),
-            'slug' => $client->getSlug()
+            'name' => $logCollection->getName(),
+            'slug' => $logCollection->getSlug()
         ),
         'lines' => $log->getLines($limit, $offset),
         'total_lines' => $totalLines,

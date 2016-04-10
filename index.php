@@ -36,7 +36,7 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
                 'users' => array(
                     'user' => array('ROLE_USER', (is_file(PASSWD_FILE) ? file_get_contents(PASSWD_FILE) : null)),
                 ),
-                'logout' => array('logout_path' => '/logs/logout'),
+                'logout' => array('logout_path' => '/logs/logout', 'invalidate_session' => true),
             ),
         ),
     ));
@@ -78,8 +78,7 @@ if(!is_file(PASSWD_FILE)) {
     })
     ->assert('url', '.+'); // Match any route;
 }
-else
-{
+else {
     $app->get('/', function() use($app) {
             if(!is_readable(CONFIG_FILE)) {
                 throw new \Syonix\LogViewer\Exceptions\ConfigFileMissingException();
@@ -89,11 +88,11 @@ else
         ->bind("home");
 
     $app->get('/login', function(\Symfony\Component\HttpFoundation\Request $request) use($app) {
-            return $app['twig']->render('login.html.twig', array(
-                    'create_success' => false,
-                    'error'         => $app['security.last_error']($request),
-                ));
-        })
+        return $app['twig']->render('login.html.twig', array(
+            'create_success' => false,
+            'error'         => $app['security.last_error']($request),
+        ));
+    })
         ->bind("login");
 
     $app->mount('/api', include 'api.php');
@@ -121,18 +120,18 @@ $app->error(function (\Symfony\Component\HttpKernel\Exception\HttpException $e) 
 
     switch($e->getStatusCode()) {
         case 404:
-            $viewer = new Syonix\LogViewer\LogViewer($app['config']['logs']);
+            $viewer = new Syonix\LogViewer\LogManager($app['config']['logs']);
 
             return $app['twig']->render('error/log_file_not_found.html.twig', array(
-                'clients' => $viewer->getClients(),
+                'clients' => $viewer->getLogCollections(),
                 'current_client_slug' => null,
                 'current_log_slug' => null,
                 'error' => $e
             ));
         default:
             try {
-                $viewer = new Syonix\LogViewer\LogViewer($app['config']['logs']);
-                $clients = $viewer->getClients();
+                $viewer = new Syonix\LogViewer\LogManager($app['config']['logs']);
+                $clients = $viewer->getLogCollections();
             } catch(\Exception $e) {
                 $clients = array();
             }
@@ -155,8 +154,8 @@ $app->error(function (\Exception $e, $code) use($app) {
     switch($code) {
         default:
             try {
-                $viewer = new Syonix\LogViewer\LogViewer($app['config']['logs']);
-                $clients = $viewer->getClients();
+                $viewer = new Syonix\LogViewer\LogManager($app['config']['logs']);
+                $clients = $viewer->getLogCollections();
             } catch(\Exception $e) {
                 $clients = array();
             }

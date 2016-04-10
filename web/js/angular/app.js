@@ -27,7 +27,7 @@ logViewer.config(['$routeProvider', '$locationProvider',
         when('/logs/:client', {resolve: { redirect: redirectService }}).
         when('/logs/:client/:log', {
             templateUrl: 'views/partials/log_file.html',
-            controller: 'LogViewController'
+            controller: 'LogFileController'
         }).
         otherwise({
             redirectTo: '/logs'
@@ -66,6 +66,7 @@ logViewer.filter('shorten', function() {
         return value + ' ...';
     };
 });
+
 logViewer.run(function($rootScope) {
     $rootScope.keys = Object.keys;
 });

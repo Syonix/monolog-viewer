@@ -95,7 +95,7 @@
     <link rel="shortcut icon" href="{{ app.template_url }}/favicon.ico"/>
     <base href="{{ app.request.baseUrl }}/">
 </head>
-<body>
+<body{% block ng_controller %}{% endblock %}>
 {% block body %}
 {% block navigation_wrapper %}
     <nav id="navigation" class="sb-slidebar sb-left sb-momentum-scrolling">
@@ -114,10 +114,6 @@
         </div>
         <header id="logs">
             {% block logslist %}{% endblock %}
-            <div id="alert" class="alert" ng-show="alertShow">
-                <span>{{ "{{ alertMessage }}" }}</span>
-                <button type="button" class="close pull-right" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            </div>
         </header>
     {% endblock %}
 </div>

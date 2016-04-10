@@ -2,11 +2,11 @@
 <div id="logline-loader" ng-if="!$parent.currentLog"><i class="fa fa-spinner fa-spin"></i> Loading log lines...</div>
 <div class="alert alert-error" ng-if="$parent.isFiltered && $parent.currentLog.total_lines == 0"><i class="fa fa-warning"></i> No log lines are matching your filter. <button ng-click="$parent.resetFilters()">Reset filters</button></div>
 <table id="logline-table">
-    <tr ng-repeat="(id, line) in $parent.currentLog.lines" class="logline level-{{ line.level | lowercase }}" slide-toggle="#context-{{ id + 1 }}">
+    <tr ng-repeat="(id, line) in $parent.currentLog.lines" class="logline level-{{ line.level | lowercase }}">
         <td class="level"><i class="fa fa-{{ $parent.getLevelIcon($parent.getLevelNumber(line.level)) }} fa-fw"></i></td>
         <td class="date">{{ formatDate(line.date.date) | date: config.date_format }}</td>
         <td class="message clearfix" ng-class="{'has-more': keys(line.context).length+keys(line.extra).length > 0}">
-            {{ line.message }}
+            <span slide-toggle="#context-{{ id + 1 }}">{{ line.message }}</span>
             <div ng-if="keys(line.context).length+keys(line.extra).length > 0" class="context slideable" id="context-{{ id + 1 }}">
                 <table>
                     <tr ng-repeat="(title, content) in line.context"><th>{{ title }}</th><td>{{ content|nl2br }}</td></tr>
