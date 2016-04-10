@@ -1,0 +1,25 @@
+// Colors
+
+$branding-primary:    #111;
+$branding-info:       #00a8f7;
+$branding-success:    #48b04b;
+$branding-warning:    #f2b600;
+$branding-danger:     #f7422d;
+
+$branding-background: #1a2d62;
+
+$foreground-text:     #3b3b3b;
+
+$alert-success-color: $branding-success;
+$alert-info-color:    $branding-info;
+$alert-warning-color: $branding-warning;
+$alert-error-color:   $branding-danger;
+
+$color-grey-middle:   #8c8c8c;
+$color-white:         #ffffff;
+
+// Fonts
+
+$font-stack-default:   "Open Sans", "Arial", "sans-serif";
+$font-stack-monospace: "Menlo", "Monaco", "Consolas", "Courier New", "monospace";
+$font-stack-code:      "Source Code Pro", "monospace";

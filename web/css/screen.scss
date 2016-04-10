@@ -1,0 +1,574 @@
+@import 'variables';
+@import 'mixins';
+
+//original selectors
+//div.error-message, div.placeholder-message
+%extend_2 {
+  width: 100%;
+  height: 100%;
+  font-size: 1.3em;
+  text-align: center;
+  color: #9f9f9f;
+}
+
+body {
+  color: #3b3b3b;
+  font-family: $font-stack-default;
+  height: 100%;
+  position: relative;
+}
+html {
+}
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: inherit;
+}
+.hide-if-mobile {
+  display: none !important;
+}
+.monospaced {
+  font-family: $font-stack-monospace;
+}
+header {
+  &#header {
+    width: 100%;
+    height: 51px;
+    background: url("../img/lines.png") repeat-x #ffffff;
+    border-bottom: 1px solid #dedede;
+    margin-bottom: 2px;
+    text-align: center;
+    .toggle-button {
+      display: inline-block;
+      font-size: 20px;
+      padding: 15px;
+      color: #b7b7b7;
+    }
+    .sb-toggle-left {
+      float: left;
+      margin-right: 47px;
+    }
+    .scroll-down {
+      float: right;
+    }
+    .sb-toggle-right {
+      float: right;
+    }
+    img.logo {
+      margin: 10px 0 0;
+      border: 0;
+    }
+    div#logout {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      padding: 15px 20px 0 0;
+      font-weight: bold;
+      a {
+        color: inherit;
+        text-decoration: none;
+        &:hover i {
+          color: inherit;
+        }
+      }
+      i {
+        color: #dedede;
+      }
+    }
+  }
+  &#logs {
+    position: absolute;
+    top: 53px;
+    left: 0;
+    right: 0;
+    height: 60px;
+    padding: 0;
+    color: #ffffff;
+    background-color: #006299;
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      height: 60px;
+      li {
+        display: block;
+        float: left;
+        height: 60px;
+        font-weight: bold;
+        font-size: 11pt;
+        &.active {
+          background-color: #0091e4;
+        }
+        > a {
+          display: block;
+          height: 100%;
+          width: 100%;
+          padding: 20px;
+          color: #ffffff;
+          &:hover {
+            text-decoration: none;
+            background-color: #0091e4;
+          }
+          &:focus {
+            text-decoration: none;
+            background-color: #0091e4;
+          }
+        }
+        form {
+          height: 100%;
+          padding: 20px;
+          display: block;
+        }
+        a.active {
+          background-color: #0091e4;
+        }
+      }
+    }
+    #filter-text {
+      width: 100%;
+      padding: 0 20px;
+    }
+    #filter-text-wrap {
+      height: 40px;
+      margin: 10px 0 0;
+      padding: 0 10px;
+      border: 1px solid #0091e4;
+      color: #ffffff;
+      background: #006299;
+      outline: none;
+      //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+      border-radius: 2px;
+      &.active {
+        border-color: #ffffff;
+      }
+      &.focus {
+        border-color: #ffffff;
+      }
+      input {
+        width: calc(100% - 70px);
+        height: 100%;
+        padding: 0;
+        margin: 0 10px;
+        border: 0;
+        color: #ffffff;
+        background: transparent;
+        &:focus {
+          outline: none;
+        }
+      }
+      a#filter-text-reset {
+        color: #ffffff;
+      }
+    }
+    .filter-dropdown {
+      padding: 20px;
+      color: #ffffff;
+      cursor: pointer;
+      position: relative;
+      &:hover {
+        text-decoration: none;
+        background-color: #0091e4;
+        .dropdown {
+          display: block;
+        }
+      }
+      .dropdown {
+        display: none;
+        padding-bottom: 7px;
+        background-color: #0091e4;
+        position: absolute;
+        right: 0;
+        top: 60px;
+        z-index: 10;
+        white-space: nowrap;
+        a {
+          color: inherit;
+          display: block;
+          padding: 7px 20px;
+          font-size: 1.1em;
+          font-weight: 200;
+          &:hover {
+            background-color: #007dc5;
+          }
+          &:focus {
+            text-decoration: none;
+          }
+        }
+      }
+      a.lower {
+        color: rgba(255, 255, 255, 0.5);
+      }
+    }
+    .dropdown a:hover {
+      text-decoration: none;
+    }
+  }
+}
+div {
+  &#login {
+    position: absolute;
+    top: 53px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: #f1f1f1;
+    margin: 0;
+    overflow: auto;
+    div#loginform {
+      width: 300px;
+      margin: 100px auto;
+      padding: 25px;
+      background-color: #ffffff;
+      form {
+        margin: 0;
+      }
+      input[type=text] {
+        margin-bottom: 25px;
+      }
+      input[type=password] {
+        margin-bottom: 25px;
+      }
+      input[type=submit] {
+      }
+    }
+  }
+  &#sb-site {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  &#content {
+    position: absolute;
+    top: 113px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    float: left;
+    padding: 15px 5px;
+    overflow: auto;
+    &.blur {
+      filter: blur(5px);
+    }
+  }
+  &.error-message {
+    @extend %extend_2;
+    color: #e74c3c;
+  }
+  &.placeholder-message {
+    @extend %extend_2;
+  }
+  &.alert {
+    margin: 0;
+    padding: 16px 35px 14px;
+    //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+    border-radius: 0;
+    border: 0;
+    background: #999999;
+    color: white;
+    font-size: 16px;
+    &:before {
+      content: '\f05a';
+      font-family: "FontAwesome";
+      font-size: 1.5em;
+      vertical-align: middle;
+      margin-right: 15px;
+    }
+    .close {
+      margin-top: 2px;
+      color: #ffffff;
+      opacity: 0.5;
+      //Instead of the line below you could use @include text-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+      text-shadow: none;
+      font-size: 1.7em;
+      font-weight: 100;
+      &:hover {
+        opacity: 1;
+      }
+    }
+    &.alert-info {
+      background-color: $alert-info-color;
+      > span:before {
+        content: 'INFO: ';
+      }
+    }
+    &.alert-error {
+      background-color: $alert-error-color;
+      &:before {
+        content: "\f06a";
+      }
+      > span:before {
+        content: 'ERROR: ';
+      }
+    }
+    &.alert-success {
+      background-color: $alert-success-color;
+      &:before {
+        content: "\f00c";
+      }
+      > span:before {
+        content: 'SUCCESS: ';
+      }
+    }
+    &.alert-warning {
+      background-color: #f2b600;
+      &:before {
+        content: "\f071";
+      }
+      > span:before {
+        content: 'WARNING: ';
+      }
+    }
+    + #logtop {
+      margin-top: 0;
+    }
+    > span:before {
+      font-weight: bold;
+      font-size: 0.9em;
+    }
+  }
+}
+.sb-slidebar {
+  background-color: #0f1a38;
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+    li {
+      display: block;
+      width: 100%;
+      height: 40px;
+      border-left: 5px solid #0f1a38;
+      text-align: left;
+      color: #9aaad2;
+      font-weight: bold;
+      font-size: 11pt;
+      &.client {
+        padding: 15px 0 0 20px;
+        font-weight: bold;
+        color: #5e6880;
+        &:first-child {
+          padding: 25px 0 0 20px;
+          height: 51px;
+        }
+      }
+      &.lower {
+        color: #5e6880;
+      }
+      a {
+        width: 100%;
+        height: 100%;
+        padding: 10px 20px;
+        display: inline-block;
+        text-decoration: none;
+        color: inherit;
+        &:hover {
+          color: #ffffff;
+        }
+      }
+      &.active {
+        color: #ffffff;
+        background-color: $branding-background;
+        &.turquoise {
+          border-left-color: #00a4e5;
+        }
+        &.purple {
+          border-left-color: #7d4bcc;
+        }
+        &.blue {
+          border-left-color: #5d6ff9;
+        }
+      }
+    }
+  }
+}
+#logtop {
+  margin: -25px 0 25px;
+  display: block;
+  height: 0;
+}
+#logline-loader {
+  color: #8c8c8c;
+  font-size: 1.1em;
+  font-style: italic;
+  margin-left: 10px;
+}
+#filter-meta {
+  margin: 15px 0;
+  color: #cbcbcb;
+  font-size: 1.1em;
+  font-style: italic;
+  text-align: center;
+}
+#logline-table {
+  table-layout: fixed;
+  max-width: 100%;
+  min-width: 100%;
+}
+.logline {
+  font-size: 11pt;
+  &:nth-child(even) {
+    background-color: #fafafa;
+  }
+  td {
+    padding: 3px 10px;
+    vertical-align: top;
+    &.level {
+      border-right: 3px solid #00a4e5;
+      text-align: center;
+      width: 40px;
+    }
+    &.date {
+      display: block;
+      font-family: $font-stack-code;
+      color: #cbcbcb;
+      width: 210px;
+      padding-bottom: 0;
+    }
+    &.message {
+      display: block;
+      font-family: $font-stack-code;
+      padding-top: 0;
+
+      &.has-more span {
+        @include user-select(none);
+        cursor: pointer;
+      }
+    }
+    &.logger {
+      display: block;
+      color: #cbcbcb;
+      white-space: nowrap;
+      + td.more {
+        padding-top: 25px;
+      }
+    }
+    &.more {
+      width: 20px;
+      font-weight: 500;
+      color: #cbcbcb;
+      font-size: 1.5em;
+      padding-top: 15px;
+    }
+  }
+  .context {
+    font-family: $font-stack-default;
+    table {
+      margin: 5px 0;
+      th,
+      td {
+        vertical-align: top;
+        color: #8c8c8c;
+        padding: 5px 0 0;
+      }
+      td {
+        padding-left: 20px;
+        //Instead of the line below you could use @include word-break($value)
+        word-break: break-all;
+        a {
+          color: #8c8c8c;
+          &:hover {
+            color: $foreground-text;
+          }
+        }
+      }
+      th {
+        vertical-align: top;
+        font-weight: bold;
+        a {
+          color: #8c8c8c;
+          &:hover {
+          }
+        }
+      }
+    }
+  }
+  &.level-critical,
+  &.level-alert {
+    .message {
+      color: #ee0000;
+    }
+    td.level {
+      border-right-color: #ee0000;
+      color: #ee0000;
+    }
+  }
+  &.level-alert {
+    .message {
+      font-weight: bold;
+    }
+  }
+  &.level-emergency {
+    background: #ee0000;
+    color: #ffffff;
+    td {
+      &.level {
+        border-right-color: #ffffff;
+        color: #ffffff;
+      }
+      &.date,
+      &.logger,
+      &.more {
+        color: #ff9a9a;
+      }
+    }
+    div.context table {
+      th,
+      td {
+        color: #ff9a9a;
+        a {
+          color: #ff9a9a;
+          &:hover {
+            color: $color-white;
+          }
+        }
+      }
+    }
+  }
+  &.level-debug td.level {
+    border-right-color: #c8c8c8;
+    color: #c8c8c8;
+  }
+  &.level-info td.level {
+    border-right-color: #00a4e5;
+    color: #00a4e5;
+  }
+  &.level-notice td.level {
+    border-right-color: #00a4e5;
+    color: #00a4e5;
+  }
+  &.level-warning td.level {
+    border-right-color: #ffd500;
+    color: #ffd500;
+  }
+  &.level-error td.level {
+    border-right-color: #ff9a00;
+    color: #ff9a00;
+  }
+  div.pointer {
+    cursor: pointer;
+  }
+}
+a {
+  &#next-button {
+    width: 100%;
+  }
+  &.reset-btn {
+    color: inherit;
+    font-weight: bold;
+    text-decoration: none;
+    &:hover {
+      color: #e74c3c;
+    }
+  }
+}
+
+#alert {
+  display: none;
+}
+
+.error-icon {
+  margin-bottom: 10px;
+}

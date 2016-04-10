@@ -9,8 +9,8 @@ Object.prototype.getKeyByValue = function( value ) {
     }
 };
 
-controllers.controller('MainController', ['$scope', '$http', '$routeParams',
-    function ($scope, $http, $routeParams) {
+controllers.controller('MainController', ['$scope', '$http',
+    function ($scope, $http) {
         $scope.alerts = [];
 
         $scope.clearCache = function () {
@@ -20,9 +20,19 @@ controllers.controller('MainController', ['$scope', '$http', '$routeParams',
                 });
         };
 
+        $scope.resetFilters = function() {
+            $scope.filter = {
+                text: null,
+                logger: null,
+                level: 100
+            };
+        };
+
         $http.get('api/logs?logs=1')
-            .success(function (data) {
-                $scope.clients = data.clients;
+            .then(function successCallback(response) {
+                $scope.clients = response.data.clients;
+            }, function errorCallback() {
+                $scope.error('Could not load log files.');
             });
 
         $scope.alert = function(type, message) {
@@ -43,11 +53,7 @@ controllers.controller('LogFileController', ['$scope', '$http', '$routeParams',
         $scope.busy = false;
         $scope.$parent.busySearch = false;
         $scope.context = [];
-        $scope.$parent.filter = {
-            text: null,
-            logger: null,
-            level: 100
-        };
+        $scope.$parent.resetFilters();
         $scope.$parent.route = $routeParams;
         $scope.$parent.isFiltered = false;
         $scope.filterTextTimeout = null;
@@ -88,6 +94,7 @@ controllers.controller('LogFileController', ['$scope', '$http', '$routeParams',
                     $scope.$parent.busySearch = false;
                     $scope.scrollTop();
                 }, function errorCallback() {
+                    $scope.error('Could not load log lines');
                     $scope.busy = false;
                     $scope.$parent.busySearch = false;
                 });
@@ -100,7 +107,8 @@ controllers.controller('LogFileController', ['$scope', '$http', '$routeParams',
                     $scope.$parent.currentLog.lines.push.apply($scope.$parent.currentLog.lines, response.data.lines);
                     $scope.$parent.currentLog.next_page_url = response.data.next_page_url;
                     $scope.busy = false;
-                }, function() {
+                }, function errorCallback() {
+                    $scope.error('Could not more log lines');
                     $scope.busy = false;
                 });
         };
@@ -109,6 +117,8 @@ controllers.controller('LogFileController', ['$scope', '$http', '$routeParams',
             $http.get('api/config')
                 .then(function successCallback(response) {
                     $scope.config = response.data;
+                }, function errorCallback() {
+                    $scope.error('Could not load config');
                 });
         };
 
@@ -155,7 +165,7 @@ controllers.controller('LogFileController', ['$scope', '$http', '$routeParams',
                         $scope.$parent.isFiltered = true;
                     }
                     $scope.$parent.busySearch = true;
-                    $scope.getLog(client, log);
+                    $scope.getLog($scope.$parent.route.client, $scope.$parent.route.log);
                 },300);
             }
         });
