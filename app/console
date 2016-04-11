@@ -8,5 +8,5 @@ use Symfony\Component\Console\Application;
 use Syonix\LogViewer\Console\Command\LintCommand;
 
 $app = new Application();
-$app->add(new LintCommand());
+$app->add(new LintCommand(__DIR__.'/config/config.yml'));
 $app->run();
