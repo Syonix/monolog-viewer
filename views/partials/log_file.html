@@ -11,8 +11,12 @@
                 <table>
                     <tr ng-repeat="(title, content) in line.context">
                         <th>{{ title }}</th>
-                        <td>{{ content|nl2br }}</td>
-                        <td><a href="javascript:void(0);"><i class="fa fa-clipboard"></i></a></td>
+                        <td id="clipboard-line{{ line.id }}-{{ $index }}">{{ content|nl2br }}</td>
+                        <td><span ngclipboard data-clipboard-target="#clipboard-line{{ line.id }}-{{ $index }}"
+                                  ngclipboard-success="copySuccess(e, id, $index);" ngclipboard-error="copyError(e);"
+                                  data-hint="{{ copyMessage[id][$index] }}" class="clipboard hint-persist"
+                                  ng-class="{ 'hint-open hint-left-t-success': copySuccess[id][$index],
+                                  'hint-open hint-left-t-error': copyError[id][$index] }"><i class="fa fa-clipboard"></i></span></td>
                     </tr>
                     <tr ng-repeat="(title, content) in line.extra"><th>{{ title }}</th><td>{{ content|nl2br }}</td></tr>
                 </table>

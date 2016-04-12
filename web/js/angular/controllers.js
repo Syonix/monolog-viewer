@@ -9,50 +9,15 @@ Object.prototype.getKeyByValue = function( value ) {
     }
 };
 
-controllers.controller('MainController', ['$scope', '$http',
-    function ($scope, $http) {
-        $scope.alerts = [];
-
-        $scope.clearCache = function () {
-            $http.get('api/cache/clear')
-                .then(function successCallback() {
-                    $scope.success('The cache has successfully been cleared.');
-                });
-        };
-
-        $scope.resetFilters = function() {
-            $scope.filter = {
-                text: null,
-                logger: null,
-                level: 100
-            };
-        };
-
-        $http.get('api/logs?logs=1')
-            .then(function successCallback(response) {
-                $scope.clients = response.data.clients;
-            }, function errorCallback() {
-                $scope.error('Could not load log files.');
-            });
-
-        $scope.alert = function(type, message) {
-            $scope.alerts.push({
-                type: type,
-                message: message
-            })
-        };
-
-        $scope.success = function(message) { $scope.alert('success', message); };
-        $scope.info    = function(message) { $scope.alert('info', message); };
-        $scope.error   = function(message) { $scope.alert('error', message); };
-    }]);
-
 controllers.controller('LogFileController', ['$scope', '$http', '$routeParams',
     function ($scope, $http, $routeParams) {
         $scope.route = $routeParams;
         $scope.busy = false;
         $scope.$parent.busySearch = false;
         $scope.context = [];
+        $scope.copyMessage = [];
+        $scope.copySuccess = [];
+        $scope.copyError = [];
         $scope.$parent.resetFilters();
         $scope.$parent.route = $routeParams;
         $scope.$parent.isFiltered = false;
@@ -84,6 +49,24 @@ controllers.controller('LogFileController', ['$scope', '$http', '$routeParams',
         $scope.success = function(message) { $scope.$parent.success(message); };
         $scope.info    = function(message) { $scope.$parent.info(message); };
         $scope.error   = function(message) { $scope.$parent.error(message); };
+
+        $scope.copySuccess = function(e, logLineId, contextId) {
+            $scope.copyMessage[logLineId] = [];
+            $scope.copyMessage[logLineId][contextId] = 'Copied!';
+            $scope.copySuccess = [];
+            $scope.copySuccess[logLineId] = [];
+            $scope.copySuccess[logLineId][contextId] = true;
+            e.clearSelection();
+        };
+
+        $scope.copyError = function(e, logLineId, contextId) {
+            $scope.copyMessage[logLineId] = [];
+            $scope.copyMessage[logLineId][contextId] = 'Copy failed. Please copy manually!';
+
+            $scope.copyError = [];
+            $scope.copyError[logLineId] = [];
+            $scope.copyError[logLineId][contextId] = true;
+        };
 
         $scope.getLog = function (client, log) {
             $scope.busy = true;
@@ -173,4 +156,42 @@ controllers.controller('LogFileController', ['$scope', '$http', '$routeParams',
             $scope.$parent.currentLog = null;
             $scope.resetFilters();
         });
+    }]);
+
+controllers.controller('MainController', ['$scope', '$http',
+    function ($scope, $http) {
+        $scope.alerts = [];
+
+        $scope.clearCache = function () {
+            $http.get('api/cache/clear')
+                .then(function successCallback() {
+                    $scope.success('The cache has successfully been cleared.');
+                });
+        };
+
+        $scope.resetFilters = function() {
+            $scope.filter = {
+                text: null,
+                logger: null,
+                level: 100
+            };
+        };
+
+        $http.get('api/logs?logs=1')
+            .then(function successCallback(response) {
+                $scope.clients = response.data.clients;
+            }, function errorCallback() {
+                $scope.error('Could not load log files.');
+            });
+
+        $scope.alert = function(type, message) {
+            $scope.alerts.push({
+                type: type,
+                message: message
+            })
+        };
+
+        $scope.success = function(message) { $scope.alert('success', message); };
+        $scope.info    = function(message) { $scope.alert('info', message); };
+        $scope.error   = function(message) { $scope.alert('error', message); };
     }]);

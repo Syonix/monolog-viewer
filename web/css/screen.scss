@@ -1,5 +1,6 @@
 @import 'variables';
 @import 'mixins';
+@import 'simple-hint';
 
 //original selectors
 //div.error-message, div.placeholder-message
@@ -467,8 +468,9 @@ div {
         padding-left: 20px;
         //Instead of the line below you could use @include word-break($value)
         word-break: break-all;
-        a {
+        span.clipboard {
           color: #8c8c8c;
+          cursor: pointer;
           &:hover {
             color: $foreground-text;
           }
@@ -477,7 +479,7 @@ div {
       th {
         vertical-align: top;
         font-weight: bold;
-        a {
+        span.clipboard {
           color: #8c8c8c;
           &:hover {
           }

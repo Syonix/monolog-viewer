@@ -1,6 +1,7 @@
 var logViewer = angular.module('logViewer', [
     'ngRoute',
-    'Controllers'
+    'Controllers',
+    'ngclipboard'
 ]);
 
 var redirectService = function ($route, $http, $location) {

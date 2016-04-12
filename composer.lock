@@ -1680,6 +1680,66 @@
             "time": "2016-01-06 14:59:35"
         },
         {
+            "name": "symfony/console",
+            "version": "v3.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/console.git",
+                "reference": "6b1175135bc2a74c08a28d89761272de8beed8cd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/console/zipball/6b1175135bc2a74c08a28d89761272de8beed8cd",
+                "reference": "6b1175135bc2a74c08a28d89761272de8beed8cd",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.9",
+                "symfony/polyfill-mbstring": "~1.0"
+            },
+            "require-dev": {
+                "psr/log": "~1.0",
+                "symfony/event-dispatcher": "~2.8|~3.0",
+                "symfony/process": "~2.8|~3.0"
+            },
+            "suggest": {
+                "psr/log": "For using the console logger",
+                "symfony/event-dispatcher": "",
+                "symfony/process": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Console\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Console Component",
+            "homepage": "https://symfony.com",
+            "time": "2016-03-16 17:00:50"
+        },
+        {
             "name": "symfony/debug",
             "version": "v3.0.4",
             "source": {
@@ -2625,12 +2685,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Syonix/log-viewer-lib.git",
-                "reference": "61be8756db1ac39f34dff1c7cca0c599884bc6a2"
+                "reference": "113ab9ae7b8d88d71a8563c453414e34159216c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Syonix/log-viewer-lib/zipball/61be8756db1ac39f34dff1c7cca0c599884bc6a2",
-                "reference": "61be8756db1ac39f34dff1c7cca0c599884bc6a2",
+                "url": "https://api.github.com/repos/Syonix/log-viewer-lib/zipball/113ab9ae7b8d88d71a8563c453414e34159216c7",
+                "reference": "113ab9ae7b8d88d71a8563c453414e34159216c7",
                 "shasum": ""
             },
             "require": {
@@ -2642,12 +2702,8 @@
                 "league/flysystem-cached-adapter": "~1.0",
                 "php": ">=5.5.9",
                 "phpunit/phpunit": "~4.8",
-                "rmccue/requests": "1.6.*",
-                "silex/silex": "~1.2",
-                "symfony/security": "~2.3",
-                "symfony/twig-bridge": "2.7.*",
-                "symfony/yaml": "~2.4",
-                "twig/twig": ">=1.8,<2.0-dev"
+                "symfony/console": "^3.0",
+                "symfony/yaml": "~2.4"
             },
             "type": "library",
             "autoload": {
@@ -2672,7 +2728,7 @@
                 "logging",
                 "monolog"
             ],
-            "time": "2016-04-06 22:52:16"
+            "time": "2016-04-11 15:26:39"
         },
         {
             "name": "twig/twig",

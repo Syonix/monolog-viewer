@@ -45,7 +45,7 @@ $api->get('/logs', function (Silex\Application $app, Request $request) {
 });
 
 $api->get('/cache/clear', function (Silex\Application $app) {
-    $cache = new \Syonix\LogViewer\Cache(new Local(APP_PATH.'/cache'));
+    $cache = new \Syonix\LogViewer\LogFileCache(new Local(APP_PATH.'/cache'));
     $cache->emptyCache();
 
     return $app->json(array(
@@ -108,7 +108,7 @@ $api->get('/logs/{clientSlug}/{logSlug}', function (Silex\Application $app, Requ
         return $app->json($error, 404);
     }
     $adapter = new \League\Flysystem\Adapter\Local(APP_PATH.'/cache');
-    $cache = new \Syonix\LogViewer\Cache($adapter, $app['config']['cache_expire'], $app['config']['reverse_line_order']);
+    $cache = new \Syonix\LogViewer\LogFileCache($adapter, $app['config']['cache_expire'], $app['config']['reverse_line_order']);
     $log = $cache->get($log);
 
     $logUrl = BASE_URL.'/api/logs/'.$logCollection->getSlug().'/'.$log->getSlug();
