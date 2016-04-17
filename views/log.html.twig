@@ -46,7 +46,7 @@
                 <i class="fa fa-fw fa-lg" ng-class="{'fa-search': !busySearch, 'fa-spinner fa-spin': busySearch}"></i>
                 <input type="text" id="filter-query" ng-model="filter.text"
                        ng-trim="true" ng-focus="searchInputWide=true" ng-blur="searchInputWide=false">
-                <a id="filter-text-reset" ng-show="filter.text.length > 0" ng-click="filter.text=null" href="javascript:void(0)"><i class="fa fa-lg fa-times-circle"></i></a>
+                <a id="filter-text-reset" ng-show="filter.text.length > 0" ng-click="filter.text=null" click-anywhere-but-here="closeCopyMessage()" href="javascript:void(0)"><i class="fa fa-lg fa-times-circle"></i></a>
             </div>
         </li>
     </ul>
