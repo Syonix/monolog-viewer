@@ -128,7 +128,7 @@ $api->get('/logs/{clientSlug}/{logSlug}', function (Silex\Application $app, Requ
             'name' => $logCollection->getName(),
             'slug' => $logCollection->getSlug()
         ],
-        'lines'         => $log->getLines($limit, $offset),
+        'lines'         => $log->getLines($limit, $offset, $filter),
         'total_lines'   => $totalLines,
         'offset'        => $offset,
         'limit'         => $limit,
