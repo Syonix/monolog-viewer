@@ -5,14 +5,19 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [v5.0.0](https://github.com/Syonix/monolog-viewer/releases/tag/v5.0.0) - unreleased
 [See full Changelog](https://github.com/Syonix/monolog-viewer/compare/v4.0.2...v5.0.0)
 ### New
-- Decoupled: API backend and AngularJS frontend.
-
+- Decoupled: API backend and AngularJS frontend
+- Added support for SFTP
+- Added copy to clipboard for extra information
+- Added pagination for long log files
 
 ### Improved
-- Changed from Flexo font to Open Sans.
+- Changed from Flexo font to Open Sans
+- Implemented log file caching for subsequent requests
+- Made application fully HTTPS ready
+- Changed sorting to newest first (old behavior configurable)
 
 ### Fixed
-- 
+- Various bug fixes
 
 ## [v4.0.2](https://github.com/Syonix/monolog-viewer/releases/tag/v4.0.2) - 2015-08-11
 [See full Changelog](https://github.com/Syonix/monolog-viewer/compare/v4.0.1...v4.0.2)

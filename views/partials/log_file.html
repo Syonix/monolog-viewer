@@ -11,19 +11,19 @@
                 <table>
                     <tr ng-repeat="(title, content) in line.context">
                         <th>{{ title }}</th>
-                        <td id="clipboard-line{{ line.id }}-{{ $index }}">{{ content|nl2br }}</td>
-                        <td><span ngclipboard data-clipboard-target="#clipboard-line{{ line.id }}-{{ $index }}"
-                                  ngclipboard-success="copySuccess(e, id, $index);" ngclipboard-error="copyError(e);"
-                                  data-hint="{{ copyMessage[id][$index] }}" class="clipboard hint-persist"
-                                  ng-class="{ 'hint-open hint-left-t-success': copySuccess[id][$index],
-                                  'hint-open hint-left-t-error': copyError[id][$index] }"><i class="fa fa-clipboard"></i></span></td>
+                        <td id="clipboard-line-{{ id }}-{{ $index }}">{{ content|nl2br }}</td>
+                        <td><span ngclipboard data-clipboard-target="#clipboard-line-{{ id }}-{{ $index }}"
+                                  ngclipboard-success="copySuccess(e, id, $index);" ngclipboard-error="copyError(e, id, $index);"
+                                  data-hint="{{ copyMessageStore[id][$index] }}" class="clipboard hint-persist"
+                                  ng-class="{ 'hint-open hint-top-t-success': copySuccessStore[id][$index],
+                                  'hint-open hint-top-t-error': copyErrorStore[id][$index] }"><i class="fa fa-clipboard"></i></span></td>
                     </tr>
                     <tr ng-repeat="(title, content) in line.extra"><th>{{ title }}</th><td>{{ content|nl2br }}</td></tr>
                 </table>
             </div>
         </td>
         <td class="logger" ng-if="config.display_logger"><i class="fa fa-tag"></i> {{ line.logger }}</td>
-        <td class="more" id="more-{{ id + 1 }}">
+        <td class="more" id="more-{{ id + 1 }}" slide-toggle="#context-{{ id + 1 }}">
             <i class="fa fa-plus-circle" ng-if="keys(line.context).length+keys(line.extra).length > 0"></i>
         </td>
     </tr>

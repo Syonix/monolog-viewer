@@ -76,26 +76,21 @@ logViewer.directive('slideable', function () {
         return {
             restrict:'C',
             compile: function (element, attr) {
-                // wrap tag
                 var contents = element.html();
                 element.html('<div class="slideable_content" style="margin:0 !important; padding:0 !important" >' + contents + '</div>');
 
-                return function postLink(scope, element, attrs) {
-                    // default properties
-                    attrs.duration = (!attrs.duration) ? '200ms' : attrs.duration;
-                    attrs.easing = (!attrs.easing) ? 'ease-in-out' : attrs.easing;
+                return function postLink(scope, element) {
                     element.css({
-                        'overflow': 'hidden',
                         'height': '0px',
                         'transitionProperty': 'height',
-                        'transitionDuration': attrs.duration,
-                        'transitionTimingFunction': attrs.easing
+                        'transitionDuration': '200ms',
+                        'transitionTimingFunction': 'ease-in-out'
                     });
                 };
             }
         };
     })
-    .directive('slideToggle', function() {
+    .directive('slideToggle', ['$timeout', function($timeout) {
         return {
             restrict: 'A',
             link: function(scope, element, attrs) {
@@ -112,11 +107,59 @@ logViewer.directive('slideable', function () {
                         var y = content.clientHeight;
                         content.style.border = 0;
                         target.style.height = y + 'px';
+                        $timeout(function(){
+                            target.style.overflow = 'visible';
+                        }, 200);
                     } else {
+                        target.style.overflow = 'hidden';
                         target.style.height = '0px';
                     }
                     attrs.expanded = !attrs.expanded;
                 });
             }
         }
+    }])
+    .factory('clickAnywhereButHereService', function($document){
+        var tracker = [];
+
+        return function($scope, expr) {
+            var i, t, len;
+            for(i = 0, len = tracker.length; i < len; i++) {
+                t = tracker[i];
+                if(t.expr === expr && t.scope === $scope) {
+                    return t;
+                }
+            }
+            var handler = function() {
+                $scope.$apply(expr);
+            };
+
+            $document.on('click', handler);
+
+            // IMPORTANT! Tear down this event handler when the scope is destroyed.
+            $scope.$on('$destroy', function(){
+                $document.off('click', handler);
+            });
+
+            t = { scope: $scope, expr: expr };
+            tracker.push(t);
+            return t;
+        };
+    })
+    .directive('clickAnywhereButHere', function($document, clickAnywhereButHereService){
+        return {
+            restrict: 'A',
+            link: function(scope, elem, attr, ctrl) {
+                var handler = function(e) {
+                    e.stopPropagation();
+                };
+                elem.on('click', handler);
+
+                scope.$on('$destroy', function(){
+                    elem.off('click', handler);
+                });
+
+                clickAnywhereButHereService(scope, attr.clickAnywhereButHere);
+            }
+        };
     });

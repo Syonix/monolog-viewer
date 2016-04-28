@@ -560,9 +560,11 @@ div.alert {
       font-weight: 500;
       color: #cbcbcb;
       font-size: 1.5em;
-      padding-top: 15px; }
+      padding-top: 15px;
+      cursor: pointer; }
   .logline .context {
-    font-family: "Open Sans", "Arial", "sans-serif"; }
+    font-family: "Open Sans", "Arial", "sans-serif";
+    overflow: hidden; }
     .logline .context table {
       margin: 5px 0; }
       .logline .context table th,

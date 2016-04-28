@@ -1,66 +1,69 @@
 <?php
 
 use League\Flysystem\Adapter\NullAdapter;
-use Syonix\LogViewer\Cache;
 use Syonix\LogViewer\LogFile;
-
+use Syonix\LogViewer\LogFileCache;
+use Syonix\LogViewer\LogManager;
 
 class LogViewerTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Syonix\LogViewer\LogViewer
+     * @var Syonix\LogViewer\LogManager
      */
-	protected $logViewer;
+    protected $logManager;
 
     /**
-     * @var Cache
+     * @var \Syonix\LogViewer\LogFileCache
      */
     protected $cache;
 
-	public function setUp(){
-        $config = array(
-            'Client1' => array(
-                'Log1' => array(
+    public function setUp()
+    {
+        $config = [
+            'Client1' => [
+                'Log1' => [
                     'type' => 'local',
-                    'path' => realpath(__DIR__ . '/res/test.log')
-                ),
-                'Log2' => array(
+                    'path' => realpath(__DIR__.'/res/test.log'),
+                ],
+                'Log2' => [
                     'type' => 'local',
-                    'path' => realpath(__DIR__ . '/res/test.log')
-                )
-            ),
-            'Client2' => array(
-                'Log3' => array(
+                    'path' => realpath(__DIR__.'/res/test.log'),
+                ],
+            ],
+            'Client2' => [
+                'Log3' => [
                     'type' => 'local',
-                    'path' => realpath(__DIR__ . '/res/test.log')
-                )
-            )
-        );
-	    $this->logViewer = new Syonix\LogViewer\LogViewer($config);
-	}
-	
-	public function tearDown(){ }
-    
+                    'path' => realpath(__DIR__.'/res/test.log'),
+                ],
+            ],
+        ];
+        $this->logManager = new LogManager($config);
+    }
+
+    public function tearDown()
+    {
+    }
+
     public function testInit()
     {
-        $this->assertInstanceOf('Syonix\LogViewer\LogViewer', $this->logViewer, "LogViewer is not instance of LogViewer");
+        $this->assertInstanceOf('Syonix\LogViewer\LogManager', $this->logManager, 'LogManager is not instance of LogManager');
     }
-    
+
     /**
      * @depends testInit
      */
     public function testClientsInit()
     {
-        $this->assertInstanceOf('Syonix\LogViewer\Client', $this->logViewer->getFirstClient());
-        $this->assertEquals('Client1', $this->logViewer->getFirstClient()->getName());
+        $this->assertInstanceOf('Syonix\LogViewer\LogCollection', $this->logManager->getFirstLogCollection());
+        $this->assertEquals('Client1', $this->logManager->getFirstLogCollection()->getName());
     }
-    
+
     /**
      * @depends testClientsInit
      */
     public function testGetLogs()
     {
-        $this->assertEquals(2, $this->logViewer->getFirstClient()->getLogs()->count());
+        $this->assertEquals(2, $this->logManager->getFirstLogCollection()->getLogs()->count());
     }
 
     /**
@@ -68,12 +71,12 @@ class LogViewerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetLog()
     {
-        $log = $this->logViewer->getFirstClient()->getFirstLog();
+        $log = $this->logManager->getFirstLogCollection()->getFirstLog();
         $this->assertInstanceOf('Syonix\LogViewer\LogFile', $log);
         $this->assertEquals('Log1', $log->getName());
+
         return $log;
     }
-
 
     /**
      * @param LogFile $log
@@ -83,7 +86,7 @@ class LogViewerTest extends PHPUnit_Framework_TestCase
     public function testGetLogLines(LogFile $log)
     {
         $adapter = new NullAdapter();
-        $this->cache = new Cache($adapter,300, false);
+        $this->cache = new LogFileCache($adapter, 300, false);
         $log = $this->cache->get($log);
         $lines = $log->getLines();
         $this->assertInstanceOf('DateTime', $lines[0]['date']);

@@ -452,10 +452,13 @@ div {
       color: #cbcbcb;
       font-size: 1.5em;
       padding-top: 15px;
+      cursor: pointer;
     }
   }
   .context {
     font-family: $font-stack-default;
+    overflow: hidden;
+
     table {
       margin: 5px 0;
       th,

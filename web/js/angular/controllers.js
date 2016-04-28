@@ -9,15 +9,15 @@ Object.prototype.getKeyByValue = function( value ) {
     }
 };
 
-controllers.controller('LogFileController', ['$scope', '$http', '$routeParams',
+controllers.controller('LogFileController', ['$scope', '$http', '$routeParams', '$timeout',
     function ($scope, $http, $routeParams) {
         $scope.route = $routeParams;
         $scope.busy = false;
         $scope.$parent.busySearch = false;
         $scope.context = [];
-        $scope.copyMessage = [];
-        $scope.copySuccess = [];
-        $scope.copyError = [];
+        $scope.copyMessageStore = [];
+        $scope.copySuccessStore = [];
+        $scope.copyErrorStore = [];
         $scope.$parent.resetFilters();
         $scope.$parent.route = $routeParams;
         $scope.$parent.isFiltered = false;
@@ -51,21 +51,34 @@ controllers.controller('LogFileController', ['$scope', '$http', '$routeParams',
         $scope.error   = function(message) { $scope.$parent.error(message); };
 
         $scope.copySuccess = function(e, logLineId, contextId) {
-            $scope.copyMessage[logLineId] = [];
-            $scope.copyMessage[logLineId][contextId] = 'Copied!';
-            $scope.copySuccess = [];
-            $scope.copySuccess[logLineId] = [];
-            $scope.copySuccess[logLineId][contextId] = true;
+            $scope.copyMessageStore[logLineId] = [];
+            $scope.copyMessageStore[logLineId][contextId] = 'Copied!';
+
+            $scope.copySuccessStore = [];
+            $scope.copySuccessStore[logLineId] = [];
+            $scope.copySuccessStore[logLineId][contextId] = true;
+
+            setTimeout(function() { $scope.closeCopyMessage(); }, 3000);
+
             e.clearSelection();
         };
 
         $scope.copyError = function(e, logLineId, contextId) {
-            $scope.copyMessage[logLineId] = [];
-            $scope.copyMessage[logLineId][contextId] = 'Copy failed. Please copy manually!';
+            $scope.copyMessageStore[logLineId] = [];
+            $scope.copyMessageStore[logLineId][contextId] = 'Copy failed. Please copy manually!';
 
-            $scope.copyError = [];
-            $scope.copyError[logLineId] = [];
-            $scope.copyError[logLineId][contextId] = true;
+            $scope.copyErrorStore = [];
+            $scope.copyErrorStore[logLineId] = [];
+            $scope.copyErrorStore[logLineId][contextId] = true;
+
+            setTimeout(function() { $scope.closeCopyMessage(); }, 3000);
+        };
+
+        $scope.closeCopyMessage = function() {
+            $scope.copyMessageStore = [];
+            $scope.copySuccessStore = [];
+            $scope.copyErrorStore = [];
+            $scope.$apply();
         };
 
         $scope.getLog = function (client, log) {
@@ -106,7 +119,8 @@ controllers.controller('LogFileController', ['$scope', '$http', '$routeParams',
         };
 
         $scope.formatDate = function(date) {
-            return new Date(date);
+            var a = date.split(/[^0-9]/);
+            return new Date (a[0],a[1]-1,a[2],a[3],a[4],a[5] );
         };
 
         $scope.$parent.getLevelNumber = function(level) {

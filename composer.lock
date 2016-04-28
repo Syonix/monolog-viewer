@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6433b513803fbe203002fec5e701953c",
-    "content-hash": "977380e104cf2a9983c20fa5c6e21139",
+    "hash": "1757dbb1afba9da075e2752008f3932f",
+    "content-hash": "899a59c726bdb920dd810a1dd165f004",
     "packages": [
         {
             "name": "ddtraceweb/monolog-parser",
@@ -447,16 +447,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "1.18.2",
+            "version": "1.19.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "064b38c16790249488e7a8b987acf1c9d7383c09"
+                "reference": "5f56ed5212dc509c8dc8caeba2715732abb32dbf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/064b38c16790249488e7a8b987acf1c9d7383c09",
-                "reference": "064b38c16790249488e7a8b987acf1c9d7383c09",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/5f56ed5212dc509c8dc8caeba2715732abb32dbf",
+                "reference": "5f56ed5212dc509c8dc8caeba2715732abb32dbf",
                 "shasum": ""
             },
             "require": {
@@ -521,7 +521,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2016-04-02 13:12:58"
+            "time": "2016-04-12 18:29:35"
         },
         {
             "name": "paragonie/random_compat",
@@ -2681,16 +2681,16 @@
         },
         {
             "name": "syonix/log-viewer-lib",
-            "version": "dev-master",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Syonix/log-viewer-lib.git",
-                "reference": "113ab9ae7b8d88d71a8563c453414e34159216c7"
+                "reference": "56e18373be28b11fa8b8a0e7b8286b478dac9abc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Syonix/log-viewer-lib/zipball/113ab9ae7b8d88d71a8563c453414e34159216c7",
-                "reference": "113ab9ae7b8d88d71a8563c453414e34159216c7",
+                "url": "https://api.github.com/repos/Syonix/log-viewer-lib/zipball/56e18373be28b11fa8b8a0e7b8286b478dac9abc",
+                "reference": "56e18373be28b11fa8b8a0e7b8286b478dac9abc",
                 "shasum": ""
             },
             "require": {
@@ -2728,7 +2728,7 @@
                 "logging",
                 "monolog"
             ],
-            "time": "2016-04-11 15:26:39"
+            "time": "2016-04-13 15:48:49"
         },
         {
             "name": "twig/twig",
@@ -2795,9 +2795,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "syonix/log-viewer-lib": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
