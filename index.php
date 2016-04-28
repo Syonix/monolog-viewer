@@ -31,7 +31,7 @@ $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 $app->register(new Silex\Provider\SecurityServiceProvider(), array(
         'security.firewalls' => array(
             'admin' => array(
-                'pattern' => '^/logs',
+                'pattern' => '^/(logs|api)',
                 'form' => array('login_path' => '/login', 'check_path' => '/logs/login_check'),
                 'users' => array(
                     'user' => array('ROLE_USER', (is_file(PASSWD_FILE) ? file_get_contents(PASSWD_FILE) : null)),
@@ -45,64 +45,11 @@ $app['security.encoder.digest'] = $app->share(function ($app) {
     });
 
 if(!is_file(PASSWD_FILE)) {
-    $app->match('/', function(\Symfony\Component\HttpFoundation\Request $request) use($app) {
-            $error = "";
-            if($request->getMethod() == "POST") {
-                if($request->get('password') == $request->get('password-repeat')) {
-                    if(is_writable(PASSWD_DIR)) {
-                        $user = new \Symfony\Component\Security\Core\User\User('user', array());
-                        $encoder = $app['security.encoder_factory']->getEncoder($user);
-                        $password = $encoder->encodePassword($request->get('password'), '');
-
-                        file_put_contents(PASSWD_FILE, $password);
-
-                        return $app['twig']->render('login.html.twig', array(
-                                'create_success' => true,
-                                'error' => false
-                            ));
-                    } else {
-                        $error = 'Could not save the password. Please make sure your server can write the directory (<code>/app/config/secure/</code>).';
-                    }
-                } else {
-                    $error = 'The provided Passwords do not match.';
-                }
-            }
-            return $app['twig']->render('set_pwd.html.twig', array(
-                    'error' => $error
-                ));
-        })
-        ->bind("home")
-        ->method('POST|GET');
-    $app->match('/{url}', function(\Symfony\Component\HttpFoundation\Request $request) use($app) {
-        return $app->redirect($app['url_generator']->generate('home'));
-    })
-    ->assert('url', '.+'); // Match any route;
+    $app->mount('/', include 'guest.php');
 }
 else {
-    $app->get('/', function() use($app) {
-            if(!is_readable(CONFIG_FILE)) {
-                throw new \Syonix\LogViewer\Exceptions\ConfigFileMissingException();
-            }
-            return $app->redirect($app['url_generator']->generate('logs'));
-        })
-        ->bind("home");
-
-    $app->get('/login', function(\Symfony\Component\HttpFoundation\Request $request) use($app) {
-        return $app['twig']->render('login.html.twig', array(
-            'create_success' => false,
-            'error'         => $app['security.last_error']($request),
-        ));
-    })
-        ->bind("login");
-
     $app->mount('/api', include 'api.php');
-
-    $app->get('/logs{path}', function() use($app) { return $app['twig']->render('log.html.twig', array(
-        'reverse_order' => $app['config']['reverse_line_order']
-    )); })
-        ->bind("logs")
-        ->value('path', FALSE)
-        ->assert("path", ".*");
+    $app->mount('/', include 'user.php');
 }
 
 $app->error(function (\Syonix\LogViewer\Exceptions\ConfigFileMissingException $e, $code) use($app) {
