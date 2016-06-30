@@ -18,6 +18,11 @@ $alert-error-color:   $branding-danger;
 $color-grey-middle:   #8c8c8c;
 $color-white:         #ffffff;
 
+$tooltip-text-color:  #ffffff;
+$tooltip-background-color: #111;
+$tooltip-success-background-color: $branding-success;
+$tooltip-error-background-color: $branding-danger;
+
 // Fonts
 
 $font-stack-default:   "Open Sans", "Arial", "sans-serif";

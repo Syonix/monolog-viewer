@@ -1,0 +1,91 @@
+@mixin colorizeTooltip($text-color, $background-color) {
+  &::after {
+    color: $text-color;
+    background: $background-color;
+  }
+  &::before {
+    border-top-color: $background-color;
+  }
+}
+
+.tooltipped {
+  position: relative;
+
+  &::after {
+    position: absolute;
+    z-index: 1000000;
+    padding: 5px 8px;
+    font-size: 12px;
+    -webkit-font-smoothing: subpixel-antialiased;
+    color: $tooltip-text-color;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: none;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: break-word;
+    white-space: pre;
+    pointer-events: none;
+    content: attr(aria-label);
+    background: $tooltip-background-color;
+    border-radius: 3px;
+    opacity: 0;
+
+    right: 50%;
+    bottom: 100%;
+    margin-bottom: 5px;
+    transform: translateX(50%);
+  }
+
+  &::before {
+    position: absolute;
+    z-index: 1000001;
+    width: 0;
+    height: 0;
+    color: $tooltip-background-color;
+    pointer-events: none;
+    content: "";
+    border: 5px solid transparent;
+    border-top-color: $tooltip-background-color;
+    opacity: 0;
+
+    top: -5px;
+    right: 50%;
+    bottom: auto;
+    margin-right: -5px;
+  }
+
+  &:hover,
+  &:active,
+  &:focus {
+    &::before,
+    &::after {
+      display: inline-block;
+      text-decoration: none;
+      animation-name: tooltip-appear;
+      animation-duration: 200ms;
+      animation-fill-mode: forwards;
+      animation-timing-function: ease-in;
+      animation-delay: 0s;
+    }
+  }
+
+  // delay animation for tooltip
+  @keyframes tooltip-appear {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  &.tooltipped-success {
+    @include colorizeTooltip($tooltip-text-color, $tooltip-success-background-color);
+  }
+
+  &.tooltipped-error {
+    @include colorizeTooltip($tooltip-text-color, $tooltip-error-background-color);
+  }
+}

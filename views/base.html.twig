@@ -7,28 +7,26 @@
     <meta charset="utf-8">
 
     <!-- Styles -->
-    <link href="{{ app.request.baseUrl }}/web/res/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="{{ app.request.baseUrl }}/res/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,300,600,300italic,600italic,700italic,400italic' rel='stylesheet' type='text/css'>
-    <link href="{{ app.request.baseUrl }}/web/res/font-awesome/css/font-awesome.min.css" rel="stylesheet" media="screen">
-    <link href="{{ app.request.baseUrl }}/web/res/slidebars/slidebars.min.css" rel="stylesheet">
-    <link href="{{ app.request.baseUrl }}/web/css/screen.css" rel="stylesheet" media="screen">
-    <link href="{{ app.request.baseUrl }}/web/css/790.css" rel="stylesheet" media="screen">
-    <link href="{{ app.request.baseUrl }}/web/css/960.css" rel="stylesheet" media="screen">
+    <link href="{{ app.request.baseUrl }}/res/font-awesome/css/font-awesome.min.css" rel="stylesheet" media="screen">
+    <link href="{{ app.request.baseUrl }}/res/slidebars/slidebars.min.css" rel="stylesheet">
+    <link href="{{ app.request.baseUrl }}/css/screen.css" rel="stylesheet" media="screen">
 
     <!-- Scripts -->
-    <script src="{{ app.request.baseUrl }}/web/res/angular/angular.min.js"></script>
-    <script src="{{ app.request.baseUrl }}/web/res/angular/angular-route.min.js"></script>
-    <script src="{{ app.request.baseUrl }}/web/res/ngclipboard/clipboard.min.js"></script>
-    <script src="{{ app.request.baseUrl }}/web/res/ngclipboard/ngclipboard.min.js"></script>
-    <script src="{{ app.request.baseUrl }}/web/js/angular/app.js"></script>
-    <script src="{{ app.request.baseUrl }}/web/js/angular/controllers.js"></script>
+    <script src="{{ app.request.baseUrl }}/res/angular/angular.min.js"></script>
+    <script src="{{ app.request.baseUrl }}/res/angular/angular-route.min.js"></script>
+    <script src="{{ app.request.baseUrl }}/res/ngclipboard/clipboard.min.js"></script>
+    <script src="{{ app.request.baseUrl }}/res/ngclipboard/ngclipboard.min.js"></script>
+    <script src="{{ app.request.baseUrl }}/js/angular/app.js"></script>
+    <script src="{{ app.request.baseUrl }}/js/angular/controllers.js"></script>
 
     <!-- Apple Touch Icons -->
-    <link rel="apple-touch-icon" href="{{ app.request.baseUrl }}/web/img/touch-icon-iphone.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="{{ app.request.baseUrl }}/web/img/touch-icon-ipad.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="{{ app.request.baseUrl }}/web/img/touch-icon-iphone-retina.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="{{ app.request.baseUrl }}/web/img/touch-icon-ipad-retina.png">
+    <link rel="apple-touch-icon" href="{{ app.request.baseUrl }}img/touch-icon-iphone.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ app.request.baseUrl }}img/touch-icon-ipad.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="{{ app.request.baseUrl }}img/touch-icon-iphone-retina.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="{{ app.request.baseUrl }}img/touch-icon-ipad-retina.png">
 
     <!-- Web App Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -107,7 +105,7 @@
 <div id="sb-site">
     <header id="header" class="clearfix">
         {% block header %}
-        <a href="{{ path("home") }}"><img class="logo" src="{{ app.request.baseUrl }}/web/img/logo.png" alt="Syonix" width="102" height="32"></a>
+        <a href="{{ path("home") }}"><img class="logo" src="{{ app.template_url }}/img/logo.png" alt="Syonix" width="102" height="32"></a>
         {% endblock %}
     </header>
     {% block content_wrap %}
@@ -124,10 +122,11 @@
 </div>
 {% endblock %}
 {% block scripts %}
-    <script src="{{ app.request.baseUrl }}/web/res/jquery/jquery-2.0.3.min.js"></script>
-    <script src="{{ app.request.baseUrl }}/web/res/jquery/jquery.stayInWebApp.min.js"></script>
-    <script src="{{ app.request.baseUrl }}/web/res/slidebars/slidebars.min.js"></script>
-    <script src="{{ app.request.baseUrl }}/web/res/retina.js"></script>
+    <script src="{{ app.request.baseUrl }}/res/jquery/jquery-2.0.3.min.js"></script>
+    <script src="{{ app.request.baseUrl }}/res/jquery/jquery.stayInWebApp.min.js"></script>
+    <script src="{{ app.request.baseUrl }}/res/slidebars/slidebars.min.js"></script>
+    <script src="{{ app.request.baseUrl }}/res/retina.js"></script>
+    <script src="{{ app.request.baseUrl }}/js/tooltips.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
             $.stayInWebApp();

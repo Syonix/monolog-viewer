@@ -2,7 +2,7 @@
 {% block ng_controller %} ng-controller="MainController"{% endblock %}
 {% block header %}
     <a href="javascript:void(0)" class="toggle-button sb-toggle-left"><i class="fa fa-bars"></i></a>
-    <a href="{{ app.request.baseUrl }}"><img class="logo" src="{{ app.request.baseUrl }}/web/img/logo.png" alt="Syonix" width="102" height="32"></a>
+    <a href="{{ app.request.baseUrl }}"><img class="logo" src="{{ app.request.baseUrl }}/img/logo.png" alt="Syonix" width="102" height="32"></a>
     <a href="javascript:void(0)" class="toggle-button sb-toggle-right"><i class="fa fa-filter"></i></a>
 {% if not reverse_order %}<a href="javascript:void(0)" class="toggle-button scroll-down" onclick="$('#content').animate({ scrollTop: $('#content').prop('scrollHeight') - $('#content').height() }, 500); return false;"><i class="fa fa-arrow-circle-down"></i></a>{% endif %}
 {% endblock %}

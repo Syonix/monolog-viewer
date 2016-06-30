@@ -3,19 +3,18 @@
 require_once '../bootstrap.php';
 
 define('APP_ROOT', realpath(__DIR__.'/../'));
-define('APP_PATH', __DIR__.'/app');
+define('APP_PATH', APP_ROOT.'/app');
 define('CONFIG_FILE', APP_PATH.'/config/config.yml');
 define('PASSWD_DIR', APP_PATH.'/config/secure');
 define('PASSWD_FILE', PASSWD_DIR.'/passwd');
-define('VENDOR_PATH', __DIR__.'/vendor');
+define('VENDOR_PATH', APP_ROOT.'/vendor');
 define('BASE_URL', ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http').
     '://'.$_SERVER['SERVER_NAME'].
     str_replace('/index.php', '', $_SERVER['SCRIPT_NAME'])
 );
-define('WEB_URL', BASE_URL.'/web');
 
 $app = new Silex\Application();
-$app['template_url'] = WEB_URL;
+$app['template_url'] = BASE_URL;
 
 if (is_readable(CONFIG_FILE)) {
     $app->register(new DerAlex\Silex\YamlConfigServiceProvider(CONFIG_FILE));
@@ -46,7 +45,6 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), [
 $app['security.encoder.digest'] = $app->share(function ($app) {
         return new \Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder(10);
     });
-
 if(!is_file(PASSWD_FILE)) {
     $app->mount('/', include 'guest.php');
 }

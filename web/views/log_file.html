@@ -1,6 +1,6 @@
 <a id="logtop"></a>
 <div id="logline-loader" ng-if="!$parent.currentLog"><i class="fa fa-spinner fa-spin"></i> Loading log lines...</div>
-<div class="alert alert-warning" ng-if="$parent.isFiltered && $parent.currentLog.total_lines == 0">No log lines are matching your filter. <button ng-click="$parent.resetFilters()">Reset filters</button></div>
+<div class="alert alert-warning" ng-if="$parent.isFiltered && $parent.currentLog.total_lines == 0 && !$parent.busySearch">No log lines are matching your filter. <button ng-click="$parent.resetFilters()"><i class="fa fa-undo" aria-hidden="true"></i> Reset filters</button></div>
 <table id="logline-table">
     <tr ng-repeat="(id, line) in $parent.currentLog.lines" class="logline level-{{ line.level | lowercase }}">
         <td class="level"><i class="fa fa-{{ $parent.getLevelIcon($parent.getLevelNumber(line.level)) }} fa-fw"></i></td>
@@ -13,9 +13,9 @@
                         <th>{{ title }}</th>
                         <td id="clipboard-line-{{ id }}-{{ $index }}">{{ content|nl2br }}</td>
                         <td>
-                            <span ngclipboard data-clipboard-target="#clipboard-line-{{ id }}-{{ $index }}" class="clipboard">
-                                <i class="fa fa-clipboard"></i>
-                            </span>
+                            <span ngclipboard data-clipboard-target="#clipboard-line-{{ id }}-{{ $index }}"
+                                  ngclipboard-success="clipboardSuccess(e)" ngclipboard-error="clipboardError(e)"
+                                  class="clipboard"><i class="fa fa-clipboard"></i></span>
                         </td>
                     </tr>
                     <tr ng-repeat="(title, content) in line.extra"><th>{{ title }}</th><td>{{ content|nl2br }}</td></tr>

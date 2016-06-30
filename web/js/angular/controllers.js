@@ -47,8 +47,14 @@ controllers.controller('LogFileController', ['$scope', '$http', '$routeParams', 
         $scope.info    = function(message) { $scope.$parent.info(message); };
         $scope.error   = function(message) { $scope.$parent.error(message); };
 
-        $scope.updateClipboard = function () {
+        $scope.clipboardSuccess = function(e) {
+            e.clearSelection();
+            showTooltip(e.trigger, 'Copied!', 'success');
+        };
 
+        $scope.clipboardError = function(e) {
+            showTooltip(e.trigger, fallbackMessage(), 'error');
+            console.error(e);
         };
 
         $scope.getLog = function (client, log) {
@@ -58,8 +64,7 @@ controllers.controller('LogFileController', ['$scope', '$http', '$routeParams', 
                     $scope.$parent.currentLog = response.data;
                     $scope.$parent.busySearch = false;
                     $scope.scrollTop();
-                    $scope.updateClipboard();
-                    $scope.busy = false;
+                    initTooltips();
                 }, function errorCallback() {
                     $scope.error('Could not load log lines');
                     $scope.busy = false;
@@ -73,8 +78,8 @@ controllers.controller('LogFileController', ['$scope', '$http', '$routeParams', 
                 .then(function successCallback(response) {
                     $scope.$parent.currentLog.lines.push.apply($scope.$parent.currentLog.lines, response.data.lines);
                     $scope.$parent.currentLog.next_page_url = response.data.next_page_url;
-                    $scope.updateClipboard();
                     $scope.busy = false;
+                    //initTooltips();
                 }, function errorCallback() {
                     $scope.error('Could not more log lines');
                     $scope.busy = false;
@@ -153,6 +158,8 @@ controllers.controller('MainController', ['$scope', '$http',
             $http.get('api/cache/clear')
                 .then(function successCallback() {
                     $scope.success('The cache has successfully been cleared.');
+                }, function error(response) {
+                    console.error(response);
                 });
         };
 
@@ -175,7 +182,7 @@ controllers.controller('MainController', ['$scope', '$http',
             $scope.alerts.push({
                 type: type,
                 message: message
-            })
+            });
         };
 
         $scope.success = function(message) { $scope.alert('success', message); };

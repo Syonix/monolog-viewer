@@ -1,6 +1,6 @@
 @import 'variables';
 @import 'mixins';
-@import 'simple-hint';
+@import 'components/tooltips';
 
 //original selectors
 //div.error-message, div.placeholder-message
@@ -261,6 +261,10 @@ div {
     @extend %extend_2;
   }
   &.alert {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
     margin: 0;
     padding: 16px 35px 14px;
     //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
@@ -288,10 +292,28 @@ div {
         opacity: 1;
       }
     }
+    button {
+      padding: 3px 10px;
+      float:right;
+      border: 1px solid #ffffff;
+      color: #ffffff;
+      -webkit-border-radius: 3px;
+      border-radius: 3px;
+      background: transparent;
+      font-weight: 600;
+
+      &:hover {
+        color: transparent;
+        background: rgba(255,255,255,1);
+      }
+    }
     &.alert-info {
       background-color: $alert-info-color;
       > span:before {
         content: 'INFO: ';
+      }
+      button:hover {
+        color: $alert-info-color;
       }
     }
     &.alert-error {
@@ -302,6 +324,9 @@ div {
       > span:before {
         content: 'ERROR: ';
       }
+      button:hover {
+        color: $alert-error-color;
+      }
     }
     &.alert-success {
       background-color: $alert-success-color;
@@ -311,14 +336,20 @@ div {
       > span:before {
         content: 'SUCCESS: ';
       }
+      button:hover {
+        color: $alert-success-color;
+      }
     }
     &.alert-warning {
-      background-color: #f2b600;
+      background-color: $alert-warning-color;
       &:before {
         content: "\f071";
       }
       > span:before {
         content: 'WARNING: ';
+      }
+      button:hover {
+        color: $alert-warning-color;
       }
     }
     + #logtop {
@@ -529,6 +560,12 @@ div {
             color: $color-white;
           }
         }
+        span.clipboard {
+          color: #ff9a9a;
+          &:hover {
+            color: $color-white;
+          }
+        }
       }
     }
   }
@@ -577,3 +614,6 @@ a {
 .error-icon {
   margin-bottom: 10px;
 }
+
+@import 'screen-sizes/790';
+@import 'screen-sizes/960';

@@ -27,7 +27,7 @@ logViewer.config(['$routeProvider', '$locationProvider',
         when('/logs',  {resolve: { redirect: redirectService }}).
         when('/logs/:client', {resolve: { redirect: redirectService }}).
         when('/logs/:client/:log', {
-            templateUrl: 'views/partials/log_file.html',
+            templateUrl: 'views/log_file.html',
             controller: 'LogFileController'
         }).
         otherwise({
