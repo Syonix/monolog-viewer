@@ -6,15 +6,17 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [See full Changelog](https://github.com/Syonix/monolog-viewer/compare/v4.0.2...v5.0.0)
 ### New
 - Decoupled: API backend and AngularJS frontend
-- Added support for SFTP
-- Added copy to clipboard for extra information
+- Moved program logic to a [separate package](https://github.com/Syonix/log-viewer-lib) for easier reuse #29
+- Added support for SFTP #38
+- Added copy to clipboard for extra information #34
 - Added pagination for long log files
+- The applications webroot is now the `web` directory for security reasons. #26
 
 ### Improved
-- Changed from Flexo font to Open Sans
-- Implemented log file caching for subsequent requests
-- Made application fully HTTPS ready
-- Changed sorting to newest first (old behavior configurable)
+- Changed from Flexo font to Open Sans #27 
+- Implemented log file caching for subsequent requests #37
+- Made application fully HTTPS ready #27
+- Changed sorting to newest first (legacy behavior can still be enabled) #21
 
 ### Fixed
 - Various bug fixes

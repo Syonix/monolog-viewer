@@ -1,8 +1,8 @@
 <?php
 
-require_once 'bootstrap.php';
+require_once '../bootstrap.php';
 
-define('APP_ROOT', __DIR__);
+define('APP_ROOT', realpath(__DIR__.'/../'));
 define('APP_PATH', __DIR__.'/app');
 define('CONFIG_FILE', APP_PATH.'/config/config.yml');
 define('PASSWD_DIR', APP_PATH.'/config/secure');

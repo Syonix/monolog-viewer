@@ -15,9 +15,6 @@ controllers.controller('LogFileController', ['$scope', '$http', '$routeParams', 
         $scope.busy = false;
         $scope.$parent.busySearch = false;
         $scope.context = [];
-        $scope.copyMessageStore = [];
-        $scope.copySuccessStore = [];
-        $scope.copyErrorStore = [];
         $scope.$parent.resetFilters();
         $scope.$parent.route = $routeParams;
         $scope.$parent.isFiltered = false;
@@ -50,35 +47,8 @@ controllers.controller('LogFileController', ['$scope', '$http', '$routeParams', 
         $scope.info    = function(message) { $scope.$parent.info(message); };
         $scope.error   = function(message) { $scope.$parent.error(message); };
 
-        $scope.copySuccess = function(e, logLineId, contextId) {
-            $scope.copyMessageStore[logLineId] = [];
-            $scope.copyMessageStore[logLineId][contextId] = 'Copied!';
+        $scope.updateClipboard = function () {
 
-            $scope.copySuccessStore = [];
-            $scope.copySuccessStore[logLineId] = [];
-            $scope.copySuccessStore[logLineId][contextId] = true;
-
-            setTimeout(function() { $scope.closeCopyMessage(); }, 3000);
-
-            e.clearSelection();
-        };
-
-        $scope.copyError = function(e, logLineId, contextId) {
-            $scope.copyMessageStore[logLineId] = [];
-            $scope.copyMessageStore[logLineId][contextId] = 'Copy failed. Please copy manually!';
-
-            $scope.copyErrorStore = [];
-            $scope.copyErrorStore[logLineId] = [];
-            $scope.copyErrorStore[logLineId][contextId] = true;
-
-            setTimeout(function() { $scope.closeCopyMessage(); }, 3000);
-        };
-
-        $scope.closeCopyMessage = function() {
-            $scope.copyMessageStore = [];
-            $scope.copySuccessStore = [];
-            $scope.copyErrorStore = [];
-            $scope.$apply();
         };
 
         $scope.getLog = function (client, log) {
@@ -86,9 +56,10 @@ controllers.controller('LogFileController', ['$scope', '$http', '$routeParams', 
             $http.get('api/logs/'+client+'/'+log, { params: $scope.$parent.filter })
                 .then(function successCallback(response) {
                     $scope.$parent.currentLog = response.data;
-                    $scope.busy = false;
                     $scope.$parent.busySearch = false;
                     $scope.scrollTop();
+                    $scope.updateClipboard();
+                    $scope.busy = false;
                 }, function errorCallback() {
                     $scope.error('Could not load log lines');
                     $scope.busy = false;
@@ -102,6 +73,7 @@ controllers.controller('LogFileController', ['$scope', '$http', '$routeParams', 
                 .then(function successCallback(response) {
                     $scope.$parent.currentLog.lines.push.apply($scope.$parent.currentLog.lines, response.data.lines);
                     $scope.$parent.currentLog.next_page_url = response.data.next_page_url;
+                    $scope.updateClipboard();
                     $scope.busy = false;
                 }, function errorCallback() {
                     $scope.error('Could not more log lines');
@@ -166,6 +138,7 @@ controllers.controller('LogFileController', ['$scope', '$http', '$routeParams', 
                 },300);
             }
         });
+
         $scope.$on('$locationChangeStart', function(event) {
             $scope.$parent.currentLog = null;
             $scope.resetFilters();
