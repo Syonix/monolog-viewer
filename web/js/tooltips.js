@@ -24,7 +24,7 @@ function fallbackMessage() {
     var actionMsg = '';
 
     if(/iPhone|iPad/i.test(navigator.userAgent)) {
-        actionMsg = 'No support :(';
+        actionMsg = 'Not supported yet :(';
     }
     else if (/Mac/i.test(navigator.userAgent)) {
         actionMsg = 'Press ⌘-C to copy';
