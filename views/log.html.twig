@@ -2,7 +2,7 @@
 {% block ng_controller %} ng-controller="MainController"{% endblock %}
 {% block header %}
     <a href="javascript:void(0)" class="toggle-button sb-toggle-left"><i class="fa fa-bars"></i></a>
-    <a href="{{ app.request.baseUrl }}"><img class="logo" src="{{ app.request.baseUrl }}/img/logo.png" alt="Syonix" width="102" height="32"></a>
+    <a href="{{ global.request.baseUrl }}"><img class="logo" src="{{ global.request.baseUrl }}/img/logo.png" alt="Syonix" width="102" height="32"></a>
     <a href="javascript:void(0)" class="toggle-button sb-toggle-right"><i class="fa fa-filter"></i></a>
 {% if not reverse_order %}<a href="javascript:void(0)" class="toggle-button scroll-down" onclick="$('#content').animate({ scrollTop: $('#content').prop('scrollHeight') - $('#content').height() }, 500); return false;"><i class="fa fa-arrow-circle-down"></i></a>{% endif %}
 {% endblock %}
@@ -11,12 +11,12 @@
         <span ng-repeat="client in clients">
             <li class="client">{{ "{{ client.name }}" }}</li>
             <li ng-repeat="log in client.logs" ng-class="{'active turquoise': (route.log == log.slug && route.client == client.slug) }">
-                <a href="{{ app.request.baseUrl }}/logs/{{ "{{ client.slug }}/{{ log.slug }}" }}">{{ "{{ log.name }}" }}</a>
+                <a href="{{ global.request.baseUrl }}/logs/{{ "{{ client.slug }}/{{ log.slug }}" }}">{{ "{{ log.name }}" }}</a>
             </li>
         </span>
 
     <li class="client">Utility</li>
-    {% if app.security.token and app.security.token.user %}<li id="logout"><a href="{{ path('logs_logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>{% endif %}
+    {% if global.user %}<li id="logout"><a href="{{ path('logs_logout') }}"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>{% endif %}
     <li><a href="javascript:void(0);" ng-click="clearCache()"><i class="fa fa-trash-o fa-fw"></i> Clear cache</a></li>
     </ul>
 {% endblock %}

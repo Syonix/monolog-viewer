@@ -17,11 +17,11 @@ $app = new Silex\Application();
 $app['template_url'] = BASE_URL;
 
 if (is_readable(CONFIG_FILE)) {
-    $app->register(new DerAlex\Silex\YamlConfigServiceProvider(CONFIG_FILE));
-    $app['debug'] = ($app['config']['debug']);
+    $app->register(new Igorw\Silex\ConfigServiceProvider(CONFIG_FILE));
+    $app['debug'] = ($app['debug']);
     Symfony\Component\Debug\ExceptionHandler::register(!$app['debug']);
-    if (in_array($app['config']['timezone'], DateTimeZone::listIdentifiers())) {
-        date_default_timezone_set($app['config']['timezone']);
+    if (in_array($app['timezone'], DateTimeZone::listIdentifiers())) {
+        date_default_timezone_set($app['timezone']);
     }
 }
 $app->register(new Silex\Provider\TwigServiceProvider(), [
@@ -29,7 +29,7 @@ $app->register(new Silex\Provider\TwigServiceProvider(), [
         'twig.options' => ['debug' => $app['debug']],
     ]);
 $app->register(new Silex\Provider\SessionServiceProvider());
-$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
+$app->register(new Silex\Provider\RoutingServiceProvider());
 $app->register(new Silex\Provider\SecurityServiceProvider(), [
         'security.firewalls' => [
             'admin' => [
@@ -42,9 +42,9 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), [
             ],
         ],
     ]);
-$app['security.encoder.digest'] = $app->share(function ($app) {
+$app['security.encoder.digest'] = function ($app) {
         return new \Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder(10);
-    });
+    };
 if(!is_file(PASSWD_FILE)) {
     $app->mount('/', include 'guest.php');
 }
@@ -68,7 +68,7 @@ $app->error(function (\Symfony\Component\HttpKernel\Exception\HttpException $e) 
 
     switch ($e->getStatusCode()) {
         case 404:
-            $viewer = new Syonix\LogViewer\LogManager($app['config']['logs']);
+            $viewer = new Syonix\LogViewer\LogManager($app['logs']);
 
             return $app['twig']->render('error/log_file_not_found.html.twig', [
                 'clients'             => $viewer->getLogCollections(),
@@ -78,7 +78,7 @@ $app->error(function (\Symfony\Component\HttpKernel\Exception\HttpException $e) 
             ]);
         default:
             try {
-                $viewer = new Syonix\LogViewer\LogManager($app['config']['logs']);
+                $viewer = new Syonix\LogViewer\LogManager($app['logs']);
                 $clients = $viewer->getLogCollections();
             } catch (\Exception $e) {
                 $clients = [];
@@ -103,7 +103,7 @@ $app->error(function (\Exception $e, $code) use ($app) {
     switch ($code) {
         default:
             try {
-                $viewer = new Syonix\LogViewer\LogManager($app['config']['logs']);
+                $viewer = new Syonix\LogViewer\LogManager($app['logs']);
                 $clients = $viewer->getLogCollections();
             } catch (\Exception $e) {
                 $clients = [];
