@@ -20,7 +20,7 @@ $ctrl->get('/login', function (\Symfony\Component\HttpFoundation\Request $reques
 
 $ctrl->get('/logs{path}', function () use ($app) {
     return $app['twig']->render('log.html.twig', [
-        'reverse_order' => $app['config']['reverse_line_order']
+        'reverse_order' => $app['reverse_line_order']
     ]);
 })
     ->bind("logs")

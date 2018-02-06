@@ -7,17 +7,17 @@ $api = $app['controllers_factory'];
 
 $api->get('/config', function (Silex\Application $app) {
     return $app->json([
-        'debug'              => $app['config']['debug'],
-        'timezone'           => $app['config']['timezone'],
-        'date_format'        => $app['config']['date_format'],
-        'display_logger'     => $app['config']['display_logger'],
-        'default_limit'      => $app['config']['default_limit'],
-        'reverse_line_order' => $app['config']['reverse_line_order'],
+        'debug'              => $app['debug'],
+        'timezone'           => $app['timezone'],
+        'date_format'        => $app['date_format'],
+        'display_logger'     => $app['display_logger'],
+        'default_limit'      => $app['default_limit'],
+        'reverse_line_order' => $app['reverse_line_order'],
     ]);
 });
 
 $api->get('/logs', function (Silex\Application $app, Request $request) {
-    $viewer = new Syonix\LogViewer\LogManager($app['config']['logs']);
+    $viewer = new Syonix\LogViewer\LogManager($app['logs']);
     $logCollections = $viewer->getLogCollections();
     $returnLogs = (bool) $request->query->get('logs', false);
     $return = [];
@@ -55,7 +55,7 @@ $api->get('/cache/clear', function (Silex\Application $app) {
 });
 
 $api->get('/logs/{clientSlug}', function (Silex\Application $app, $clientSlug) {
-    $viewer = new Syonix\LogViewer\LogManager($app['config']['logs']);
+    $viewer = new Syonix\LogViewer\LogManager($app['logs']);
     $logCollection = $viewer->getLogCollection($clientSlug);
     if (null === $logCollection) {
         $error = ['message' => 'The client was not found.'];
@@ -82,7 +82,7 @@ $api->get('/logs/{clientSlug}', function (Silex\Application $app, $clientSlug) {
 });
 
 $api->get('/logs/{clientSlug}/{logSlug}', function (Silex\Application $app, Request $request, $clientSlug, $logSlug) {
-    $defaultLimit = (intval($app['config']['default_limit']) > 0) ? intval($app['config']['default_limit']) : 100;
+    $defaultLimit = (intval($app['default_limit']) > 0) ? intval($app['default_limit']) : 100;
     $limit = intval($request->query->get('limit', $defaultLimit));
     $offset = intval($request->query->get('offset', 0));
     $filter = [];
@@ -103,7 +103,7 @@ $api->get('/logs/{clientSlug}/{logSlug}', function (Silex\Application $app, Requ
         $filter = null;
     }
 
-    $viewer = new Syonix\LogViewer\LogManager($app['config']['logs']);
+    $viewer = new Syonix\LogViewer\LogManager($app['logs']);
     $logCollection = $viewer->getLogCollection($clientSlug);
     if (null === $logCollection) {
         $error = ['message' => 'The client was not found.'];
@@ -118,7 +118,7 @@ $api->get('/logs/{clientSlug}/{logSlug}', function (Silex\Application $app, Requ
         return $app->json($error, 404);
     }
     $adapter = new \League\Flysystem\Adapter\Local(APP_PATH.'/cache');
-    $cache = new \Syonix\LogViewer\LogFileCache($adapter, $app['config']['cache_expire'], $app['config']['reverse_line_order']);
+    $cache = new \Syonix\LogViewer\LogFileCache($adapter, $app['cache_expire'], $app['reverse_line_order']);
     $log = $cache->get($log);
 
     $logUrl = BASE_URL.'/api/logs/'.$logCollection->getSlug().'/'.$log->getSlug();
@@ -142,7 +142,7 @@ $api->get('/logs/{clientSlug}/{logSlug}', function (Silex\Application $app, Requ
             'name' => $logCollection->getName(),
             'slug' => $logCollection->getSlug(),
         ],
-        'lines'         => $log->getLines($limit, $offset),
+        'lines'         => $log->getLines($limit, $offset, $filter),
         'total_lines'   => $totalLines,
         'offset'        => $offset,
         'limit'         => $limit,
