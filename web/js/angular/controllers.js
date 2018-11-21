@@ -65,6 +65,7 @@ controllers.controller('LogFileController', ['$scope', '$http', '$routeParams', 
                     $scope.$parent.busySearch = false;
                     $scope.scrollTop();
                     initTooltips();
+                    $scope.busy = false;
                 }, function errorCallback() {
                     $scope.error('Could not load log lines');
                     $scope.busy = false;

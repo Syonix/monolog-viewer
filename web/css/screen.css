@@ -82,6 +82,14 @@ h4,
 h5 {
   font-family: inherit; }
 
+.stack {
+  white-space: pre;
+}
+
+.date {
+  white-space: nowrap;
+}
+
 .hide-if-mobile {
   display: none !important; }
 
@@ -402,7 +410,9 @@ div.alert {
 #logline-table {
   table-layout: fixed;
   max-width: 100%;
-  min-width: 100%; }
+  min-width: 100%;
+  width: 100%;
+}
 
 .logline {
   font-size: 11pt; }

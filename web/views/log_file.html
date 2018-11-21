@@ -11,14 +11,14 @@
                 <table>
                     <tr ng-repeat="(title, content) in line.context">
                         <th>{{ title }}</th>
-                        <td id="clipboard-line-{{ id }}-{{ $index }}">{{ content|nl2br }}</td>
+                        <td id="clipboard-line-{{ id }}-{{ $index }}" class="stack">{{ content }}</td>
                         <td>
                             <span ngclipboard data-clipboard-target="#clipboard-line-{{ id }}-{{ $index }}"
                                   ngclipboard-success="clipboardSuccess(e)" ngclipboard-error="clipboardError(e)"
                                   class="clipboard"><i class="fa fa-clipboard"></i></span>
                         </td>
                     </tr>
-                    <tr ng-repeat="(title, content) in line.extra"><th>{{ title }}</th><td>{{ content|nl2br }}</td></tr>
+                    <tr ng-repeat="(title, content) in line.extra"><th>{{ title }}</th><td>{{ content }}</td></tr>
                 </table>
             </div>
         </td>
