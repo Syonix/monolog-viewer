@@ -13,6 +13,12 @@ define('BASE_URL', ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 
     str_replace('/index.php', '', $_SERVER['SCRIPT_NAME'])
 );
 
+// PHP built-in webserver configuration, see https://silex.symfony.com/doc/2.0/web_servers.html
+$filename = __DIR__.preg_replace('#(\?.*)$#', '', $_SERVER['REQUEST_URI']);
+if (php_sapi_name() === 'cli-server' && is_file($filename)) {
+    return false;
+}
+
 $app = new Silex\Application();
 $app['template_url'] = BASE_URL;
 

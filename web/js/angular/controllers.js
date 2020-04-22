@@ -62,6 +62,7 @@ controllers.controller('LogFileController', ['$scope', '$http', '$routeParams', 
             $http.get('api/logs/'+client+'/'+log, { params: $scope.$parent.filter })
                 .then(function successCallback(response) {
                     $scope.$parent.currentLog = response.data;
+                    $scope.busy = false;
                     $scope.$parent.busySearch = false;
                     $scope.scrollTop();
                     initTooltips();
