@@ -7,3 +7,5 @@ app/config/config.yml
 *.yml~
 .settings
 .project
+.vscode
+.history
