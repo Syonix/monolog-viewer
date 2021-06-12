@@ -2,8 +2,8 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v5.0.0](https://github.com/Syonix/monolog-viewer/releases/tag/v5.0.0) - unreleased
-[See full Changelog](https://github.com/Syonix/monolog-viewer/compare/v4.0.2...v5.0.0)
+## [v5.0.0](https://github.com/Syonix/monolog-viewer/releases/tag/v5.0.0-rc1) - unreleased
+[See full Changelog](https://github.com/Syonix/monolog-viewer/compare/v4.0.2...v5.0.0-rc1)
 ### New
 - Decoupled: API backend and AngularJS frontend
 - Moved program logic to a [separate package](https://github.com/Syonix/log-viewer-lib) for easier reuse #29
